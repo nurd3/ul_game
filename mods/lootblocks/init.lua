@@ -12,7 +12,7 @@ function lootblocks.register_drop(stacks, chance)
 end
 
 function lootblocks.gen_drop(pos)
-    local stacks = {"air"}
+    local stacks = {"lootblocks:lootblock"}
     for _,v in ipairs(lootblocks.registered_drops) do
         if math.random() < v.chance then
             stacks = stacks
