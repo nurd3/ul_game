@@ -1,8 +1,8 @@
-local S = minitest.get_translator
+local S = ul_basic.get_translator
 
-minetest.register_tool("minitest:pick", {
+minetest.register_tool("ul_basic:pick", {
     description = S"Pickaxe",
-    inventory_image = "minitest_pick",
+    inventory_image = "ul_basic_pick.png",
 
     tool_capabilities = {
         full_punch_interval = 1.0,
@@ -13,9 +13,9 @@ minetest.register_tool("minitest:pick", {
         damage_groups = {fleshy = 1},
     },
 })
-minetest.register_tool("minitest:knife", {
+minetest.register_tool("ul_basic:knife", {
     description = S"Knife",
-    inventory_image = "minitest_knife",
+    inventory_image = "ul_basic_knife.png",
 
     tool_capabilities = {
         full_punch_interval = 1.0,
@@ -26,9 +26,9 @@ minetest.register_tool("minitest:knife", {
         damage_groups = {fleshy = 3},
     },
 })
-minetest.register_tool("minitest:sword", {
+minetest.register_tool("ul_basic:sword", {
     description = S"Sword",
-    inventory_image = "minitest_sword",
+    inventory_image = "ul_basic_sword.png",
 
     tool_capabilities = {
         full_punch_interval = 1.0,
@@ -40,6 +40,6 @@ minetest.register_tool("minitest:sword", {
     },
 })
 
-lootblocks.register_drop("minitest:pick", 0.125)
-lootblocks.register_drop("minitest:knife", 0.25)
-lootblocks.register_drop("minitest:sword", 0.125)
+lootblocks.register_drop("ul_basic:pick", 0.125)
+lootblocks.register_drop("ul_basic:knife", 0.25)
+lootblocks.register_drop("ul_basic:sword", 0.125)

@@ -1,9 +1,9 @@
-local S = minitest.get_translator
+local S = ul_basic.get_translator
 
-minetest.register_node("minitest:stone", {
+minetest.register_node("ul_basic:stone", {
     description = S"Stone",
     drawtype = "normal",
-    tiles = {"minitest_stone.png"},
+    tiles = {"ul_basic_stone.png"},
     groups = {cracky = 3},
 	sunlight_propagates = true,
 	is_ground_content = true,
@@ -11,10 +11,10 @@ minetest.register_node("minitest:stone", {
 	paramtype2 = "none",
 })
 
-minetest.register_node("minitest:lamp", {
+minetest.register_node("ul_basic:lamp", {
     description = S"Lamp",
     drawtype = "normal",
-    tiles = {"minitest_lamp.png"},
+    tiles = {"ul_basic_lamp.png"},
     groups = {cracky = 3},
 	sunlight_propagates = true,
 	is_ground_content = false,
@@ -23,4 +23,4 @@ minetest.register_node("minitest:lamp", {
     light_source = 14,
 })
 
-lootblocks.register_drop("minitest:lamp", 0.125)
+lootblocks.register_drop("ul_basic:lamp", 0.125)
