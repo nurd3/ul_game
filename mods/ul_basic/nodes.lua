@@ -12,10 +12,10 @@ minetest.register_node("ul_basic:stone", {
 })
 
 minetest.register_node("ul_basic:ore", {
-    description = S"Stone",
+    description = S"Ore",
     drawtype = "normal",
     tiles = {"ul_basic_ore.png"},
-    groups = {cracky = 3},
+    groups = {cracky = 2},
 	sunlight_propagates = true,
 	is_ground_content = true,
 	paramtype = "none",
@@ -26,7 +26,7 @@ minetest.register_node("ul_basic:lamp", {
     description = S"Lamp",
     drawtype = "normal",
     tiles = {"ul_basic_lamp.png"},
-    groups = {cracky = 3},
+    groups = {oddly_breakable_by_hand = 3},
 	sunlight_propagates = true,
 	is_ground_content = false,
 	paramtype = "none",
@@ -34,5 +34,58 @@ minetest.register_node("ul_basic:lamp", {
     light_source = 14,
 })
 
-lootblocks.register_drop("ul_basic:lamp", 0.125)
+lootblocks.register_drop("ul_basic:lamp", 0.25)
 lootblocks.register_drop("ul_basic:ore", 0.125)
+
+minetest.register_alias("mapgen_stone", "ul_basic:stone")
+
+minetest.register_decoration({
+	name = "ul_basic:lamp",
+	deco_type = "simple",
+	place_on = {"mapgen_stone"},
+	sidelen = 4,
+	noise_params = {
+		offset = -0.25,
+		scale = 0.125,
+		spread = {x = 16, y = 16, z = 16},
+		seed = 3,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_max = 31000,
+	y_min = -31000,
+	decoration = "ul_basic:lamp",
+})
+
+minetest.register_ore({
+	ore_type       = "scatter",
+	ore            = "ul_basic:ore",
+	wherein        = "ul_basic:stone",
+	clust_scarcity = 8 * 8 * 8,
+	clust_num_ores = 9,
+	clust_size     = 3,
+	y_max          = 31000,
+	y_min          = 1025,
+})
+
+minetest.register_ore({
+	ore_type       = "scatter",
+	ore            = "ul_basic:ore",
+	wherein        = "ul_basic:stone",
+	clust_scarcity = 8 * 8 * 8,
+	clust_num_ores = 8,
+	clust_size     = 3,
+	y_max          = 64,
+	y_min          = -31000,
+})
+
+minetest.register_ore({
+	ore_type       = "scatter",
+	ore            = "ul_basic:ore",
+	wherein        = "ul_basic:stone",
+	clust_scarcity = 24 * 24 * 24,
+	clust_num_ores = 27,
+	clust_size     = 6,
+	y_max          = 0,
+	y_min          = -31000,
+})

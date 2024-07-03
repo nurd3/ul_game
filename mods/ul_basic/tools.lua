@@ -1,5 +1,39 @@
 local S = ul_basic.get_translator
 
+minetest.register_item(':', {
+    type = 'none',
+    wield_image = 'ul_basic_hand.png',
+    wield_scale = {x = 0.5, y = 1, z = 4},
+    tool_capabilities = {
+        full_punch_interval = 1.0,
+        max_drop_level = 0,
+        groupcaps = {
+            crumbly = {
+                times = {[2] = 3.00, [3] = 0.70},
+                uses = 0,
+                maxlevel = 1,
+            },
+            snappy = {
+                times = {[3] = 0.40},
+                uses = 0,
+                maxlevel = 1,
+            },
+            oddly_breakable_by_hand = {
+                times = {[1] = 3.50, [2] = 2.00, [3] = 0.70},
+                uses = 0,
+            },
+            cracky = {
+                times = {[3] = 3.50},
+                uses = 0,
+            },
+        },
+        damage_groups = {fleshy = 1},
+    },
+	on_secondary_use = offhand,
+	on_place = offhand,
+})
+
+
 minetest.register_tool("ul_basic:pick", {
     description = S"Pickaxe",
     inventory_image = "ul_basic_pick.png",
@@ -40,6 +74,21 @@ minetest.register_tool("ul_basic:sword", {
     },
 })
 
+minetest.register_craftitem("ul_basic:lantern", {
+    description = S"Lantern",
+    inventory_image = "ul_basic_lantern.png",
+
+    tool_capabilities = {
+        full_punch_interval = 1.0,
+        max_drop_level = 0,
+        damage_groups = {fleshy = 2},
+    },
+	on_secondary_use = offhand,
+	on_place = offhand,
+	light_source = 10,
+})
+
 lootblocks.register_drop("ul_basic:pick", 0.125)
-lootblocks.register_drop("ul_basic:knife", 0.25)
+lootblocks.register_drop("ul_basic:knife", 0.125)
 lootblocks.register_drop("ul_basic:sword", 0.125)
+lootblocks.register_drop("ul_basic:lantern", 0.5)
