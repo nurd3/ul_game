@@ -1,0 +1,12 @@
+# textdomain:ul_basic
+# -- nodes -- #
+Stone=Pierre
+Ore=Minerai
+Rare Ore=Minerai Rare
+Super Ore=Minerai Super
+Lamp=Lampe
+# -- tools -- #
+Pickaxe=Pioche
+Sword=Epée
+Knife=Couteau
+Lantern=Lanterne

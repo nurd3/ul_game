@@ -1,0 +1,22 @@
+# textdomain:ul_mobs
+@1 Spawn Egg=
+# -- animals -- #
+Plain 'Gull=
+Magic 'Gull=
+Raging 'Gull=
+# -- monsters -- #
+Eye=
+Big Eye=
+Ghost=
+Zombie=
+Vampire=
+Lich=
+Skeleton=
+Stalker=
+Kobold=
+Horbold=
+# -- arcanoids -- #
+Alien=
+Lootglob=
+Shadow=
+Eeltig=

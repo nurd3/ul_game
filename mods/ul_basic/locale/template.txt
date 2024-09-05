@@ -1,0 +1,12 @@
+# textdomain:ul_basic
+# -- nodes -- #
+Stone=
+Ore=
+Rare Ore=
+Super Ore=
+Lamp=
+# -- tools -- #
+Pickaxe=
+Sword=
+Knife=
+Lantern=

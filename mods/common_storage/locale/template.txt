@@ -1,0 +1,3 @@
+# textdomain:common_storage
+Common=
+Changes only save when this page is closed=

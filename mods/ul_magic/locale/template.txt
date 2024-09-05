@@ -1,0 +1,25 @@
+# textdomain:ul_magic
+# -- crystals -- #
+Magic Crystal=
+Magic Shard=
+# -- runestones -- #
+Runestone=
+Active Runestone=
+@1 Runestone
+# -- runes -- #
+Rune of @1=
+# -- rings -- #
+Ring=
+@1 Ring=
+# -- spells -- #
+Blank Spell=
+@1 Spell=
+# -- default magic types -- #
+Health=
+Regeneration=
+Fireball=
+Launching=
+Levitation=
+Teleportation=
+Vampirism=
+Poison=

@@ -1,0 +1,4 @@
+# textdomain:lootblocks
+Lootblock=
+Rare Lootblock=
+Super Lootblock=
