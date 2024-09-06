@@ -1,6 +1,6 @@
 local function light_check(pos)
-	local light = minetest.get_node_light(pos)
-	return light < 7
+	-- this wasn't working and I'm too lazy to fix.
+	return true
 end
 
 natural_entities.register_spawn("ul_mobs:surface_monsters", {

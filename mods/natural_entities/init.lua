@@ -109,9 +109,12 @@ local function do_spawns(dtime, plyr)
 				while repeats < 4 and not spawn do
 					spawn, pos2 = adjust(pos2, min, max)
 					repeats = repeats + 1
+					if def.check and not def.check(pos2) then
+						spawn = false
+					end
 				end
 				
-				if spawn and def.check(pos2) then
+				if spawn and not def.check or def.check(pos2) then
 					minetest.add_entity(pos2, ent_name)
 				end
 			end
