@@ -23,9 +23,6 @@ sfinv.register_page("common_storage:common_storage", {
 })
 
 minetest.register_on_player_receive_fields(function(plyr, formname, fields)
-	if formname ~= "common_storage:common_storage" then
-		return
-	end
 	
 	local size = inv:get_size("main")
 	
