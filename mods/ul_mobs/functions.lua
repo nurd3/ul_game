@@ -2,11 +2,11 @@ local active_block_range = minetest.get_mapgen_setting('active_block_range') or 
 local modifier = {}
 
 function ul_mobs.incmod(entname)
-	modifier[entname] = (population[entname] or 0) + 1
+	modifier[entname] = (modifier[entname] or 0) + 1
 end
 
 function ul_mobs.decmod(entname, val)
-	modifier[entname] = (population[entname] or 0) - 1
+	modifier[entname] = (modifier[entname] or 0) - 1
 end
 
 function ul_mobs.set_mod(entname, val)
