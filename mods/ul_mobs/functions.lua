@@ -16,7 +16,7 @@ end
 function ul_mobs.check(pos, entname)
 	local light = minetest.get_node_light(pos, 0)
 	modifier[entname] = modifier[entname] or 0
-	if light < 7 then
+	if light and light < 7 then
 		return modifier[entname] - math.random(1, 20) < 0
 	end
 end
