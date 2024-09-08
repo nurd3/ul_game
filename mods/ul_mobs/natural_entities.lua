@@ -1,8 +1,3 @@
-local function light_check(pos)
-	-- this wasn't working and I'm too lazy to fix.
-	return true
-end
-
 natural_entities.register_spawn("ul_mobs:surface_monsters", {
 	
 	spawn_rate = 0.1,
@@ -23,7 +18,7 @@ natural_entities.register_spawn("ul_mobs:surface_monsters", {
 		["ul_mobs:shadow"] = 0.5,
 	},
 	
-	check = light_check
+	check = ul_mobs.check
 	
 })
 
@@ -45,7 +40,7 @@ natural_entities.register_spawn("ul_mobs:caves_monsters", {
 		["ul_mobs:kobold"] = 1.0,
 	},
 	
-	check = light_check
+	check = ul_mobs.check
 	
 })
 
@@ -68,7 +63,7 @@ natural_entities.register_spawn("ul_mobs:deep_caves_monsters", {
 		["ul_mobs:horbold"] = 0.1,
 	},
 	
-	check = light_check
+	check = ul_mobs.check
 	
 })
 
@@ -87,7 +82,7 @@ natural_entities.register_spawn("ul_mobs:deeper_caves_monsters", {
 		["ul_mobs:skeleton"] = 1.0,
 	},
 	
-	check = light_check
+	check = ul_mobs.check
 	
 })
 
@@ -104,7 +99,7 @@ natural_entities.register_spawn("ul_mobs:surface_animals", {
 		["ul_mobs:rgull"] = 0.1,
 	},
 	
-	check = light_check
+	check = ul_mobs.check
 	
 })
 
@@ -121,7 +116,7 @@ natural_entities.register_spawn("ul_mobs:caves_animals", {
 		["ul_mobs:mgull"] = 0.05,
 	},
 	
-	check = light_check
+	check = ul_mobs.check
 	
 })
 
@@ -138,7 +133,7 @@ natural_entities.register_spawn("ul_mobs:deep_caves_animals", {
 		["ul_mobs:mgull"] = 0.2,
 	},
 	
-	check = light_check
+	check = ul_mobs.check
 	
 })
 
@@ -157,6 +152,6 @@ natural_entities.register_spawn("ul_mobs:arcanoids", {
 		["ul_mobs:eeltig"] = 1.0,
 	},
 	
-	check = light_check
+	check = ul_mobs.check
 	
 })

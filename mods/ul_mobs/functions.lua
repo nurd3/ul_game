@@ -1,4 +1,25 @@
 local active_block_range = minetest.get_mapgen_setting('active_block_range') or 3
+local modifier = {}
+
+function ul_mobs.incmod(entname)
+	modifier[entname] = (population[entname] or 0) + 1
+end
+
+function ul_mobs.decmod(entname, val)
+	modifier[entname] = (population[entname] or 0) - 1
+end
+
+function ul_mobs.set_mod(entname, val)
+	population[entname] = val
+end
+
+function ul_mobs.check(pos, entname)
+	local light = minetest.get_node_light(pos, 0)
+	modifier[entname] = modifier[entname] or 0
+	if light < 7 then
+		return modifier[entname] - math.random(1, 20) < 0
+	end
+end
 
 function ul_mobs.can_see(self, tpos)
 
@@ -106,6 +127,8 @@ function ul_mobs.brain(self)
 			self.on_die(self, pos)
 		end
 		
+		ul_mobs.incmod(self.name)
+
 		mobkit.clear_queue_high(self)	-- cease all activity
 		core.after(1.0, self.object.remove, self.object)
 		return
@@ -155,4 +178,17 @@ function ul_mobs.brain(self)
 		end
 	end
 	
+end
+
+local timer = 0
+
+function ul_mobs.mod_step(dtime)
+	timer = timer + dtime
+	
+	if timer > 2 then
+		timer = 0
+		for nom,mod in pairs(modifier) do
+			modifier[nom] = mod - mod / 20 * 5
+		end
+	end
 end
