@@ -27,12 +27,12 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "ul_basic:lamp",
 	type = "shapeless",
-	recipe = {"ul_basic:lantern", "ul_basic:lantern", "ul_basic:lantern"}
+	recipe = {"ul_basic:lantern", "ul_basic:stone 3"}
 })
 
 
 minetest.register_craft({
 	output = "ul_basic:lantern",
 	type = "shapeless",
-	recipe = {"ul_basic:stone", "ul_basic:ore_super"}
+	recipe = {"ul_basic:stone", "ul_magic:shard"}
 })

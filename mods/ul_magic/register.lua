@@ -144,13 +144,13 @@ function ul_magic.register_rune(name, def)
 	minetest.register_craft({
 		output = name.."_spell",
 		type = "shapeless",
-		recipe = {"group:spell", name}
+		recipe = {"ul_magic:spell", name}
 	})
 	
 	minetest.register_craft({
 		output = name.."_ring",
 		type = "shapeless",
-		recipe = {"group:ring", name}
+		recipe = {"ul_magic:ring", name}
 	})
 	
 end
