@@ -28,5 +28,19 @@ local function compile_recipes()
 end
 
 minetest.register_on_mods_loaded(function()
-
+    compile_recipes()
 end)
+
+sfinv.register_page(":sfinv:crafting", {
+    title = S"Crafting",
+	get = function(self, player, context)
+
+		return sfinv.make_formspec(player, context,
+            page..
+            [[
+                button[1,20;5,1;back;<]
+                label[2,20;]][[]
+				listring[current_player;main]
+			]], true)
+	end
+})
