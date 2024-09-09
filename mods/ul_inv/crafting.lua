@@ -1,8 +1,6 @@
 local S = minetest.get_translator"ul_inv"
 
 local recipes = {}
-local pagemax = 0
-local pagenums = {}
 
 local function compile_recipes()
     for item,_ in pairs(minetest.registered_items) do
@@ -27,19 +25,22 @@ end
 
 minetest.register_on_mods_loaded(function()
     compile_recipes()
-    pagemax = math.ceiling(#recipes / 5)
 end)
 
 sfinv.register_page(":sfinv:crafting", {
     title = S"Crafting",
 	get = function(self, player, context)
-        pagenums[player:get_player_name()] = pagenums[player:get_player_name()] or 0
-        local pagenum = pagenums[player:get_player_name()]
         local content = ""
-        for i = pagenum * 5 + 1, pagenum * 5 + 5 do
-            content = content.."container[]"
+        for i,rec in ipairs(recipes) do
+            content = content.."container[0,"..tostring(5 * i).."]"
 
-            
+			local offset = 0
+			for nom,amt in pairs(rec.input) do
+            	content = content.."label[0,"..offset..";10,5;"..tostring(amt).."X "..nom.."]"
+				offset = offset + 5
+			end
+			local nom, amt = ItemString(rec.output).name, ItemString(rec.output).count
+            content = content.."label[5,0;10,5;"..tostring(amt).."X "..nom.."]"
 
             content = content.."container_end[]"
         end
