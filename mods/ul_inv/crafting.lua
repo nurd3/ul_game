@@ -55,5 +55,5 @@ sfinv.register_page(":sfinv:crafting", {
 })
 
 minetest.register_on_player_receive_fields(function(plyr, formname, fields)
-	minetest.log(fields.button)
+	minetest.log(tostring(fields.button))
 end)
