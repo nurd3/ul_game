@@ -40,15 +40,20 @@ sfinv.register_page(":sfinv:crafting", {
 				offset = offset + 5
 			end
 			local nom, amt = ItemString(rec.output).name, ItemString(rec.output).count
-            content = content.."label[5,0;10,5;"..tostring(amt).."X "..nom.."]"
+            content = content.."label[50,0;10,5;"..tostring(amt).."X "..nom.."]"..
+				"button[100,0;10,5;ul_craft"..tostring(i).."]"
 
             content = content.."container_end[]"
         end
 		return sfinv.make_formspec(player, context,
-			"scrollbar[0,0;1,10;vertical;ul_recipes]\n"..
-			"scroll_container[0,0;10,10;ul_recipes;vertical]\n"..
+			"scrollbar[0,0;10,100;vertical;ul_recipes]\n"..
+			"scroll_container[0,0;100,100;ul_recipes;vertical]\n"..
             content..
 			"scroll_container_end[]"
 		, true)
 	end
 })
+
+minetest.register_on_player_receive_fields(function(plyr, formname, fields)
+	minetest.log(fields.button)
+end)

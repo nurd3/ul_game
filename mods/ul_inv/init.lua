@@ -8,3 +8,4 @@ ul_inv.get_translator = S
 
 dofile(path.."/offhand.lua")
 dofile(path.."/outfit.lua")
+dofile(path.."/crafting.lua")
