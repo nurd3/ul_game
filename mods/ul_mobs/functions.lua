@@ -21,6 +21,13 @@ function ul_mobs.check(pos, entname)
 	end
 end
 
+function ul_mobs.quick_battle(dist, hp1, sp1, ml1, rg1, hp2, sp2, ml2, rg2)
+	local midpoint = sp1 / (sp1 + sp2) 
+	if rg1 then
+		
+	end
+end
+
 function ul_mobs.can_see(self, tpos)
 
 	if not self or not tpos or not mobkit.is_alive(self) then
@@ -134,8 +141,8 @@ function ul_mobs.brain(self)
 		return
 	end
 
-	-- decision making happens every second
-	if mobkit.timer(self,1) then
+	-- decision making happens every 500ms
+	if mobkit.timer(self, 0.25) then
 		local prty = mobkit.get_queue_priority(self)
 		local owner = self._owner and minetest.get_player_by_name(self._owner)
 		local sitting = mobkit.recall(self, "sitting")
@@ -192,3 +199,5 @@ function ul_mobs.mod_step(dtime)
 		end
 	end
 end
+
+minetest.register_globalstep(ul_mobs.mod_step)

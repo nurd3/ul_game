@@ -61,7 +61,7 @@ minetest.register_node("lootblocks:lootblock", {
     on_punch = function(pos, node, puncher)
         minetest.set_node(pos, {name="air"})
         local inv = puncher:get_inventory()
-		if math.random() > 0.5 and lootblocks.gen_spawn(pos) then
+		if math.random() > 0.75 and lootblocks.gen_spawn(pos) then
 			return
 		end
         lootblocks.gen_drop(pos)
@@ -80,7 +80,7 @@ minetest.register_node("lootblocks:lootblock_rare", {
         minetest.set_node(pos, {name="air"})
         local inv = puncher:get_inventory()
         lootblocks.gen_drop(pos)
-		if math.random() > 0.5 and lootblocks.gen_spawn(pos) then
+		if math.random() > 0.75 and lootblocks.gen_spawn(pos) then
 			return
 		end
 		while math.random() > 0.5 do
@@ -99,7 +99,7 @@ minetest.register_node("lootblocks:lootblock_super", {
     on_punch = function(pos, node, puncher)
         minetest.set_node(pos, {name="air"})
         local inv = puncher:get_inventory()
-		if math.random() > 0.5 and lootblocks.gen_spawn(pos) then
+		if math.random() > 0.75 and lootblocks.gen_spawn(pos) then
 			return
 		end
         lootblocks.gen_drop(pos)

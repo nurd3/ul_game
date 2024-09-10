@@ -31,6 +31,8 @@ ul_mobs.register_mob("ul_mobs:alien", {
 	disable_taming = true,
 	
 					-- behaviour
+	range_power = 5,
+	melee_power = 10,
 	on_check_prey = arcanoid_check_prey,
 	on_die = ul_mobs.death_drops({1.0, "ul_magic:runestone"}),
 	type = "monster",
@@ -57,6 +59,8 @@ ul_mobs.register_mob("ul_mobs:lootglob", {
 	disable_taming = true,
 	
 					-- behaviour
+	range_power = 0,
+	melee_power = 10,
 	on_check_prey = function(self, obj)
 		return vector.distance(self.object:get_pos(), obj:get_pos()) < 3 and arcanoid_check_prey(self, obj)
 	end,
@@ -91,6 +95,8 @@ ul_mobs.register_mob("ul_mobs:shadow", {
 	disable_taming = true,
 	
 					-- behaviour
+	range_power = 5,
+	melee_power = 10,
 	on_check_prey = function(self, obj)
 		return vector.distance(self.object:get_pos(), obj:get_pos()) < 3 and arcanoid_check_prey(self, obj)
 	end,
@@ -119,6 +125,8 @@ ul_mobs.register_mob("ul_mobs:eeltig", {
 	disable_taming = true,
 	
 					-- behaviour
+	range_power = 0,
+	melee_power = 10,
 	on_check_prey = arcanoid_check_prey,
 	on_die = ul_mobs.death_drops({1.0, "lootblocks:lootblock_super"}),
 	type = "monster",
