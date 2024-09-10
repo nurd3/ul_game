@@ -15,7 +15,7 @@ end
 
 function lootblocks.register_spawn(ents, chance)
 	if type(ents) == "string" then ents = {ents} end
-    table.insert(lootblocks.registered_drops, {ents=ents, chance=chance})
+    table.insert(lootblocks.registered_spawns, {ents=ents, chance=chance})
 end
 
 lootblocks.defaultdrop = {"lootblocks:lootblock"}

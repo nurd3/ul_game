@@ -124,7 +124,7 @@ function ul_magic.register_rune(name, def)
 			then
 				ul_magic.wear_level(user, name)
 				itemstack:add_wear(65536 / 10)
-				ul_basic.objsound(user, "ul_magic_support")
+				ul_basic.objsound(user, "ul_magic_cast")
 			else
 				ul_basic.objsound(user, "ul_fail")
 			end
@@ -154,4 +154,3 @@ function ul_magic.register_rune(name, def)
 	})
 	
 end
-
