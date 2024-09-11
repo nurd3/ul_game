@@ -36,7 +36,7 @@ local function compile_recipes()
 	end
 	
 	for i,rec in ipairs(recipes) do
-		recipes_formspec = recipes_formspec.."container["..((i - 1) % 2 + 1)..","..(math.floor((i - 1) / 2)).."]\n"
+		recipes_formspec = recipes_formspec.."container["..((i - 1) % 3 + 1)..","..(math.floor((i - 1) / 3)).."]\n"
 		local offset = 0
 		
 		local itm, amt = minetest.registered_items[ItemStack(rec.output):get_name()], ItemStack(rec.output):get_count()
