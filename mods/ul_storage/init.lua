@@ -14,7 +14,7 @@ function ul_storage.get_formspec(pos)
 	local spos = pos.x .. "," .. pos.y .. "," .. pos.z
 	local formspec =
 		"size[8,9]" ..
-		"field[0.3,0.5;3,1;name_field;Crate Name;" .. meta:get_string("_name") .. "]" ..
+		"field[0.3,0.5;3,1;name_field;Crate Name;" .. minetest.formspec_escape(meta:get_string("_name")) .. "]" ..
 		"button[0.3,1;2,1;save_button;Save]" ..
 		"list[nodemeta:" .. spos .. ";main;4,0.3;4,4;]" ..
 		"list[current_player;main;0,4.85;8,1;]" ..
