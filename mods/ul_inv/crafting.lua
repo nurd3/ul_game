@@ -1,4 +1,4 @@
-local S = ul_inv.get_inventory
+local S = ul_inv.get_translator
 
 local function get_item_display_name(id)
 	return (minetest.registered_items[id] and (minetest.registered_items[id].short_description or minetest.registered_items[id].description)) or id
