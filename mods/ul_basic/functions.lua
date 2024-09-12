@@ -56,6 +56,52 @@ function ul_basic.drop(pos, chance, item, amount)
 	
 end
 
+-- util on_melee function, generates an on_use function
+function ul_basic.on_melee(stats)
+	local dmg = stats.dmg or 0
+	local enc_ovr = stats.enchanting_override or false
+	local func = stats.func or function() return end
+	
+	return function(itemstack, user, pointed_thing, level)
+		if pointed_thing.type == "node" then
+		
+			local ref = minetest.get_node(pointed_thing.under)
+			local def = minetest.registered_nodes[ref.name]
+			
+			if def then
+				def.on_punch(pointed_thing.under, ref, user)
+			end
+		
+		elseif pointed_thing.type == "object" then
+		
+			local obj = pointed_thing.ref
+			local meta = itemstack:get_meta()
+			local luaent = obj:get_luaentity()
+			
+			if luaent and luaent.on_punch then
+				luaent:on_punch(user, 0, {damage_groups = {fleshy = dmg, punch_attack_uses = stats.uses}}, user:get_look_dir())
+			end
+			
+			if obj:is_valid() and meta and meta:contains("_enchantment") then
+				local enc = meta:get("_enchantment")
+				local lvl = user and ul_magic.get_level(user, enc) or level or 1
+				local rune = ul_magic.registered_runes[enc]
+				
+				if rune and rune.on_melee then
+					rune.on_melee(user, obj, lvl, stats)
+					ul_magic.wear_level(user, enc)
+					if enc_ovr then
+					end
+				end
+			end
+			
+			return itemstack
+			
+		end
+	end
+	
+end
+
 function ul_basic.node_sound_defaults(tbl)
 	tbl = tbl or {}
 	tbl.footstep = tbl.footstep or

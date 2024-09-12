@@ -49,32 +49,30 @@ minetest.register_tool("ul_basic:pick", {
 minetest.register_tool("ul_basic:knife", {
     description = S"Knife",
     inventory_image = "ul_basic_knife.png",
-
-    tool_capabilities = {
-        full_punch_interval = 0.4,
-        max_drop_level = 0,
-        groupcaps = {
-            snappy = {times = {2.50, 1.40, 1.00}, uses = 10, maxlevel = 1},
-        },
-        damage_groups = {fleshy = 3},
-		punch_attack_uses = 10
-    },
+	
+	on_use = ul_basic.on_melee {
+		dmg = 3,						-- amount of damage to deal
+		uses = 10,						-- how many times it can be used before breaking
+		enchantment_override = true		-- damage is overridden by enchantments
+	},
+	
+	enchantable = "melee",
 	
 	groups = {weapon = 1, tool = 1}
 })
 minetest.register_tool("ul_basic:sword", {
     description = S"Sword",
     inventory_image = "ul_basic_sword.png",
+	
+	tool_capabilities = {},
 
-    tool_capabilities = {
-        full_punch_interval = 0.5,
-        max_drop_level = 0,
-        groupcaps = {
-            snappy = {times = {2.50, 1.40, 1.00}, uses = 20, maxlevel = 1},
-        },
-        damage_groups = {fleshy = 5},
-		punch_attack_uses = 20
-    },
+    on_use = ul_basic.on_melee {
+		dmg = 5,						-- amount of damage to deal
+		uses = 20,						-- how many times it can be used before breaking
+		enchantment_override = true		-- damage is overridden by enchantments
+	},
+	
+	enchantable = "melee",
 	
 	groups = {weapon = 1, tool = 1}
 })
@@ -82,6 +80,8 @@ minetest.register_tool("ul_basic:sword", {
 minetest.register_tool("ul_basic:lantern", {
     description = S"Lantern",
     inventory_image = "ul_basic_lantern.png",
+	
+	tool_capabilities = {},
 
     tool_capabilities = {
         full_punch_interval = 1.0,
