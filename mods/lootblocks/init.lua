@@ -47,7 +47,7 @@ function lootblocks.gen_drop(pos)
         end
     end
     local stacks = t[math.random(#t)]
-	if not stacks then stacks = lootblocks.defaultdrop end
+	if not stacks or #stacks <= 0 then stacks = lootblocks.defaultdrop end
     for _,w in ipairs(stacks) do
         minetest.add_item(pos, ItemStack(w))
     end
