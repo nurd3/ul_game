@@ -53,7 +53,6 @@ minetest.register_tool("ul_basic:knife", {
 	on_use = ul_basic.on_melee {
 		dmg = 3,						-- amount of damage to deal
 		uses = 10,						-- how many times it can be used before breaking
-		enchantment_override = true		-- damage is overridden by enchantments
 	},
 	
 	enchantable = "melee",
@@ -69,7 +68,6 @@ minetest.register_tool("ul_basic:sword", {
     on_use = ul_basic.on_melee {
 		dmg = 5,						-- amount of damage to deal
 		uses = 20,						-- how many times it can be used before breaking
-		enchantment_override = true		-- damage is overridden by enchantments
 	},
 	
 	enchantable = "melee",

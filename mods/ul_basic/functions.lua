@@ -132,3 +132,26 @@ function ul_basic.is_alive(thing)		-- thing can be luaentity or objectref.
 		return hp and hp > 0
 	end
 end
+
+function ul_basic.set_hp(obj, add)
+	local luaent = obj:get_luaentity()
+	
+	local hp = (luaent and (luaent.hp or luaent.health)) or obj:get_hp()
+	local hp_max = obj:get_properties().hp_max or 0
+	
+	new_hp = math.min(hp_max, 
+		math.max(hp + add, 0)
+	)
+	
+	if luaent then
+		if luaent.health then
+			luaent.health = new_hp
+		else
+			luaent.hp = new_hp
+		end
+	else
+		obj:set_hp(new_hp)
+	end
+	
+	return hp ~= new_hp
+end
