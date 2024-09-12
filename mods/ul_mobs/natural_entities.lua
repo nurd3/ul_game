@@ -16,6 +16,8 @@ natural_entities.register_spawn("ul_mobs:surface_monsters", {
 		["ul_mobs:kobold"] = 0.1,
 				-- arcanoids
 		["ul_mobs:shadow"] = 0.5,
+				-- races
+		["ul_mobs:cult"] = 0.05,
 	},
 	
 	check = ul_mobs.check
