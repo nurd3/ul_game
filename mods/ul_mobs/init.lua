@@ -179,6 +179,7 @@ dofile(path.."/soul.lua")
 dofile(path.."/monsters.lua")
 dofile(path.."/animals.lua")
 dofile(path.."/arcanoids.lua")
+dofile(path.."/races.lua")
 
 if natural_entities then
 	dofile(path.."/natural_entities.lua")
