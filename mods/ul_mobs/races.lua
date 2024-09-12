@@ -24,7 +24,7 @@ ul_mobs.register_mob("ul_mobs:cult", {
 	description = S"Cult",
 	egg_colors = {"#800000", "#000000"},
 	visual = "upright_sprite",
-	textures = {"ul_mobs_cult.png", "ul_mobs_animal_cult_back.png^[transformFX"},
+	textures = {"ul_mobs_cult.png", "ul_mobs_cult_back.png^[transformFX"},
 	visual_size = {x = 2, y = 2},
 	collisionbox = {-0.3, -0.4, -0.3, 0.3, 0.4, 0.3},
 	

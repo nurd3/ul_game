@@ -45,11 +45,19 @@ ul_magic.register_rune("ul_magic:fireball", {
 			return true
 		end
 	end,
+	on_melee = function (user, victim, level, stats)
+		if victim and user then
+			victim:set_hp(victim:get_hp() - (level * 2))
+			ul_statfx.apply(victim, "ul_magic:burning", 5)
+			return true
+		end
+	end
 })
 ul_magic.register_rune("ul_magic:launch", {
 	type = "attack",
 	description = S"Launching",
 	color = "#0080ff",
+	disable_ring = true,
 	on_hitobj = function (user, victim, level)
 		if victim then
 			victim:add_velocity({x=0,y=20,z=0})
@@ -59,6 +67,15 @@ ul_magic.register_rune("ul_magic:launch", {
 	on_cast = function (user, victim, level)
 		if user then
 			user:add_velocity({x=0,y=20,z=0})
+			return true
+		end
+	end,
+	on_melee = function (user, victim, level, stats)
+		if victim and user then
+			if stats.enchantment_override then
+				victim:set_hp(victim:get_hp() - stats.dmg)
+			end
+			victim:add_velocity({x=0,y=20,z=0})
 			return true
 		end
 	end
@@ -78,12 +95,22 @@ ul_magic.register_rune("ul_magic:levitate", {
 			ul_statfx.apply(user, "ul_magic:levitate", 2 * level)
 			return true
 		end
+	end,
+	on_melee = function (user, victim, level, stats)
+		if victim and user then
+			if stats.enchantment_override then
+				victim:set_hp(victim:get_hp() - stats.dmg)
+			end
+			ul_statfx.apply(victim, "ul_magic:levitate", 2 * level)
+			return true
+		end
 	end
 })
 ul_magic.register_rune("ul_magic:teleport", {
 	type = "movement",
 	description = S"Teleportation",
 	color = "#0000ff",
+	disable_ring = true,
 	on_hitnode = function (user, pos, level)
 		if user then
 			user:set_pos(pos)
@@ -100,6 +127,13 @@ ul_magic.register_rune("ul_magic:vampirism", {
 			victim:set_hp(victim:get_hp() - level * 2)
 			return true
 		end
+	end,
+	on_melee = function (user, victim, level, stats)
+		if victim and user then
+			user:set_hp(user:get_hp() + level * 2)
+			victim:set_hp(victim:get_hp() - level * 2)
+			return true
+		end
 	end
 })
 ul_magic.register_rune("ul_magic:poison", {
@@ -108,6 +142,15 @@ ul_magic.register_rune("ul_magic:poison", {
 	color = "#00ff00",
 	on_hitobj = function (user, victim, level)
 		if victim then
+			ul_statfx.apply(victim, "ul_magic:poison", 3 * level)
+			return true
+		end
+	end,
+	on_melee = function (user, victim, level, stats)
+		if victim then
+			if stats.enchantment_override then
+				victim:set_hp(victim:get_hp() - stats.dmg)
+			end
 			ul_statfx.apply(victim, "ul_magic:poison", 3 * level)
 			return true
 		end

@@ -26,9 +26,9 @@ sfinv.register_page("ul_inv:enchanting", {
 		local input = inv:get_stack("craft", 1):get_name()
 		local rune = inv:get_stack("craft", 2):get_name()
 		
-		if input:is_empty() then
+		if inv:get_stack("craft", 1):is_empty() then
 			minetest.chat_send_player(plyr:get_player_name(), minetest.colorize("#ff0000", S"You can't enchant air!"))
-		elseif rune:is_empty() then
+		elseif inv:get_stack("craft", 2):is_empty() then
 			minetest.chat_send_player(plyr:get_player_name(), minetest.colorize("#ff0000", S"Air is not a rune!"))
 		end
 		
@@ -53,11 +53,13 @@ sfinv.register_page("ul_inv:enchanting", {
 		
 		local result = ItemStack(input)
 		local imgmod = runedef.color and ("^[multiply:"..runedef.color) or ""
+		local S2 = ul_magic.get_translator
 		
 		inv:remove_item("craft", ItemStack(input))
 		inv:remove_item("craft", ItemStack(rune))
 		
 		result:get_meta():set_string("_enchantment", rune)
+		result:get_meta():set_string("description", S2("@1 of @2", inpdef.description, runedef.description))
 		result:get_meta():set_string("inventory_image", inpdef.inventory_image..imgmod)
 		
 		inv:set_stack("craft", 3, result)

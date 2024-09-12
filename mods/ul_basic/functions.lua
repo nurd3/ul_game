@@ -94,9 +94,6 @@ function ul_basic.on_melee(stats)
 					end
 				end
 			end
-			
-			return itemstack
-			
 		end
 	end
 	

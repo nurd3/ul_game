@@ -134,23 +134,25 @@ function ul_magic.register_rune(name, def)
 		groups = {spell = 1}
 	})
 	
-	ul_inv.register_wearable(name.."_ring", {
-		description = S("@1 Ring", def.description or name),
-		inventory_image = "ul_magic_ring.png^[fill:2x2:7,3:"..(def.color or "#ffffff"),
+	if not def.disable_ring then
+		ul_inv.register_wearable(name.."_ring", {
+			description = S("@1 Ring", def.description or name),
+			inventory_image = "ul_magic_ring.png^[fill:2x2:7,3:"..(def.color or "#ffffff"),
+			
+			groups = {ring = 1}
+		})
 		
-		groups = {ring = 1}
-	})
+		minetest.register_craft({
+			output = name.."_ring",
+			type = "shapeless",
+			recipe = {"ul_magic:ring", name}
+		})
+	end
 	
 	minetest.register_craft({
 		output = name.."_spell",
 		type = "shapeless",
 		recipe = {"ul_magic:spell", name}
-	})
-	
-	minetest.register_craft({
-		output = name.."_ring",
-		type = "shapeless",
-		recipe = {"ul_magic:ring", name}
 	})
 	
 end
