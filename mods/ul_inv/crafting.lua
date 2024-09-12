@@ -109,7 +109,7 @@ sfinv.override_page("sfinv:crafting", {
 			for nom,amt in pairs(rec.input) do
 				local stack = ItemStack(nom.." "..amt)
 				if not inv:contains_item("main", stack) then
-					minetest.chat_send_player(plyr:get_player_name(), "Not enough "..get_item_display_name(nom).."!")
+					minetest.chat_send_player(plyr:get_player_name(), minetest.colorize("#ff0000", S("Not enough @1!", get_item_display_name(nom))))
 					return
 				end
 			end
