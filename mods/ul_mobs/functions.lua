@@ -141,8 +141,8 @@ function ul_mobs.brain(self)
 		return
 	end
 
-	-- decision making happens every 500ms
-	if mobkit.timer(self, 0.25) then
+	-- decision making doesn't need to happen too often
+	if mobkit.timer(self, ul_mobs.reaction_time) then
 		local prty = mobkit.get_queue_priority(self)
 		local owner = self._owner and minetest.get_player_by_name(self._owner)
 		local sitting = mobkit.recall(self, "sitting")
