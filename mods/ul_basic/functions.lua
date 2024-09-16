@@ -1,3 +1,14 @@
+function ul_basic.punch(obj, puncher, time_from_last_punch, tool_capabilities, dir)
+	tool_capabilities = tool_capabilities or {damage_groups = {fleshy = 0}}
+	dir = dir or vector.zero()
+	if obj == nil then
+		return
+	elseif type(obj) == "table" then
+		return ul_basic.punch(obj.object, puncher, time_from_last_punch, tool_capabilities, dir)
+	elseif type(obj) == "userdata" and obj:is_valid() then
+		return obj:punch(puncher, time_from_last_punch, tool_capabilities, dir)
+	end
+end
 
 -- util drop function
 function ul_basic.drop(pos, chance, item, amount)
@@ -56,47 +67,60 @@ function ul_basic.drop(pos, chance, item, amount)
 	
 end
 
--- util on_melee function, generates an on_use function
-function ul_basic.on_melee(stats)
-	local dmg = stats.dmg or 0
-	local enc_ovr = stats.enchanting_override or false
-	local func = stats.func or function() return end
+local last_punch = {}
+
+function ul_basic.get_attackdtime(plyrname, fallback, update)
+	if not plyrname then
+		return fallback
+	end
+	local currtime = minetest.get_server_uptime()
+	local ret = last_punch[plyrname] and currtime - last_punch[plyrname] or fallback
+	if update then
+		last_punch[plyrname] = currtime
+	end
+	return ret
+end
+
+-- util on_melee function
+function ul_basic.on_melee(itemstack, user, pointed_thing, level)
+	local tool_capabilities = itemstack:get_tool_capabilities()
+	if pointed_thing.type == "node" then
 	
-	return function(itemstack, user, pointed_thing, level)
-		if pointed_thing.type == "node" then
+		local ref = minetest.get_node(pointed_thing.under)
+		local def = minetest.registered_nodes[ref.name]
 		
-			local ref = minetest.get_node(pointed_thing.under)
-			local def = minetest.registered_nodes[ref.name]
-			
-			if def then
-				def.on_punch(pointed_thing.under, ref, user)
-			end
+		if def then
+			def.on_punch(pointed_thing.under, ref, user)
+		end
+	
+	elseif pointed_thing.type == "object" then
+	
+		local obj = pointed_thing.ref
+		local meta = itemstack:get_meta()
+		local luaent = obj:get_luaentity()
 		
-		elseif pointed_thing.type == "object" then
+		local delta = ul_basic.get_attackdtime(user:get_player_name(), tool_capabilities.full_punch_interval, true)
 		
-			local obj = pointed_thing.ref
-			local meta = itemstack:get_meta()
-			local luaent = obj:get_luaentity()
+		ul_basic.punch(obj, user, delta, tool_capabilities, user:get_look_dir())
+		
+		
+		if obj:is_valid() and meta and meta:contains("_enchantment") then
+			local enc = meta:get("_enchantment")
+			local lvl = user and ul_magic.get_level(user, enc) or level or 1
+			local rune = ul_magic.registered_runes[enc]
 			
-			if luaent and luaent.on_punch then
-				luaent:on_punch(user, 0, {damage_groups = {fleshy = dmg, punch_attack_uses = stats.uses}}, user:get_look_dir())
-			end
-			
-			if obj:is_valid() and meta and meta:contains("_enchantment") then
-				local enc = meta:get("_enchantment")
-				local lvl = user and ul_magic.get_level(user, enc) or level or 1
-				local rune = ul_magic.registered_runes[enc]
-				
-				if rune and rune.on_melee then
-					rune.on_melee(user, obj, lvl, stats)
-					ul_magic.wear_level(user, enc)
-					if enc_ovr then
-					end
+			if rune and rune.on_melee then
+				rune.on_melee(user, obj, lvl)
+				ul_magic.wear_level(user, enc)
+				if enc_ovr then
 				end
 			end
 		end
 	end
-	
+end
+
+function ul_basic.objsound(obj, name)
+	minetest.sound_play(name, {object=obj, gain = 1.0})
 end
 
 function ul_basic.node_sound_defaults(tbl)
@@ -111,11 +135,6 @@ function ul_basic.node_sound_defaults(tbl)
 			{name = "ul_basic_place", gain = 1.0}
 	return tbl
 end
-
-function ul_basic.objsound(obj, name)
-	minetest.sound_play(name, {object=obj, gain = 1.0})
-end
-
 
 function ul_basic.possound(pos, name)
 	minetest.sound_play(name, {pos=pos, gain = 1.0})

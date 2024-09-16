@@ -41,7 +41,8 @@ minetest.register_tool("ul_basic:pick", {
         groupcaps = {
             cracky = {times = {1.50, 1.00, 0.50}, uses = 20, maxlevel = 1},
         },
-        damage_groups = {fleshy = 1},
+        damage_groups = {fleshy = 7},
+        punch_attack_uses = 5
     },
 	
 	groups = {weapon = 1, tool = 1}
@@ -50,29 +51,35 @@ minetest.register_tool("ul_basic:knife", {
     description = S"Knife",
     inventory_image = "ul_basic_knife.png",
 	
-	on_use = ul_basic.on_melee {
-		dmg = 3,						-- amount of damage to deal
-		uses = 10,						-- how many times it can be used before breaking
+	on_use = ul_basic.on_melee,
+	tool_capabilities = {
+		full_punch_interval = 0.5,
+		damage_groups = {
+			fleshy = 3
+		},
+		punch_attack_uses = 10,
 	},
 	
 	enchantable = "melee",
 	
-	groups = {weapon = 1, tool = 1}
+	groups = {weapon = 1, melee = 1, tool = 1}
 })
 minetest.register_tool("ul_basic:sword", {
     description = S"Sword",
     inventory_image = "ul_basic_sword.png",
-	
-	tool_capabilities = {},
 
-    on_use = ul_basic.on_melee {
-		dmg = 5,						-- amount of damage to deal
-		uses = 20,						-- how many times it can be used before breaking
+    on_use = ul_basic.on_melee,
+	tool_capabilities = {
+		full_punch_interval = 1.0,
+		damage_groups = {
+			fleshy = 5
+		},
+		punch_attack_uses = 20,
 	},
 	
 	enchantable = "melee",
 	
-	groups = {weapon = 1, tool = 1}
+	groups = {weapon = 1, melee = 1, tool = 1}
 })
 
 minetest.register_tool("ul_basic:lantern", {
