@@ -44,6 +44,7 @@ function ul_magic.register_rune(name, def)
 		collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
 		physical = true,
 		glow = 14,
+		_ignore_balls = true,
 		on_activate = function(self, staticdata)
 			local sdat = minetest.deserialize(staticdata)
 			
@@ -54,25 +55,53 @@ function ul_magic.register_rune(name, def)
 				self._shooter = sdat._shooter
 				self._level = sdat._level
 				self._timer = sdat._timer or 0
+				self._ignore_balls = true
+				self._attack = def.type == "attack"
 				
 			end
+		end,
+		set_shooter = function(self, shooter)
+			self._shooter = shooter
 		end,
 		on_step = function(self, dtime, moveresult)
 			if not self._timer then return self.object:remove() end
 			self._timer = self._timer + dtime
+			
+			self.object:set_velocity(self._velocity)
+			
+			local disappear = false
+			
 			for _,col in ipairs(moveresult.collisions) do
-				collided = true
-				if col.type == "node" and def.on_hitnode then
-					def.on_hitnode(self._shooter, col.node_pos, self_level)
+			
+				local ignore = false
+				local result
+				
+				if col.type == "node" then
+					ignore = minetest.registered_nodes[col.node_pos]
+						and not minetest.registered_nodes[col.node_pos].walkable
+					result = not ignore
+						and def.on_hitnode
+						and def.on_hitnode(self._shooter, col.node_pos, self._level)
+				elseif col.type == "object" and col.object:is_valid() then
+					if self._attack then
+						ul_basic.punch(col.object, self._shooter)
+					end
+					ignore = col.object:get_luaentity()
+						and col.object:get_luaentity()._ignore_balls
+					result = not ignore
+						and def.on_hitobj
+						and def.on_hitobj(self._shooter, col.object, self._level)
 				end
-				if col.type == "object" and def.on_hitobj then
-					def.on_hitobj(self._shooter, col.object, self._level)
-				end
-				if def.on_hit then 
-					def.on_hit(self._shooter, col.node_pos, col.object, self._level)
+				
+				if not ignore then
+					
+					disappear = def.on_hit
+						and def.on_hit(self._shooter, col.type, self._level, result, col.node_pos or col.object)
+					disappear = disappear == nil or disappear
+					
 				end
 			end
-			if moveresult.collides or self._timer > 30 then
+			if disappear or self._timer > 30 then
 				core.after(0.05, self.object.remove, self.object)
 			end
 		end,
@@ -90,11 +119,11 @@ function ul_magic.register_rune(name, def)
 				local hvel = vector.multiply(vector.normalize(user:get_rotation() or user:get_look_dir()),8)
 				local pos = user:get_pos()
 				pos.y = pos.y + 1.5
-				local o = minetest.add_entity(pos, name.."_ball", minetest.serialize{
+				local o = minetest.add_entity(pos, name.."_ball", minetest.serialize {
 					_velocity = hvel,
 					_level = ul_magic.get_level(user, name)
 				})
-				o:get_luaentity()._shooter = user
+				o:get_luaentity():set_shooter(user)
 				
 				ul_magic.wear_level(user, name)
 				itemstack:add_wear(65536 / 10)

@@ -49,11 +49,11 @@ function ul_magic.shoot(self, target, name, level)
 			or 1.0
 		)
 		local hvel = vector.multiply(vector.direction(pos, tpos),8)
-		local o = minetest.add_entity(pos, name.."_ball", minetest.serialize{
+		local o = minetest.add_entity(pos, name.."_ball", minetest.serialize {
 			_velocity = hvel,
 			_level = level,
 		})
-		o:get_luaentity()._shooter = user
+		o:get_luaentity():set_shooter(self.object)
 		
 		ul_basic.objsound(self.object, "ul_magic_attack")
 	else

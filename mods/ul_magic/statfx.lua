@@ -16,7 +16,7 @@ ul_statfx.register("ul_magic:burning", {
 			return 0
 		end
 		
-		if ul_statfx.timer(timer, dtime, 0.5) and ul_basic.set_hp(obj, -1) then
+		if ul_statfx.timer(timer, dtime, 0.5) and ul_basic.punch(obj, nil, nil, {damage_groups={fleshy=1}}) then
 			ul_basic.objsound(obj, "player_damage")
 		end
 	end
