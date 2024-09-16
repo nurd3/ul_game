@@ -4,7 +4,7 @@ minetest.register_item(':', {
     type = 'none',
     wield_image = 'blank.png',
     tool_capabilities = {
-        full_punch_interval = 0.5,
+        full_punch_interval = 1.0,
         max_drop_level = 0,
         groupcaps = {
             crumbly = {
@@ -26,7 +26,7 @@ minetest.register_item(':', {
                 uses = 0,
             },
         },
-        damage_groups = {fleshy = 1},
+        damage_groups = {fleshy = 2},
     }
 })
 
