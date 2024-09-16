@@ -28,6 +28,28 @@ function ul_mobs.quick_battle(dist, hp1, sp1, ml1, rg1, hp2, sp2, ml2, rg2)
 	end
 end
 
+function ul_mobs.death_drops(...)
+	local drops = {...}
+	local func = function (self, pos)
+		for _,v in ipairs(drops) do
+			mobkit_plus.drop(pos, table.unpack(v))
+		end
+	end
+	return func
+end
+
+function ul_mobs.gen_spawn()
+	local temp = {}
+	for name,chance in pairs(monsters) do
+		if math.random() < chance then
+			table.insert(temp, name)
+		end
+	end
+	if #temp > 0 then
+		return temp[math.random(#temp)]
+	end
+end
+
 function ul_mobs.can_see(self, tpos)
 
 	if not self or not tpos or not mobkit.is_alive(self) then

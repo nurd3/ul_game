@@ -16,11 +16,11 @@ local function check_prey(self, obj)
 		return false
 	end
 	
-	if self.monstertype and luaent then
+	if self.category and luaent then
 		
-		local mtype = luaent.monstertype
+		local mtype = luaent.category
 		
-		if mtype and mtype == self.monstertype and math.random() < infighting_chance and not self.owner then
+		if mtype and mtype == self.category and math.random() < infighting_chance and not self._owner then
 			return false
 		end
 		
@@ -28,7 +28,7 @@ local function check_prey(self, obj)
 	
 	if self._owner then
 		
-		if luaent and luaent.type == "animal" then
+		if luaent and (luaent.type == "animal" or luaent.type == "race") then
 			return false
 		end
 		

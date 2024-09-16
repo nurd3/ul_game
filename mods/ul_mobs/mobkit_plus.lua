@@ -219,7 +219,7 @@ function mobkit_plus.hurt_animation(self)
 	mobkit.make_sound(self, "hurt")
 	-- stolen from mobs redo
 	core.after(0.1, function()
-		self.object:set_texture_mod("^[brighten")
+		self.object:set_texture_mod("^[invert:rgb")
 
 		core.after(0.3, function()
 			self.object:set_texture_mod("")
@@ -227,17 +227,31 @@ function mobkit_plus.hurt_animation(self)
 	end)
 end
 
+function mobkit_plus.calculate_dmg(dtime, tool_capabilities)
+	if not tool_capabilities or not tool_capabilities.fleshy then return 1 end
+	if not tool_capabilities.full_punch_interval then return tool_capabilities.fleshy end
+	local mult = math.min(1, dtime / (tool_capabilities.full_punch_interval))
+	
+	return math.round(tool_capabilities.fleshy * mult)
+end
+
 function mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)
 
+	local dmg = mobkit_plus.calculate_dmg(time_from_last_punch, tool_capabilities)
+
 	local is_alive = mobkit.is_alive(self)
-	mobkit.hurt(self,tool_capabilities.damage_groups.fleshy or 1)
+	if dmg == 0 then
+		ul_basic.objsound(self.object, "ul_miss")
+		return
+	end
+	mobkit.hurt(self, dmg)
 	mobkit_plus.hurt_animation(self)
-	if not self.disable_knockback then
+	if not self.disable_knockback and dir then
 		local hvel = vector.multiply(vector.normalize({x=dir.x,y=0,z=dir.z}),4)
 		self.object:set_velocity({x=hvel.x,y=2,z=hvel.z})
 	end
 	
-	local weapon = puncher:get_wielded_item()
+	local weapon = puncher and puncher:get_wielded_item()
 	
 	if weapon and is_alive then
 	
