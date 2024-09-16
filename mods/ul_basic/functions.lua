@@ -103,7 +103,6 @@ function ul_basic.on_melee(itemstack, user, pointed_thing, level)
 		
 		ul_basic.punch(obj, user, delta, tool_capabilities, user:get_look_dir())
 		
-		
 		if obj:is_valid() and meta and meta:contains("_enchantment") then
 			local enc = meta:get("_enchantment")
 			local lvl = user and ul_magic.get_level(user, enc) or level or 1

@@ -228,11 +228,11 @@ function mobkit_plus.hurt_animation(self)
 end
 
 function mobkit_plus.calculate_dmg(dtime, tool_capabilities)
-	if not tool_capabilities or not tool_capabilities.fleshy then return 1 end
-	if not tool_capabilities.full_punch_interval then return tool_capabilities.fleshy end
+	if not tool_capabilities or not tool_capabilities.damage_groups.fleshy then return 1 end
+	if not tool_capabilities.full_punch_interval then return tool_capabilities.damage_groups.fleshy end
 	local mult = math.min(1, dtime / (tool_capabilities.full_punch_interval))
 	
-	return math.round(tool_capabilities.fleshy * mult)
+	return math.floor(tool_capabilities.damage_groups.fleshy * mult + 0.25)
 end
 
 function mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)

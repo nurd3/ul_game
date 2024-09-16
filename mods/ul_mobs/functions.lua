@@ -150,7 +150,7 @@ function ul_mobs.brain(self)
 		end
 		
 		if not self.disable_taming then
-			ul_basic.drop(pos, 0.5, self.name, 1)
+			ul_basic.drop(pos, 0.1, self.name, 1)
 		end
 		if self.on_die then
 			self.on_die(self, pos)
