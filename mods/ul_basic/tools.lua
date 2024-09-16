@@ -4,7 +4,7 @@ minetest.register_item(':', {
     type = 'none',
     wield_image = 'blank.png',
     tool_capabilities = {
-        full_punch_interval = 1.0,
+        full_punch_interval = 0.5,
         max_drop_level = 0,
         groupcaps = {
             crumbly = {

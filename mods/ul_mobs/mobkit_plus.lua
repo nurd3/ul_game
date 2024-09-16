@@ -232,7 +232,9 @@ function mobkit_plus.calculate_dmg(dtime, tool_capabilities)
 	if not tool_capabilities.full_punch_interval then return tool_capabilities.damage_groups.fleshy end
 	local mult = math.min(1, dtime / (tool_capabilities.full_punch_interval))
 	
-	return math.floor(tool_capabilities.damage_groups.fleshy * mult + 0.25)
+	return math.random() < mult 
+		and math.floor(tool_capabilities.damage_groups.fleshy * mult + 0.25)
+		or 0
 end
 
 function mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)
