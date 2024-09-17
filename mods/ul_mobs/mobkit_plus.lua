@@ -238,15 +238,19 @@ function mobkit_plus.calculate_dmg(dtime, tool_capabilities)
 end
 
 function mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)
+	
+	if not tool_capabilities.is_magic then
+		local dmg = mobkit_plus.calculate_dmg(time_from_last_punch, tool_capabilities)
 
-	local dmg = mobkit_plus.calculate_dmg(time_from_last_punch, tool_capabilities)
-
-	local is_alive = mobkit.is_alive(self)
-	if dmg == 0 then
-		ul_basic.objsound(self.object, "ul_miss")
-		return
+		local is_alive = mobkit.is_alive(self)
+		if dmg == 0 then
+			ul_basic.objsound(self.object, "ul_basic_miss")
+			return
+		end
+		
+		mobkit.hurt(self, dmg)
 	end
-	mobkit.hurt(self, dmg)
+	
 	mobkit_plus.hurt_animation(self)
 	if not self.disable_knockback and dir then
 		local hvel = vector.multiply(vector.normalize({x=dir.x,y=0,z=dir.z}),4)
