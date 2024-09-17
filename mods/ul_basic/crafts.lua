@@ -30,9 +30,38 @@ minetest.register_craft({
 	recipe = {"ul_basic:lantern", "ul_basic:stone 3"}
 })
 
-
 minetest.register_craft({
 	output = "ul_basic:lantern",
 	type = "shapeless",
 	recipe = {"ul_basic:stone", "ul_magic:shard"}
+})
+
+minetest.register_craft({
+	output = "ul_basic:rod 2",
+	type = "shapeless",
+	recipe = {"ul_basic:bone", "ul_basic:stone"}
+})
+
+minetest.register_craft({
+	output = "ul_basic:ladder 3",
+	type = "shapeless",
+	recipe = {"ul_basic:rod 4"}
+})
+
+minetest.register_craft({
+	output = "ul_basic:pick",
+	type = "shapeless",
+	recipe = {"ul_basic:bone 2", "ul_basic:rod"}
+})
+
+minetest.register_craft({
+	output = "ul_basic:sword",
+	type = "shapeless",
+	recipe = {"ul_basic:bone 2", "ul_basic:rod"}
+})
+
+minetest.register_craft({
+	output = "ul_basic:knife",
+	type = "shapeless",
+	recipe = {"ul_basic:bone", "ul_basic:rod"}
 })

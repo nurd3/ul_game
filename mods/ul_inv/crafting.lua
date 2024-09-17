@@ -67,7 +67,9 @@ sfinv.override_page("sfinv:crafting", {
 		if selected[plyr:get_player_name()] then
 			local rec = recipes[selected[plyr:get_player_name()]]
 			local offset = 0.5
-			recipe = recipe.."label[0,0;"..get_item_display_name(rec.output).."]"
+			local ist = ItemStack(rec.output)
+			local prepend = ist:get_count() > 1 and (ist:get_count().."X ") or ""
+			recipe = recipe.."label[0,0;"..prepend..get_item_display_name(ist:get_name()).."]"
 			for nom,amt in pairs(rec.input) do
 				local name = get_item_display_name(nom)
 				recipe = recipe.."label[0.1,"..offset..";"..amt.."X "..name.."]\n"

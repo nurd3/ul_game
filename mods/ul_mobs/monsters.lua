@@ -147,7 +147,7 @@ ul_mobs.register_mob("ul_mobs:zombie", {
 	range_power = 0,
 	melee_power = 5,
 	on_check_prey = check_prey,
-	on_die = ul_mobs.death_drops({0.1, "ul_magic:poison"}),
+	on_die = ul_mobs.death_drops({0.1, "ul_magic:poison"}, {0.5, "ul_basic:bone"}),
 	type = "monster",
 	category = "undead"
 })
@@ -178,7 +178,7 @@ ul_mobs.register_mob("ul_mobs:vampire", {
 	range_power = 3,
 	melee_power = 5,
 	on_check_prey = check_prey,
-	on_die = ul_mobs.death_drops({0.1, "ul_magic:vampirism"}),
+	on_die = ul_mobs.death_drops({0.1, "ul_magic:vampirism"}, {0.2, "ul_basic:bone"}),
 	type = "monster",
 	category = "undead"
 })
@@ -205,7 +205,7 @@ ul_mobs.register_mob("ul_mobs:lich", {
 	range_power = 0,
 	melee_power = 10,
 	on_check_prey = check_prey,
-	on_die = ul_mobs.death_drops({1.0, "ul_magic:regen"}),
+	on_die = ul_mobs.death_drops({1.0, "ul_magic:regen"}, {0.3, "ul_basic:bone"}),
 	type = "monster",
 	category = "undead"
 })
@@ -232,7 +232,7 @@ ul_mobs.register_mob("ul_mobs:skeleton", {
 	range_power = 0,
 	melee_power = 10,
 	on_check_prey = check_prey,
-	on_die = ul_mobs.death_drops({1.0, "ul_magic:sword"}),
+	on_die = ul_mobs.death_drops({0.2, "ul_magic:sword"}, {1.0, "ul_basic:bone"}),
 	type = "monster",
 	category = "undead"
 })
@@ -269,7 +269,7 @@ ul_mobs.register_mob("ul_mobs:stalker", {
 			return true
 		end
 	end,
-	on_die = ul_mobs.death_drops({1.0, "ul_magic:launch"}),
+	on_die = ul_mobs.death_drops({1.0, "ul_magic:launch"}, {0.5, "ul_basic:bone"}),
 	type = "monster",
 	category = "undead"
 })

@@ -1,18 +1,38 @@
-function ul_basic.punch(obj, puncher, time_from_last_punch, tool_capabilities, dir)
-	tool_capabilities = tool_capabilities or {damage_groups = {fleshy = 0}}
-	dir = dir or vector.zero()
-	if obj == nil then
-		return
-	elseif type(obj) == "table" then
-		return ul_basic.punch(obj.object, puncher, time_from_last_punch, tool_capabilities, dir)
-	elseif type(obj) == "userdata" and obj:is_valid() then
-		return obj:punch(puncher, time_from_last_punch, tool_capabilities, dir)
+local last_break = {}
+
+function ul_basic.node_breakable(drops)
+	local stack = ItemStack(drops)
+	return function(pos, node, puncher)
+		if not puncher then
+			return
+		end
+		
+		local plyr = puncher:get_player_name()
+		
+		if plyr then
+			last_break[plyr] = last_break[plyr] or -1
+			local delta = minetest.get_server_uptime() - last_break[plyr]
+			if delta <= 0.1 then
+				return
+			end
+			last_break[plyr] = minetest.get_server_uptime()
+		end
+		
+		local inv = puncher:get_inventory()
+		
+		ul_basic.give_or_drop(inv, "main", pos, 2, stack)
+		
+		ul_basic.nodesound(pos, "dug")
+
+		minetest.swap_node(pos, {name="air"})
 	end
 end
 
--- util drop function
-function ul_basic.drop(pos, chance, item, amount)
+--------------------
+-- ITEM/INVENTORY --
+--------------------
 
+local function handle_amount(amount)
 	-- amount handling
 	local amt = amount or 1
 
@@ -35,13 +55,13 @@ function ul_basic.drop(pos, chance, item, amount)
 
 		if a == b then
 			amt = a
-			minetest.log("warning", "mobkit_plus.drop: 0 distance range")
+			minetest.log("warning", "ul_basic.handle_amount: 0 distance range")
 		elseif 											-- catch erroneous ranges
 			a <= 0 or b <= 0 or							-- must be over 0
 			a ~= math.floor(a) or b ~= math.floor(b)	-- must be integers
 		then
 			amt = 1
-			minetest.log("error", "mobkit_plus.drop: range must be integers over 0")
+			minetest.log("error", "ul_basic.handle_amount: range must be integers over 0")
 		else
 			amt = math.random(a, b)
 		end
@@ -50,8 +70,41 @@ function ul_basic.drop(pos, chance, item, amount)
 	-- catch erroneous inputs
 	if amt <= 0 or amt ~= math.floor(amt) then
 		amt = 1
-		minetest.log("warning", "mobkit_plus.drop: amount must be an integer over 0")
+		minetest.log("warning", "ul_basic.handle_amount: amount must be an integer over 0")
 	end
+	
+	return amt
+end
+
+function ul_basic.give_or_drop(inv, listname, pos, chance, stack, amount)
+
+	local lst = listname or "main"
+	if amount then
+		stack:set_amount(
+			handle_amount(amount)
+		)
+	end
+
+	-- positioning
+	local pos = vector.copy(pos)
+	pos.y = pos.y + 1
+
+	if math.random() < chance then
+		if inv and inv:room_for_item(lst, stack) then
+			inv:add_item(lst, stack)
+		else
+			minetest.add_item(
+				pos, stack
+			)
+		end
+	end
+	
+end
+
+-- util drop function
+function ul_basic.drop(pos, chance, item, amount)
+
+	local amt = handle_amount(amount)
 
 	-- positioning
 	local pos = vector.copy(pos)
@@ -66,6 +119,10 @@ function ul_basic.drop(pos, chance, item, amount)
 	end
 	
 end
+
+------------
+-- COMBAT --
+------------
 
 local last_punch = {}
 
@@ -118,8 +175,26 @@ function ul_basic.on_melee(itemstack, user, pointed_thing, level)
 	end
 end
 
+------------
+-- SOUNDS --
+------------
+
+function ul_basic.possound(pos, name)
+	minetest.sound_play(name, {pos=pos, gain = 1.0})
+end
+
 function ul_basic.objsound(obj, name)
 	minetest.sound_play(name, {object=obj, gain = 1.0})
+end
+
+function ul_basic.nodesound(pos, name)
+	local def = minetest.registered_nodes[
+		minetest.get_node(pos).name
+	]
+	local actual_name = def
+		and def.sounds
+		and def.sounds[name]
+	ul_basic.possound(pos, actual_name)
 end
 
 function ul_basic.node_sound_defaults(tbl)
@@ -135,9 +210,9 @@ function ul_basic.node_sound_defaults(tbl)
 	return tbl
 end
 
-function ul_basic.possound(pos, name)
-	minetest.sound_play(name, {pos=pos, gain = 1.0})
-end
+-------------------------
+-- LUAENTITIES/PLAYERS --
+-------------------------
 
 function ul_basic.is_alive(thing)		-- thing can be luaentity or objectref.
 --	if not thing then return false end
@@ -172,4 +247,17 @@ function ul_basic.set_hp(obj, add)
 	end
 	
 	return hp ~= new_hp
+end
+
+-- punches something
+function ul_basic.punch(obj, puncher, time_from_last_punch, tool_capabilities, dir)
+	tool_capabilities = tool_capabilities or {damage_groups = {fleshy = 0}}
+	dir = dir or vector.zero()
+	if obj == nil then
+		return
+	elseif type(obj) == "table" then
+		return ul_basic.punch(obj.object, puncher, time_from_last_punch, tool_capabilities, dir)
+	elseif type(obj) == "userdata" and obj:is_valid() then
+		return obj:punch(puncher, time_from_last_punch, tool_capabilities, dir)
+	end
 end

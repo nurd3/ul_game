@@ -6,7 +6,7 @@ minetest.register_node("ul_basic:stone", {
     drawtype = "normal",
     tiles = {"ul_basic_stone.png"},
     groups = {cracky = 3},
-	sunlight_propagates = true,
+	sunlight_propagates = false,
 	is_ground_content = true,
 	paramtype = "none",
 	paramtype2 = "none",
@@ -18,7 +18,7 @@ minetest.register_node("ul_basic:ore", {
     drawtype = "normal",
     tiles = {"ul_basic_ore.png"},
     groups = {cracky = 2},
-	sunlight_propagates = true,
+	sunlight_propagates = false,
 	is_ground_content = true,
 	paramtype = "none",
 	paramtype2 = "none",
@@ -30,7 +30,7 @@ minetest.register_node("ul_basic:ore_rare", {
     drawtype = "normal",
     tiles = {"ul_basic_ore.png^[hsl:120"},
     groups = {cracky = 2},
-	sunlight_propagates = true,
+	sunlight_propagates = false,
 	is_ground_content = true,
 	paramtype = "none",
 	paramtype2 = "none",
@@ -42,7 +42,7 @@ minetest.register_node("ul_basic:ore_super", {
     drawtype = "normal",
     tiles = {"ul_basic_ore.png^[hsl:180"},
     groups = {cracky = 2},
-	sunlight_propagates = true,
+	sunlight_propagates = false,
 	is_ground_content = true,
 	paramtype = "none",
 	paramtype2 = "none",
@@ -61,8 +61,30 @@ minetest.register_node("ul_basic:lamp", {
     light_source = 14
 })
 
+minetest.register_node("ul_basic:ladder", {
+    description = S"Ladder",
+	sounds = ul_basic.node_sound_defaults(),
+    drawtype = "signlike",
+	inventory_image = "ul_basic_ladder.png",
+    tiles = {"ul_basic_ladder.png"},
+	on_punch = ul_basic.node_breakable("ul_basic:ladder"),
+    groups = {snappy = 1},
+	sunlight_propagates = true,
+	is_ground_content = false,
+	walkable = false,
+	climbable = true,
+	paramtype = "light",
+	paramtype2 = "wallmounted",
+	
+	selection_box = {
+		type = "wallmounted",
+		wall_side = {-0.5,-0.4,-0.4,-0.4,0.4,0.4},
+	},
+})
+
 lootblocks.register_drop("ul_basic:lamp", 0.25)
 lootblocks.register_drop("ul_basic:ore", 0.125)
+lootblocks.register_drop("ul_basic:ladder", 0.125)
 
 minetest.register_alias("mapgen_stone", "ul_basic:stone")
 minetest.register_alias("mapgen_water_source", "air")
