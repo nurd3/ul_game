@@ -191,11 +191,23 @@ function ul_basic.nodesound(pos, name)
 	local def = minetest.registered_nodes[
 		minetest.get_node(pos).name
 	]
-	local actual_name = def
+	local spec = def
 		and def.sounds
 		and def.sounds[name]
-	ul_basic.possound(pos, actual_name)
+	ul_basic.possound(pos, spec)
 end
+
+function ul_basic.entsound(ent, name)
+	if type(ent) == "userdata" then 
+		return ul_basic.entsound(ent:get_luaentity(), name)
+	end
+	local spec = ent
+		and ent.sounds
+		and ent.sounds[name]
+	ul_basic.objsound(ent.object, spec)
+end
+
+-- SOUND TEMPLATES --
 
 function ul_basic.node_sound_defaults(tbl)
 	tbl = tbl or {}
@@ -207,6 +219,21 @@ function ul_basic.node_sound_defaults(tbl)
 			{name = "ul_basic_dug", gain = 0.25}
 	tbl.place = tbl.place or
 			{name = "ul_basic_place", gain = 1.0}
+	return tbl
+end
+
+function ul_basic.interactable_sound_defaults(tbl)
+	tbl = tbl or {}
+	tbl.dig = tbl.dig or
+			{name = "ul_basic_dig", gain = 0.4}
+	tbl.dug = tbl.dug or
+			{name = "ul_basic_dug", gain = 0.25}
+	tbl.place = tbl.place or
+			{name = "ul_basic_place", gain = 1.0}
+	tbl.interact = tbl.interact or
+			{name = "ul_interact", gain = 0.2}
+	tbl.fail = tbl.fail or
+			{name = "ul_fail", gain = 0.4}
 	return tbl
 end
 

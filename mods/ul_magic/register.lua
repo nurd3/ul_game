@@ -84,7 +84,7 @@ function ul_magic.register_rune(name, def)
 						and def.on_hitnode(self._shooter, col.node_pos, self._level)
 				elseif col.type == "object" and col.object:is_valid() then
 					if self._attack then
-						ul_basic.punch(col.object, self._shooter, {is_magic = true})
+						ul_basic.punch(col.object, self._shooter, nil, {is_magic = true})
 					end
 					ignore = col.object:get_luaentity()
 						and col.object:get_luaentity()._ignore_balls

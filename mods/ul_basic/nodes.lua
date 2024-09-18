@@ -12,6 +12,32 @@ minetest.register_node("ul_basic:stone", {
 	paramtype2 = "none",
 })
 
+minetest.register_node("ul_basic:building", {
+    description = S"Building",
+	sounds = ul_basic.node_sound_defaults(),
+    drawtype = "glasslike_framed",
+    tiles = {"ul_basic_building.png", "ul_basic_building_detail.png"},
+    groups = {oddly_breakable_by_hand = 3},
+	sunlight_propagates = false,
+	is_ground_content = false,
+	paramtype = "light",
+	paramtype2 = "none",
+	use_texture_alpha = "clip"
+})
+
+minetest.register_node("ul_basic:window", {
+    description = S"Window",
+	sounds = ul_basic.node_sound_defaults(),
+    drawtype = "glasslike_framed_optional",
+    tiles = {"ul_basic_window.png", "ul_basic_window_detail.png"},
+    groups = {oddly_breakable_by_hand = 3},
+	sunlight_propagates = true,
+	is_ground_content = false,
+	paramtype = "light",
+	paramtype2 = "none",
+	use_texture_alpha = "clip",
+})
+
 minetest.register_node("ul_basic:ore", {
     description = S"Ore",
 	sounds = ul_basic.node_sound_defaults(),
@@ -84,7 +110,6 @@ minetest.register_node("ul_basic:ladder", {
 
 lootblocks.register_drop("ul_basic:lamp", 0.25)
 lootblocks.register_drop("ul_basic:ore", 0.125)
-lootblocks.register_drop("ul_basic:ladder", 0.125)
 
 minetest.register_alias("mapgen_stone", "ul_basic:stone")
 minetest.register_alias("mapgen_water_source", "air")
