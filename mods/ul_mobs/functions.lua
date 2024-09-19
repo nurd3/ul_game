@@ -16,7 +16,7 @@ end
 function ul_mobs.check(pos, entname)
 	local light = minetest.get_node_light(pos, 0)
 	modifier[entname] = modifier[entname] or 0
-	if light and light < 7 then
+	if light and light <= 5 then
 		return modifier[entname] - math.random(1, 20) < 0
 	end
 end
@@ -36,18 +36,6 @@ function ul_mobs.death_drops(...)
 		end
 	end
 	return func
-end
-
-function ul_mobs.gen_spawn()
-	local temp = {}
-	for name,chance in pairs(monsters) do
-		if math.random() < chance then
-			table.insert(temp, name)
-		end
-	end
-	if #temp > 0 then
-		return temp[math.random(#temp)]
-	end
 end
 
 function ul_mobs.can_see(self, tpos)
