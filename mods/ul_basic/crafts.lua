@@ -45,7 +45,7 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "ul_basic:building 9",
 	type = "shapeless",
-	recipe = {"ul_basic:bone 2", "ul_basic:rod 2"}
+	recipe = {"ul_basic:rod", "ul_basic:stone"}
 })
 
 minetest.register_craft({
