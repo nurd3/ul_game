@@ -82,7 +82,7 @@ function ul_magic.register_rune(name, def)
 					result = not ignore
 						and def.on_hitnode
 						and def.on_hitnode(self._shooter, col.node_pos, self._level)
-				elseif col.type == "object" and col.object:is_valid() then
+				elseif col.type == "object" then
 					if self._attack then
 						ul_basic.punch(col.object, self._shooter, nil, {is_magic = true})
 					end

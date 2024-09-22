@@ -284,7 +284,7 @@ function ul_basic.punch(obj, puncher, time_from_last_punch, tool_capabilities, d
 		return
 	elseif type(obj) == "table" then
 		return ul_basic.punch(obj.object, puncher, time_from_last_punch, tool_capabilities, dir)
-	elseif type(obj) == "userdata" and obj:is_valid() then
+	elseif type(obj) == "userdata" then
 		return obj:punch(puncher, time_from_last_punch, tool_capabilities, dir)
 	end
 end
