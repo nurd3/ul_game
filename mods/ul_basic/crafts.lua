@@ -55,7 +55,7 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-	output = "ul_basic:window",
+	output = "ul_basic:window 4",
 	type = "shapeless",
 	recipe = {"ul_basic:bone 2"}
 })

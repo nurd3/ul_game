@@ -239,10 +239,11 @@ end
 
 function mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)
 	
+	local is_alive = mobkit.is_alive(self)
+	
 	if not tool_capabilities.is_magic then
 		local dmg = mobkit_plus.calculate_dmg(time_from_last_punch, tool_capabilities)
 
-		local is_alive = mobkit.is_alive(self)
 		if dmg == 0 then
 			ul_basic.objsound(self.object, "ul_basic_miss")
 			return
@@ -260,11 +261,10 @@ function mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabili
 	local weapon = puncher and puncher:get_wielded_item()
 	
 	if weapon and is_alive then
+
 	
 		-- add weapon wear
-		local punch_interval = tool_capabilities.full_punch_interval or 1.4
-		
-		local punch_attack_uses = tool_capabilities.punch_attack_uses or 20
+		local punch_attack_uses = tool_capabilities.punch_attack_uses
 		
 		local wear = 0
 
