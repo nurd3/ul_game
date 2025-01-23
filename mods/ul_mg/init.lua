@@ -1,11 +1,11 @@
-local S = minetest.get_translator"ul_mg"
-local path = minetest.get_modpath"ul_mg"
+local S = core.get_translator"ul_mg"
+local path = core.get_modpath"ul_mg"
 
 ul_mg = {}
 
 ul_mg.get_translator = S
 ul_mg.get_modpath = path
 
-minetest.register_on_generated(function()
+core.register_on_generated(function()
 	
 end)

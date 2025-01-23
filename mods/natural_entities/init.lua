@@ -1,7 +1,7 @@
 natural_entities = {}
 
-local S = minetest.get_translator"natural_entities"
-local path = minetest.get_modpath"natural_entities"
+local S = core.get_translator"natural_entities"
+local path = core.get_modpath"natural_entities"
 
 natural_entities.get_translator = S
 natural_entities.get_modpath = path
@@ -26,8 +26,8 @@ local function adjust(pos, min, max)
 	
 	local count = 1
 	
-	local nodename = minetest.get_node(vector.add(pos, offset)).name
-	local node = minetest.registered_nodes[nodename]
+	local nodename = core.get_node(vector.add(pos, offset)).name
+	local node = core.registered_nodes[nodename]
 	local spawn = nodename ~= "ignore" and not node.walkable
 	
 	while not spawn do
@@ -39,8 +39,8 @@ local function adjust(pos, min, max)
 		if offset.z > max_sqr then
 			break
 		end
-		nodename = minetest.get_node(vector.add(pos, offset)).name
-		node = minetest.registered_nodes[nodename]
+		nodename = core.get_node(vector.add(pos, offset)).name
+		node = core.registered_nodes[nodename]
 		spawn = nodename ~= "ignore" and not node.walkable
 		count = count + 1
 	end
@@ -63,8 +63,8 @@ local function adjust(pos, min, max)
 		if pos.y + offset.y > max then
 			return false, vector.add(pos, offset)
 		end
-		nodename = minetest.get_node(vector.add(pos, offset)).name
-		node = minetest.registered_nodes[nodename]
+		nodename = core.get_node(vector.add(pos, offset)).name
+		node = core.registered_nodes[nodename]
 		spawn = nodename ~= "ignore" and not node.walkable
 		count = count + 1
 	end
@@ -115,7 +115,7 @@ local function do_spawns(dtime, plyr)
 				end
 				
 				if spawn and (not def.check or def.check(pos2, ent_name)) then
-					minetest.add_entity(pos2, ent_name)
+					core.add_entity(pos2, ent_name)
 				end
 			end
 		end
@@ -123,12 +123,12 @@ local function do_spawns(dtime, plyr)
 end
 
 function natural_entities.spawnstep(dtime)
-	for _,plyr in ipairs(minetest.get_connected_players()) do
+	for _,plyr in ipairs(core.get_connected_players()) do
 		do_spawns(dtime, plyr)
 	end
 end
 
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	return natural_entities.spawnstep(dtime)
 end)
 

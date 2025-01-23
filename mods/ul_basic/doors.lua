@@ -4,7 +4,7 @@ ul_basic.doors = {}
 
 function ul_basic.doors.register(name, def)
 	
-	minetest.register_entity(name, {
+	core.register_entity(name, {
 		
 		sounds = def.sounds,
 		visual = "upright_sprite",
@@ -15,7 +15,7 @@ function ul_basic.doors.register(name, def)
 		collide_with_objects = true,
 		physical = true,
 		on_activate = function(self, staticdata)
-			local sdat = minetest.deserialize(staticdata)
+			local sdat = core.deserialize(staticdata)
 			
 			self._door_opened = false
 			self._facing = 0
@@ -44,7 +44,7 @@ function ul_basic.doors.register(name, def)
 			end
 		end,
 		get_staticdata = function(self)
-			return minetest.serialize {
+			return core.serialize {
 				_door_opened = self._door_opened,
 				_facing = self._facing,
 				_origin = self._origin,
@@ -71,7 +71,7 @@ function ul_basic.doors.register(name, def)
 	
 	local inv_img = def.inventory_image or def.textures.closed[1]
 	
-	minetest.register_craftitem(name, {
+	core.register_craftitem(name, {
 		short_description = def.short_description or def.description or name,
 		description = def.description,
 		inventory_image = inv_img,
@@ -81,8 +81,8 @@ function ul_basic.doors.register(name, def)
 			
 			local pos = vector.round(pointed_thing.above)
 			
-			if minetest.get_node(pos).name ~= "air" 
-			or minetest.get_node(pos + vector.new(0,1,0)).name ~= "air"
+			if core.get_node(pos).name ~= "air" 
+			or core.get_node(pos + vector.new(0,1,0)).name ~= "air"
 			then
 				return
 			end
@@ -131,10 +131,10 @@ function ul_basic.doors.place(pos, door, dir, opened)
 		end
 	end
 	
-	return minetest.add_entity(
+	return core.add_entity(
 		vector.round(pos),
 		door,
-		minetest.serialize {_door_opened = opened or false, _facing = facing}
+		core.serialize {_door_opened = opened or false, _facing = facing}
 	)
 end
 

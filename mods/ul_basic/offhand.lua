@@ -1,5 +1,5 @@
 local function can_be_offhanded(itemname)
-	if itemname and minetest.registered_items[itemname] and minetest.registered_items[itemname].disable_offhand then
+	if itemname and core.registered_items[itemname] and core.registered_items[itemname].disable_offhand then
 		return false
 	end
 	return true
@@ -19,7 +19,7 @@ local function offhand(plyr)
 	return
 end
 
-minetest.register_on_joinplayer(function(plyr)
+core.register_on_joinplayer(function(plyr)
     local inv = plyr:get_inventory()
     inv:set_size("offhand", 1)
 	plyr:hud_add({
@@ -52,9 +52,9 @@ local function wear_lantern(stack)
 	return stack
 end
 
-minetest.register_globalstep(function (dtime)
+core.register_globalstep(function (dtime)
 	timer = timer + dtime
-	for _,plyr in ipairs(minetest.get_connected_players()) do
+	for _,plyr in ipairs(core.get_connected_players()) do
 		local controls = plyr:get_player_control()
 		if not controls.aux1 then 
 			pressed[plyr:get_player_name()] = false

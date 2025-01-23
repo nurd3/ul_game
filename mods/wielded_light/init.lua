@@ -1,4 +1,4 @@
-local mod_name = minetest.get_current_modname()
+local mod_name = core.get_current_modname()
 
 -- Node replacements that emit light
 -- Sets of lighting_node={ node=original_node, level=light_level }
@@ -84,12 +84,12 @@ end
 
 -- Log an error coming from this mod
 local function error_log(message, ...)
-	minetest.log("error", "[Wielded Light] " .. (message:format(...)))
+	core.log("error", "[Wielded Light] " .. (message:format(...)))
 end
 
 -- Is a node lightable and a liquid capable of flooding some light sources
 local function is_lightable_liquid(pos)
-	local node = minetest.get_node_or_nil(pos)
+	local node = core.get_node_or_nil(pos)
 	if not node then return end
 	return lightable_liquids[node.name]
 end
@@ -101,14 +101,14 @@ end
 
 -- Check whether a node was registered by the wield_light mod
 local function is_wieldlight_node(pos_vec)
-	local name = string.sub(minetest.get_node(pos_vec).name, 1, #mod_name)
+	local name = string.sub(core.get_node(pos_vec).name, 1, #mod_name)
 	return name == mod_name
 end
 
 -- Get the projected position of an entity based on its velocity, rounded to the nearest block
 local function entity_pos(obj, offset)
 	local velocity
-	if (minetest.features.direct_velocity_on_players or not obj:is_player()) and obj.get_velocity then
+	if (core.features.direct_velocity_on_players or not obj:is_player()) and obj.get_velocity then
 		velocity = obj:get_velocity()
 	else
 		velocity = obj:get_player_velocity()
@@ -136,7 +136,7 @@ local function add_light(pos, id, light_level)
 		active_lights[pos] = {}
 	end
 	if active_lights[pos][id] ~= light_level then
-		-- minetest.log("error", "add "..id.." "..pos.." "..tostring(light_level))
+		-- core.log("error", "add "..id.." "..pos.." "..tostring(light_level))
 		active_lights[pos][id] = light_level
 		light_recalcs[pos] = true
 	end
@@ -145,9 +145,9 @@ end
 -- Remove light from active light list and mark position for update
 local function remove_light(pos, id)
 	if not active_lights[pos] then return end
-	-- minetest.log("error", "rem "..id.." "..pos)
+	-- core.log("error", "rem "..id.." "..pos)
 	active_lights[pos][id] = nil
-	minetest.after(removal_delay, function ()
+	core.after(removal_delay, function ()
 		light_recalcs[pos] = true
 	end)
 end
@@ -155,7 +155,7 @@ end
 -- Track an entity's position and update its light, will be called on every update step
 local function update_entity(entity)
 	local pos = entity_pos(entity.obj, entity.offset)
-	local pos_str = pos and minetest.pos_to_string(pos)
+	local pos_str = pos and core.pos_to_string(pos)
 
 	-- If the position has changed, remove the old light and mark the entity for update
 	if entity.pos and pos_str ~= entity.pos then
@@ -183,7 +183,7 @@ local function update_entity(entity)
 	end
 	if active_lights[pos_str] then
 		if is_wieldlight_node(pos) then
-			minetest.get_node_timer(pos):start(cleanup_interval)
+			core.get_node_timer(pos):start(cleanup_interval)
 		end
 	end
 	entity.update = false
@@ -192,9 +192,9 @@ end
 
 -- Save the original nodes timer if it has one
 local function save_timer(pos_vec)
-	local timer = minetest.get_node_timer(pos_vec)
+	local timer = core.get_node_timer(pos_vec)
 	if timer:is_started() then
-		local meta = minetest.get_meta(pos_vec)
+		local meta = core.get_meta(pos_vec)
 		meta:set_float("saved_timer_timeout", timer:get_timeout())
 		meta:set_float("saved_timer_elapsed", timer:get_elapsed())
 	end
@@ -202,11 +202,11 @@ end
 
 -- Restore the original nodes timer if it had one
 local function restore_timer(pos_vec)
-	local meta = minetest.get_meta(pos_vec)
+	local meta = core.get_meta(pos_vec)
 	local timeout = meta:get_float("saved_timer_timeout")
 	if timeout > 0 then
 		local elapsed = meta:get_float("saved_timer_elapsed")
-		local timer = minetest.get_node_timer(pos_vec)
+		local timer = core.get_node_timer(pos_vec)
 		timer:set(timeout, elapsed)
 		meta:set_string("saved_timer_timeout","")
 		meta:set_string("saved_timer_elapsed","")
@@ -215,18 +215,18 @@ end
 
 -- Replace a lighting node with its original counterpart
 local function reset_lighting_node(pos)
-	local existing_node = minetest.get_node(pos)
+	local existing_node = core.get_node(pos)
 	local lighting_node = wielded_light.get_lighting_node(existing_node.name)
 	if not lighting_node then
 		return
 	end
-	minetest.swap_node(pos, { name = lighting_node.node,param2 = existing_node.param2 })
+	core.swap_node(pos, { name = lighting_node.node,param2 = existing_node.param2 })
 	restore_timer(pos)
 end
 
 -- Will be run once the node timer expires
 local function cleanup_timer_callback(pos, elapsed)
-	local pos_str = minetest.pos_to_string(pos)
+	local pos_str = core.pos_to_string(pos)
 	local lights = active_lights[pos_str]
 	-- If no active lights for this position, remove itself
 	if not lights then
@@ -240,7 +240,7 @@ local function cleanup_timer_callback(pos, elapsed)
 				remove_light(pos_str, id)
 			end
 		end
-		minetest.get_node_timer(pos):start(cleanup_interval)
+		core.get_node_timer(pos):start(cleanup_interval)
 	end
 end
 
@@ -261,7 +261,7 @@ local function recalc_light(pos)
 	end
 
 	-- Convert the position back to a vector
-	local pos_vec = minetest.string_to_pos(pos)
+	local pos_vec = core.string_to_pos(pos)
 
 	-- If no items in this position, delete it from the list and remove any light node
 	if not any_light then
@@ -277,10 +277,10 @@ local function recalc_light(pos)
 	end
 
 	-- Limit the light level
-	max_light = math.min(max_light, minetest.LIGHT_MAX)
+	max_light = math.min(max_light, core.LIGHT_MAX)
 
 	-- Get the current light level in this position
-	local existing_node = minetest.get_node(pos_vec)
+	local existing_node = core.get_node(pos_vec)
 	local name = existing_node.name
 	local old_value = wielded_light.level_of_lighting_node(name) or 0
 
@@ -297,11 +297,11 @@ local function recalc_light(pos)
 				save_timer(pos_vec)
 			end
 
-			minetest.swap_node(pos_vec, {
+			core.swap_node(pos_vec, {
 				name = lightable_nodes[node_name][max_light],
 				param2 = existing_node.param2
 			})
-			minetest.get_node_timer(pos_vec):start(cleanup_interval)
+			core.get_node_timer(pos_vec):start(cleanup_interval)
 		else
 			active_lights[pos] = nil
 		end
@@ -319,7 +319,7 @@ local function global_timer_callback(dtime)
 	timer = 0
 
 	-- Run all custom player callbacks for each player
-	local connected_players = minetest.get_connected_players()
+	local connected_players = core.get_connected_players()
 	for _,callback in pairs(update_player_callbacks) do
 		for _, player in pairs(connected_players) do
 			callback(player)
@@ -388,7 +388,7 @@ function wielded_light.register_lightable_node(node_name, property_overrides, cu
 	end
 
 	-- Node must already be registered
-	local original_definition = minetest.registered_nodes[node_name]
+	local original_definition = core.registered_nodes[node_name]
 	if not original_definition then
 		error_log("The node '%s' cannot be registered as lightable because it does not exist.", node_name)
 		return
@@ -430,7 +430,7 @@ function wielded_light.register_lightable_node(node_name, property_overrides, cu
 
 	-- Register the lighting nodes
 	lightable_nodes[node_name] = {}
-	for i=1, minetest.LIGHT_MAX do
+	for i=1, core.LIGHT_MAX do
 		local lighting_node_name = wielded_light.lighting_node_of_level(i, prefix)
 
 		-- Index for quick finding later
@@ -450,13 +450,13 @@ function wielded_light.register_lightable_node(node_name, property_overrides, cu
 			level_definition.liquid_alternative_flowing = lighting_node_name
 		end
 
-		minetest.register_node(":"..lighting_node_name, level_definition)
+		core.register_node(":"..lighting_node_name, level_definition)
 	end
 end
 
 -- Check if node can have a wielded light node placed in it
 function wielded_light.is_lightable_node(node_pos)
-	local name = minetest.get_node(node_pos).name
+	local name = core.get_node(node_pos).name
 	if lightable_nodes[name] then
 		return true
 	elseif wielded_light.get_lighting_node(name) then
@@ -506,7 +506,7 @@ function wielded_light.get_light_def(item_name)
 	-- Get the light level of an item from its definition
 	-- Reduce the light level by level_delta - original functionality
 	-- Limit between 0 and the max light level
-	return math.min(math.max((itemdef.light_source or 0) - level_delta, 0), minetest.LIGHT_MAX), itemdef.floodable
+	return math.min(math.max((itemdef.light_source or 0) - level_delta, 0), core.LIGHT_MAX), itemdef.floodable
 end
 
 -- Register an item as shining
@@ -567,7 +567,7 @@ function wielded_light.track_item_entity(obj, cat, item)
 
 	-- Add the light in on creation so it's immediate
 	local pos = entity_pos(obj)
-	local pos_str = pos and minetest.pos_to_string(pos)
+	local pos_str = pos and core.pos_to_string(pos)
 	if pos_str then
 		if not (light_is_floodable and is_lightable_liquid(pos)) then
 			add_light(pos_str, id, light_level)
@@ -605,11 +605,11 @@ end
 -- Setup --
 
 -- Wielded item shining globalstep
-minetest.register_globalstep(global_timer_callback)
+core.register_globalstep(global_timer_callback)
 
 -- Dropped item on_step override
 -- https://github.com/minetest/minetest/issues/6909
-local builtin_item = minetest.registered_entities["__builtin:item"]
+local builtin_item = core.registered_entities["__builtin:item"]
 local item = {
 	on_step = function(self, dtime, ...)
 		builtin_item.on_step(self, dtime, ...)
@@ -623,7 +623,7 @@ local item = {
 	end
 }
 setmetatable(item, {__index = builtin_item})
-minetest.register_entity(":__builtin:item", item)
+core.register_entity(":__builtin:item", item)
 
 -- Track a player's wielded item
 wielded_light.register_player_lightstep(function (player)

@@ -1,7 +1,7 @@
 local S = ul_inv.get_translator
 
 local function get_item_display_name(id)
-	return (minetest.registered_items[id] and (minetest.registered_items[id].short_description or minetest.registered_items[id].description)) or id
+	return (core.registered_items[id] and (core.registered_items[id].short_description or core.registered_items[id].description)) or id
 end
 
 sfinv.register_page("ul_inv:enchanting", {
@@ -27,27 +27,27 @@ sfinv.register_page("ul_inv:enchanting", {
 		local rune = inv:get_stack("craft", 2):get_name()
 		
 		if inv:get_stack("craft", 1):is_empty() then
-			minetest.chat_send_player(plyr:get_player_name(), minetest.colorize("#ff0000", S"You can't enchant air!"))
+			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S"You can't enchant air!"))
 		elseif inv:get_stack("craft", 2):is_empty() then
-			minetest.chat_send_player(plyr:get_player_name(), minetest.colorize("#ff0000", S"Air is not a rune!"))
+			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S"Air is not a rune!"))
 		end
 		
-		local inpdef = minetest.registered_items[input]
+		local inpdef = core.registered_items[input]
 		local enctype = inpdef and inpdef.enchantable
 		local runedef =  ul_magic.registered_runes[rune]
 		local func = runedef and runedef["on_"..enctype]
 		
 		if not enctype then
-			minetest.chat_send_player(plyr:get_player_name(), minetest.colorize("#ff0000", S("@1 is not enchantable!", get_item_display_name(input))))
+			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S("@1 is not enchantable!", get_item_display_name(input))))
 			return
 		elseif not runedef then
-			minetest.chat_send_player(plyr:get_player_name(), minetest.colorize("#ff0000", S("@1 is not a rune!", get_item_display_name(rune))))
+			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S("@1 is not a rune!", get_item_display_name(rune))))
 			return
 		elseif not func then
-			minetest.chat_send_player(plyr:get_player_name(), minetest.colorize("#ff0000", S("@1 cannot be enchanted with @2!", get_item_display_name(input), get_item_display_name(rune))))
+			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S("@1 cannot be enchanted with @2!", get_item_display_name(input), get_item_display_name(rune))))
 			return
 		elseif inv:get_stack("craft", 3):get_count() > 0 then
-			minetest.chat_send_player(plyr:get_player_name(), minetest.colorize("#ff0000", S"Clear the result box!"))
+			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S"Clear the result box!"))
 			return
 		end
 		

@@ -12,12 +12,12 @@ function ul_magic.register_rune(name, def)
 	
 	local imgmod = def.color and ("^[multiply:"..def.color) or ""
 	
-	minetest.register_craftitem(name, {
+	core.register_craftitem(name, {
 		description = S("Rune of @1", def.description or name),
 		inventory_image = "ul_magic_rune.png"..imgmod,
 	})
 	
-	minetest.register_node(name.."_runestone", {
+	core.register_node(name.."_runestone", {
 		description = S("@1 Runestone", def.description or name),
 		sounds = ul_basic.node_sound_defaults(),
 		drawtype = "normal",
@@ -28,16 +28,16 @@ function ul_magic.register_rune(name, def)
 		paramtype2 = "none",
 		diggable = false,
 		on_rightclick = function (pos, node, puncher)
-			minetest.set_node(pos, {name="ul_magic:runestone_active"})
-			local timer = minetest.get_node_timer(pos)
+			core.set_node(pos, {name="ul_magic:runestone_active"})
+			local timer = core.get_node_timer(pos)
 			timer:set(1, 0)
-			minetest.add_item(pos, ItemStack(name))
+			core.add_item(pos, ItemStack(name))
 			ul_basic.possound(pos, "ul_take")
 		end,
 		light_source = 14
 	})
 	
-	minetest.register_entity(name.."_ball", {
+	core.register_entity(name.."_ball", {
 		visual = "sprite",
 		textures = {"ul_magic_ball.png"..imgmod.."^[brighten"},
 		visual_size = {x=1.0,y=1.0},
@@ -46,7 +46,7 @@ function ul_magic.register_rune(name, def)
 		glow = 14,
 		_ignore_balls = true,
 		on_activate = function(self, staticdata)
-			local sdat = minetest.deserialize(staticdata)
+			local sdat = core.deserialize(staticdata)
 			
 			if sdat then
 				
@@ -77,8 +77,8 @@ function ul_magic.register_rune(name, def)
 				local result
 				
 				if col.type == "node" then
-					ignore = minetest.registered_nodes[col.node_pos]
-						and not minetest.registered_nodes[col.node_pos].walkable
+					ignore = core.registered_nodes[col.node_pos]
+						and not core.registered_nodes[col.node_pos].walkable
 					result = not ignore
 						and def.on_hitnode
 						and def.on_hitnode(self._shooter, col.node_pos, self._level)
@@ -110,7 +110,7 @@ function ul_magic.register_rune(name, def)
 		end
 	})
 	
-	minetest.register_tool(name.."_spell", {
+	core.register_tool(name.."_spell", {
 		description = S("@1 Spell", def.description or name),
 		inventory_image = "ul_magic_spell.png"..imgmod,
 		on_use = function(itemstack, user, pointed_thing)
@@ -119,7 +119,7 @@ function ul_magic.register_rune(name, def)
 				local hvel = vector.multiply(vector.normalize(user:get_rotation() or user:get_look_dir()),8)
 				local pos = user:get_pos()
 				pos.y = pos.y + 1.5
-				local o = minetest.add_entity(pos, name.."_ball", minetest.serialize {
+				local o = core.add_entity(pos, name.."_ball", core.serialize {
 					_velocity = hvel,
 					_level = ul_magic.get_level(user, name)
 				})
@@ -171,14 +171,14 @@ function ul_magic.register_rune(name, def)
 			groups = {ring = 1}
 		})
 		
-		minetest.register_craft({
+		core.register_craft({
 			output = name.."_ring",
 			type = "shapeless",
 			recipe = {"ul_magic:ring", name}
 		})
 	end
 	
-	minetest.register_craft({
+	core.register_craft({
 		output = name.."_spell",
 		type = "shapeless",
 		recipe = {"ul_magic:spell", name}

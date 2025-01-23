@@ -1,12 +1,12 @@
 common_storage = {}
 
-local S = minetest.get_translator"common_storage"
+local S = core.get_translator"common_storage"
 
 common_storage.get_translator = S
 
-local inv = minetest.create_detached_inventory("common_storage")
+local inv = core.create_detached_inventory("common_storage")
 
-local storage = minetest.get_mod_storage()
+local storage = core.get_mod_storage()
 
 inv:set_size("main", 4 * 4)
 
@@ -34,7 +34,7 @@ local function save()
 	
 	end
 	
-	storage:set_string("items", minetest.serialize(data))
+	storage:set_string("items", core.serialize(data))
 	
 end
 
@@ -53,7 +53,7 @@ sfinv.register_page("common_storage:common_storage", {
 })
 
 
-local data = minetest.deserialize(storage:get_string("items")) or {}
+local data = core.deserialize(storage:get_string("items")) or {}
 local index = 1
 
 for i,v in ipairs(data) do

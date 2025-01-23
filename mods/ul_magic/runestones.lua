@@ -10,7 +10,7 @@ function ul_magic.gen_rune()
 	end
 end
 
-minetest.register_node("ul_magic:runestone", {
+core.register_node("ul_magic:runestone", {
     description = S"Runestone",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "normal",
@@ -24,20 +24,20 @@ minetest.register_node("ul_magic:runestone", {
 		local stack = digger:get_wielded_item()
 		stack:set_count(stack:get_count() - 1)
 		digger:set_wielded_item(stack)
-		minetest.remove_node(pos)
-		minetest.add_item(pos, ItemStack"ul_magic:runestone")
+		core.remove_node(pos)
+		core.add_item(pos, ItemStack"ul_magic:runestone")
 		return true
 	end,
 	on_rightclick = function (pos, node, puncher)
-		minetest.set_node(pos, {name="ul_magic:runestone_active"})
-		local timer = minetest.get_node_timer(pos)
+		core.set_node(pos, {name="ul_magic:runestone_active"})
+		local timer = core.get_node_timer(pos)
 		timer:set(1, 0)
 		ul_basic.possound(pos, "ul_magic_cast")
 	end
 })
 
 
-minetest.register_node("ul_magic:runestone_active", {
+core.register_node("ul_magic:runestone_active", {
     description = S"Active Runestone",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "normal",
@@ -49,10 +49,10 @@ minetest.register_node("ul_magic:runestone_active", {
 	light_source = 14,
 	on_timer = function (pos, elapsed)
 		if math.random() * elapsed > 10 then
-			minetest.set_node(pos, {name = ul_magic.gen_rune().."_runestone"})
+			core.set_node(pos, {name = ul_magic.gen_rune().."_runestone"})
 			ul_basic.possound(pos, "ul_activate")
 		else
-			local timer = minetest.get_node_timer(pos)
+			local timer = core.get_node_timer(pos)
 			timer:set(1, elapsed)
 		end
 	end,
@@ -61,12 +61,12 @@ minetest.register_node("ul_magic:runestone_active", {
 		local stack = digger:get_wielded_item()
 		stack:set_count(stack:get_count() - 1)
 		digger:set_wielded_item(stack)
-		minetest.remove_node(pos)
-		minetest.add_item(pos, ItemStack"ul_magic:runestone")
+		core.remove_node(pos)
+		core.add_item(pos, ItemStack"ul_magic:runestone")
 		return true
 	end,
 	on_rightclick = function (pos, node, puncher)
-		local timer = minetest.get_node_timer(pos)
+		local timer = core.get_node_timer(pos)
 		if not timer:is_started() then
 			timer:set(1, 0)
 			ul_basic.possound(pos, "ul_magic_cast")
@@ -75,7 +75,7 @@ minetest.register_node("ul_magic:runestone_active", {
 })
 
 
-minetest.register_craft({
+core.register_craft({
 	output = "ul_magic:runestone",
 	type = "shaped",
 	recipe = {
@@ -85,7 +85,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_magic:runestone",
 	wherein        = "mapgen_stone",

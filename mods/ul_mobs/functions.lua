@@ -1,4 +1,4 @@
-local active_block_range = minetest.get_mapgen_setting('active_block_range') or 3
+local active_block_range = core.get_mapgen_setting('active_block_range') or 3
 local modifier = {}
 
 function ul_mobs.incmod(entname)
@@ -14,7 +14,7 @@ function ul_mobs.set_mod(entname, val)
 end
 
 function ul_mobs.check(pos, entname)
-	local light = minetest.get_node_light(pos, 0)
+	local light = core.get_node_light(pos, 0)
 	modifier[entname] = modifier[entname] or 0
 	if light and light <= 5 then
 		return modifier[entname] - math.random(1, 20) < 0
@@ -46,7 +46,7 @@ function ul_mobs.can_see(self, tpos)
 
 	local pos = self.object:get_pos()
 	
-	if not minetest.line_of_sight(pos, tpos) then
+	if not core.line_of_sight(pos, tpos) then
 		return false
 	end
 	
@@ -58,7 +58,7 @@ function ul_mobs.can_see(self, tpos)
 	end
 	
 	local night_vision = self.vision or 0
-	local light_level = minetest.get_node_light(tpos)
+	local light_level = core.get_node_light(tpos)
 	
 	if light_level < night_vision then
 		local dist_frac = (dist / view_range)
@@ -154,7 +154,7 @@ function ul_mobs.brain(self)
 	-- decision making doesn't need to happen too often
 	if mobkit.timer(self, ul_mobs.reaction_time) then
 		local prty = mobkit.get_queue_priority(self)
-		local owner = self._owner and minetest.get_player_by_name(self._owner)
+		local owner = self._owner and core.get_player_by_name(self._owner)
 		local sitting = mobkit.recall(self, "sitting")
 		
 		if owner then
@@ -210,4 +210,4 @@ function ul_mobs.mod_step(dtime)
 	end
 end
 
-minetest.register_globalstep(ul_mobs.mod_step)
+core.register_globalstep(ul_mobs.mod_step)

@@ -14,7 +14,7 @@ function ul_mobs.register_mob(name, def)
 		colors[3] = colors[2] or colors[1]
 	end
 	
-	minetest.register_craftitem(name, {
+	core.register_craftitem(name, {
 		description = S("@1 Spawn Egg", def.description),
 		inventory_image = 
 			"(ul_mobs_egg.png^[multiply:"..colors[1]..":255)"..
@@ -24,7 +24,7 @@ function ul_mobs.register_mob(name, def)
 			if pointed_thing.type == "node" then
 				local pos = pointed_thing.above
 				pos.y = pos.y - def.collisionbox[2]
-				minetest.add_entity(pos, name, minetest.serialize({_owner=plyr:get_player_name()}))
+				core.add_entity(pos, name, core.serialize({_owner=plyr:get_player_name()}))
 				stack:set_count(stack:get_count() - 1)
 				return stack
 			end
@@ -58,7 +58,7 @@ function ul_mobs.register_mob(name, def)
 		on_activate = function(self, staticdata, dtime_s)
 			mobkit.actfunc(self, staticdata, dtime_s)
 			
-			local sdat = minetest.deserialize(staticdata)
+			local sdat = core.deserialize(staticdata)
 			
 			if sdat and sdat._owner then
 				self.object:set_properties{
@@ -67,10 +67,10 @@ function ul_mobs.register_mob(name, def)
 			end
 		end,
 		get_staticdata = function (self)	-- mobkit does not save hp or owner
-			local ret = minetest.deserialize(mobkit.statfunc(self))
+			local ret = core.deserialize(mobkit.statfunc(self))
 			ret._owner = self._owner or self.owner
 			ret.hp = self.hp
-			return minetest.serialize(ret)
+			return core.serialize(ret)
 		end,
 											-- api props
 		springiness = 0,
@@ -107,13 +107,13 @@ function ul_mobs.register_mob(name, def)
 				if name == self._owner then
 					if mobkit.recall(self, "sitting") then
 						mobkit.forget(self, "sitting")
-						minetest.chat_send_player(name, "this mob is now standing")
+						core.chat_send_player(name, "this mob is now standing")
 					else
 						mobkit.remember(self, "sitting", "true")
-						minetest.chat_send_player(name, "this mob is now sitting")
+						core.chat_send_player(name, "this mob is now sitting")
 					end
 				else
-					minetest.chat_send_player(name, "this mob is owned by "..self._owner)
+					core.chat_send_player(name, "this mob is owned by "..self._owner)
 				end
 			end
 		end
@@ -130,6 +130,6 @@ function ul_mobs.register_mob(name, def)
 	
 	entdef.sounds = sounds
 	
-	minetest.register_entity(name, entdef)
+	core.register_entity(name, entdef)
 
 end

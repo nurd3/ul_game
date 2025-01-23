@@ -1,7 +1,7 @@
 local S = ul_inv.get_translator
 
 local function get_item_display_name(id)
-	return (minetest.registered_items[id] and (minetest.registered_items[id].short_description or minetest.registered_items[id].description)) or id
+	return (core.registered_items[id] and (core.registered_items[id].short_description or core.registered_items[id].description)) or id
 end
 
 local selected = {}
@@ -11,8 +11,8 @@ local recipes_formspec = ""
 
 local function compile_recipes()
 	local temp1, temp2 = {}, {}
-    for item,_ in pairs(minetest.registered_items) do
-        local x = minetest.get_all_craft_recipes(item)
+    for item,_ in pairs(core.registered_items) do
+        local x = core.get_all_craft_recipes(item)
         if x ~= nil then
             for _,t in ipairs(x) do
                 local count = {}
@@ -39,7 +39,7 @@ local function compile_recipes()
 		recipes_formspec = recipes_formspec.."container["..((i - 1) % 3 + 1)..","..(math.floor((i - 1) / 3)).."]\n"
 		local offset = 0
 		
-		local itm, amt = minetest.registered_items[ItemStack(rec.output):get_name()], ItemStack(rec.output):get_count()
+		local itm, amt = core.registered_items[ItemStack(rec.output):get_name()], ItemStack(rec.output):get_count()
 		
 		local img = itm.inventory_image
 		
@@ -53,7 +53,7 @@ local function compile_recipes()
 	end
 end
 
-minetest.register_on_mods_loaded(function()
+core.register_on_mods_loaded(function()
     compile_recipes()
 end)
 
@@ -111,7 +111,7 @@ sfinv.override_page("sfinv:crafting", {
 			for nom,amt in pairs(rec.input) do
 				local stack = ItemStack(nom.." "..amt)
 				if not inv:contains_item("main", stack) then
-					minetest.chat_send_player(plyr:get_player_name(), minetest.colorize("#ff0000", S("Not enough @1!", get_item_display_name(nom))))
+					core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S("Not enough @1!", get_item_display_name(nom))))
 					return
 				end
 			end
@@ -127,7 +127,7 @@ sfinv.override_page("sfinv:crafting", {
 			if inv:room_for_item("main", out) then
 				inv:add_item("main", out)
 			else
-				minetest.add_item(plyr:get_pos(), out)
+				core.add_item(plyr:get_pos(), out)
 			end
 			
 			return

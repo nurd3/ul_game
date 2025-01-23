@@ -54,14 +54,14 @@ sfinv.register_page("myadmin:myadmin", {
 
         -- Add all players to the text list, and to the players list
         local is_first = true
-        for _ , player in pairs(minetest.get_connected_players()) do
+        for _ , player in pairs(core.get_connected_players()) do
             local player_name = player:get_player_name()
             players[#players + 1] = player_name
             if not is_first then
                 formspec[#formspec + 1] = ","
             end
             formspec[#formspec + 1] =
-                    minetest.formspec_escape(player_name)
+                    core.formspec_escape(player_name)
             is_first = false
         end
         formspec[#formspec + 1] = "]"
@@ -93,7 +93,7 @@ end,
 ```
 
 `on_player_receive_fields` works the same as
-`minetest.register_on_player_receive_fields`, except that `context` is
+`core.register_on_player_receive_fields`, except that `context` is
 given instead of `formname`.
 Please note that SFINV will consume events relevant to itself, such as
 navigation tab events, so you won't receive them in this callback.
@@ -104,7 +104,7 @@ Now let's implement the `on_player_receive_fields` for our admin mod:
 on_player_receive_fields = function(self, player, context, fields)
     -- text list event,  check event type and set index if selection changed
     if fields.playerlist then
-        local event = minetest.explode_textlist_event(fields.playerlist)
+        local event = core.explode_textlist_event(fields.playerlist)
         if event.type == "CHG" then
             context.myadmin_selected_idx = event.index
         end
@@ -114,9 +114,9 @@ on_player_receive_fields = function(self, player, context, fields)
         local player_name =
                 context.myadmin_players[context.myadmin_selected_idx]
         if player_name then
-            minetest.chat_send_player(player:get_player_name(),
+            core.chat_send_player(player:get_player_name(),
                     "Kicked " .. player_name)
-            minetest.kick_player(player_name)
+            core.kick_player(player_name)
         end
 
     -- Ban button was pressed
@@ -124,10 +124,10 @@ on_player_receive_fields = function(self, player, context, fields)
         local player_name =
                 context.myadmin_players[context.myadmin_selected_idx]
         if player_name then
-            minetest.chat_send_player(player:get_player_name(),
+            core.chat_send_player(player:get_player_name(),
                     "Banned " .. player_name)
-            minetest.ban_player(player_name)
-            minetest.kick_player(player_name, "Banned")
+            core.ban_player(player_name)
+            core.kick_player(player_name, "Banned")
         end
     end
 end,
@@ -144,13 +144,13 @@ control when the page is shown:
 
 ```lua
 is_in_nav = function(self, player, context)
-    local privs = minetest.get_player_privs(player:get_player_name())
+    local privs = core.get_player_privs(player:get_player_name())
     return privs.kick or privs.ban
 end,
 ```
 
 If you only need to check one priv or want to perform an 'and', you should use
-`minetest.check_player_privs()` instead of `get_player_privs`.
+`core.check_player_privs()` instead of `get_player_privs`.
 
 Note that the `is_in_nav` is only called when the player's inventory formspec is
 generated. This happens when a player joins the game, switches tabs, or a mod
@@ -166,7 +166,7 @@ local function on_grant_revoke(grantee, granter, priv)
         return
     end
 
-    local player = minetest.get_player_by_name(grantee)
+    local player = core.get_player_by_name(grantee)
     if not player then
         return
     end
@@ -179,8 +179,8 @@ local function on_grant_revoke(grantee, granter, priv)
     sfinv.set_player_inventory_formspec(player, context)
 end
 
-minetest.register_on_priv_grant(on_grant_revoke)
-minetest.register_on_priv_revoke(on_grant_revoke)
+core.register_on_priv_grant(on_grant_revoke)
+core.register_on_priv_revoke(on_grant_revoke)
 ```
 
 ## on_enter and on_leave callbacks

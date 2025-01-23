@@ -11,11 +11,11 @@ function ul_basic.node_breakable(drops)
 		
 		if plyr then
 			last_break[plyr] = last_break[plyr] or -1
-			local delta = minetest.get_server_uptime() - last_break[plyr]
+			local delta = core.get_server_uptime() - last_break[plyr]
 			if delta <= 0.1 then
 				return
 			end
-			last_break[plyr] = minetest.get_server_uptime()
+			last_break[plyr] = core.get_server_uptime()
 		end
 		
 		local inv = puncher:get_inventory()
@@ -24,7 +24,7 @@ function ul_basic.node_breakable(drops)
 		
 		ul_basic.nodesound(pos, "dug")
 
-		minetest.swap_node(pos, {name="air"})
+		core.swap_node(pos, {name="air"})
 	end
 end
 
@@ -55,13 +55,13 @@ local function handle_amount(amount)
 
 		if a == b then
 			amt = a
-			minetest.log("warning", "ul_basic.handle_amount: 0 distance range")
+			core.log("warning", "ul_basic.handle_amount: 0 distance range")
 		elseif 											-- catch erroneous ranges
 			a <= 0 or b <= 0 or							-- must be over 0
 			a ~= math.floor(a) or b ~= math.floor(b)	-- must be integers
 		then
 			amt = 1
-			minetest.log("error", "ul_basic.handle_amount: range must be integers over 0")
+			core.log("error", "ul_basic.handle_amount: range must be integers over 0")
 		else
 			amt = math.random(a, b)
 		end
@@ -70,7 +70,7 @@ local function handle_amount(amount)
 	-- catch erroneous inputs
 	if amt <= 0 or amt ~= math.floor(amt) then
 		amt = 1
-		minetest.log("warning", "ul_basic.handle_amount: amount must be an integer over 0")
+		core.log("warning", "ul_basic.handle_amount: amount must be an integer over 0")
 	end
 	
 	return amt
@@ -93,7 +93,7 @@ function ul_basic.give_or_drop(inv, listname, pos, chance, stack, amount)
 		if inv and inv:room_for_item(lst, stack) then
 			inv:add_item(lst, stack)
 		else
-			minetest.add_item(
+			core.add_item(
 				pos, stack
 			)
 		end
@@ -112,7 +112,7 @@ function ul_basic.drop(pos, chance, item, amount)
 
 	if math.random() < chance then
 		-- drop the item
-		minetest.add_item(
+		core.add_item(
 			pos, 
 			ItemStack(item.." "..tostring(amt))
 		)
@@ -130,7 +130,7 @@ function ul_basic.get_attackdtime(plyrname, fallback, update)
 	if not plyrname then
 		return fallback
 	end
-	local currtime = minetest.get_server_uptime()
+	local currtime = core.get_server_uptime()
 	local ret = last_punch[plyrname] and currtime - last_punch[plyrname] or fallback
 	if update then
 		last_punch[plyrname] = currtime
@@ -143,8 +143,8 @@ function ul_basic.on_melee(itemstack, user, pointed_thing, level)
 	local tool_capabilities = itemstack:get_tool_capabilities()
 	if pointed_thing.type == "node" then
 	
-		local ref = minetest.get_node(pointed_thing.under)
-		local def = minetest.registered_nodes[ref.name]
+		local ref = core.get_node(pointed_thing.under)
+		local def = core.registered_nodes[ref.name]
 		
 		if def then
 			def.on_punch(pointed_thing.under, ref, user)
@@ -180,16 +180,16 @@ end
 ------------
 
 function ul_basic.possound(pos, name)
-	minetest.sound_play(name, {pos=pos, gain = 1.0})
+	core.sound_play(name, {pos=pos, gain = 1.0})
 end
 
 function ul_basic.objsound(obj, name)
-	minetest.sound_play(name, {object=obj, gain = 1.0})
+	core.sound_play(name, {object=obj, gain = 1.0})
 end
 
 function ul_basic.nodesound(pos, name)
-	local def = minetest.registered_nodes[
-		minetest.get_node(pos).name
+	local def = core.registered_nodes[
+		core.get_node(pos).name
 	]
 	local spec = def
 		and def.sounds

@@ -10,7 +10,7 @@ function mobkit_plus.pathfind(self, tpos, max_dist)
 	end
 	
 	
-	local path = minetest.find_path(
+	local path = core.find_path(
 		vector.round(mobkit.get_stand_pos(self)), 
 		tpos, 
 		max_dist,
@@ -24,10 +24,10 @@ end
 
 local function printpath(path)
 	if not path then
-		return minetest.chat_send_all"nil"
+		return core.chat_send_all"nil"
 	end
 	for i,v in ipairs(path) do
-		minetest.chat_send_all(tostring(i).." "..vector.to_string(v))
+		core.chat_send_all(tostring(i).." "..vector.to_string(v))
 	end
 end
 
@@ -57,7 +57,7 @@ function mobkit_plus.lq_dumbwalk(self,dest,speed_factor)
 			local dir = vector.normalize(vector.direction({x=pos.x,y=0,z=pos.z},
 														{x=dest.x,y=0,z=dest.z}))
 			dir = vector.multiply(dir,self.max_speed*speed_factor)
-			self.object:set_yaw(minetest.dir_to_yaw(dir))
+			self.object:set_yaw(core.dir_to_yaw(dir))
 			dir.y = y
 			self.object:set_velocity(dir)
 		end
@@ -70,10 +70,10 @@ function mobkit_plus.lq_goto(self, tpos)
 	local height = tpos.y - mobkit.get_stand_pos(self).y
 	
 	if height <= 0.5 then
-		self.object:set_yaw(minetest.dir_to_yaw(vector.direction(self.object:get_pos(),tpos)))
+		self.object:set_yaw(core.dir_to_yaw(vector.direction(self.object:get_pos(),tpos)))
 		mobkit_plus.lq_dumbwalk(self,tpos)
 	else
-		self.object:set_yaw(minetest.dir_to_yaw(vector.direction(self.object:get_pos(),tpos)))
+		self.object:set_yaw(core.dir_to_yaw(vector.direction(self.object:get_pos(),tpos)))
 		mobkit.lq_dumbjump(self,height)
 	end
 	
@@ -183,13 +183,13 @@ function mobkit_plus.drop(pos, chance, item, amount)
 
 		if a == b then
 			amt = a
-			minetest.log("warning", "mobkit_plus.drop: 0 distance range")
+			core.log("warning", "mobkit_plus.drop: 0 distance range")
 		elseif 											-- catch erroneous ranges
 			a <= 0 or b <= 0 or							-- must be over 0
 			a ~= math.floor(a) or b ~= math.floor(b)	-- must be integers
 		then
 			amt = 1
-			minetest.log("error", "mobkit_plus.drop: range must be integers over 0")
+			core.log("error", "mobkit_plus.drop: range must be integers over 0")
 		else
 			amt = math.random(a, b)
 		end
@@ -198,7 +198,7 @@ function mobkit_plus.drop(pos, chance, item, amount)
 	-- catch erroneous inputs
 	if amt <= 0 or amt ~= math.floor(amt) then
 		amt = 1
-		minetest.log("warning", "mobkit_plus.drop: amount must be an integer over 0")
+		core.log("warning", "mobkit_plus.drop: amount must be an integer over 0")
 	end
 
 	-- positioning
@@ -207,7 +207,7 @@ function mobkit_plus.drop(pos, chance, item, amount)
 
 	if math.random() < chance then
 		-- drop the item
-		minetest.add_item(
+		core.add_item(
 			pos, 
 			ItemStack(item.." "..tostring(amt))
 		)

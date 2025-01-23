@@ -1,6 +1,6 @@
 local S = ul_basic.get_translator
 
-minetest.register_item(':', {
+core.register_item(':', {
     type = 'none',
     wield_image = 'blank.png',
     tool_capabilities = {
@@ -31,7 +31,7 @@ minetest.register_item(':', {
 })
 
 
-minetest.register_tool("ul_basic:pick", {
+core.register_tool("ul_basic:pick", {
     description = S"Pickaxe",
     inventory_image = "ul_basic_pick.png",
 
@@ -47,7 +47,7 @@ minetest.register_tool("ul_basic:pick", {
 	
 	groups = {weapon = 1, tool = 1}
 })
-minetest.register_tool("ul_basic:knife", {
+core.register_tool("ul_basic:knife", {
     description = S"Knife",
     inventory_image = "ul_basic_knife.png",
 	
@@ -64,7 +64,7 @@ minetest.register_tool("ul_basic:knife", {
 	
 	groups = {weapon = 1, melee = 1, tool = 1}
 })
-minetest.register_tool("ul_basic:sword", {
+core.register_tool("ul_basic:sword", {
     description = S"Sword",
     inventory_image = "ul_basic_sword.png",
 
@@ -82,7 +82,7 @@ minetest.register_tool("ul_basic:sword", {
 	groups = {weapon = 1, melee = 1, tool = 1}
 })
 
-minetest.register_tool("ul_basic:lantern", {
+core.register_tool("ul_basic:lantern", {
     description = S"Lantern",
     inventory_image = "ul_basic_lantern.png",
 	

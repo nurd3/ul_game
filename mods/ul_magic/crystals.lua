@@ -1,6 +1,6 @@
 local S = ul_magic.get_translator
 
-minetest.register_node("ul_magic:crystal", {
+core.register_node("ul_magic:crystal", {
 	description = S"Magic Crystal",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "normal",
@@ -9,14 +9,14 @@ minetest.register_node("ul_magic:crystal", {
 	light_source = 12
 })
 
-minetest.register_craftitem("ul_magic:shard", {
+core.register_craftitem("ul_magic:shard", {
 	description = S"Magic Shard",
 	inventory_image = "ul_magic_shard.png",
 	groups = {magic = 1, shard = 1},
 	light_source = 12
 })
 
-minetest.register_craft({
+core.register_craft({
 	output = "ul_magic:crystal",
 	type = "shaped",
 	recipe = {
@@ -25,7 +25,7 @@ minetest.register_craft({
 	}
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_magic:crystal",
 	wherein        = "mapgen_stone",
@@ -36,7 +36,7 @@ minetest.register_ore({
 	y_min          = 0,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_magic:crystal",
 	wherein        = "mapgen_stone",
@@ -47,7 +47,7 @@ minetest.register_ore({
 	y_min          = -100,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_magic:crystal",
 	wherein        = "mapgen_stone",

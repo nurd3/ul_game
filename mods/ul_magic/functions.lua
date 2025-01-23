@@ -49,7 +49,7 @@ function ul_magic.shoot(self, target, name, level)
 			or 1.0
 		)
 		local hvel = vector.multiply(vector.direction(pos, tpos),8)
-		local o = minetest.add_entity(pos, name.."_ball", minetest.serialize {
+		local o = core.add_entity(pos, name.."_ball", core.serialize {
 			_velocity = hvel,
 			_level = level,
 		})

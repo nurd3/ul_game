@@ -2,7 +2,7 @@ local S = ul_basic.get_translator
 
 local hud_ids = {}
 
-minetest.register_on_joinplayer(function(plyr)
+core.register_on_joinplayer(function(plyr)
 	local name = plyr:get_player_name()
 	
 	hud_ids[name] = plyr:hud_add({
@@ -20,10 +20,10 @@ end)
 
 local timer = 0
 
-minetest.register_globalstep(function(delta)
+core.register_globalstep(function(delta)
 	timer = timer + delta
 	if timer > 0.1 then
-		for _,plyr in ipairs(minetest.get_connected_players()) do
+		for _,plyr in ipairs(core.get_connected_players()) do
 			local name = plyr:get_player_name()
 			local pos = vector.round(plyr:get_pos())
 			local dtime = ul_basic.get_attackdtime(name)

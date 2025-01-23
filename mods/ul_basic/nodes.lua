@@ -1,6 +1,6 @@
 local S = ul_basic.get_translator
 
-minetest.register_node("ul_basic:stone", {
+core.register_node("ul_basic:stone", {
     description = S"Stone",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "normal",
@@ -12,7 +12,7 @@ minetest.register_node("ul_basic:stone", {
 	paramtype2 = "none",
 })
 
-minetest.register_node("ul_basic:building", {
+core.register_node("ul_basic:building", {
     description = S"Building",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "glasslike_framed",
@@ -25,7 +25,7 @@ minetest.register_node("ul_basic:building", {
 	use_texture_alpha = "clip"
 })
 
-minetest.register_node("ul_basic:window", {
+core.register_node("ul_basic:window", {
     description = S"Window",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "glasslike_framed_optional",
@@ -38,7 +38,7 @@ minetest.register_node("ul_basic:window", {
 	use_texture_alpha = "clip",
 })
 
-minetest.register_node("ul_basic:ore", {
+core.register_node("ul_basic:ore", {
     description = S"Ore",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "normal",
@@ -50,7 +50,7 @@ minetest.register_node("ul_basic:ore", {
 	paramtype2 = "none",
 })
 
-minetest.register_node("ul_basic:ore_rare", {
+core.register_node("ul_basic:ore_rare", {
     description = S"Rare Ore",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "normal",
@@ -62,7 +62,7 @@ minetest.register_node("ul_basic:ore_rare", {
 	paramtype2 = "none",
 })
 
-minetest.register_node("ul_basic:ore_super", {
+core.register_node("ul_basic:ore_super", {
     description = S"Super Ore",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "normal",
@@ -74,7 +74,7 @@ minetest.register_node("ul_basic:ore_super", {
 	paramtype2 = "none",
 })
 
-minetest.register_node("ul_basic:lamp", {
+core.register_node("ul_basic:lamp", {
     description = S"Lamp",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "normal",
@@ -87,7 +87,7 @@ minetest.register_node("ul_basic:lamp", {
     light_source = 14
 })
 
-minetest.register_node("ul_basic:ladder", {
+core.register_node("ul_basic:ladder", {
     description = S"Ladder",
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "signlike",
@@ -111,10 +111,10 @@ minetest.register_node("ul_basic:ladder", {
 lootblocks.register_drop("ul_basic:lamp", 0.25)
 lootblocks.register_drop("ul_basic:ore", 0.125)
 
-minetest.register_alias("mapgen_stone", "ul_basic:stone")
-minetest.register_alias("mapgen_water_source", "air")
+core.register_alias("mapgen_stone", "ul_basic:stone")
+core.register_alias("mapgen_water_source", "air")
 
-minetest.register_decoration({
+core.register_decoration({
 	name = "ul_basic:lamp",
 	deco_type = "simple",
 	place_on = {"mapgen_stone"},
@@ -132,7 +132,7 @@ minetest.register_decoration({
 	decoration = "ul_basic:lamp",
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_basic:ore",
 	wherein        = "mapgen_stone",
@@ -143,7 +143,7 @@ minetest.register_ore({
 	y_min          = 1025,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_basic:ore",
 	wherein        = "mapgen_stone",
@@ -153,7 +153,7 @@ minetest.register_ore({
 	y_max          = 64,
 	y_min          = -31000,
 })
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_basic:ore",
 	wherein        = "mapgen_stone",
@@ -164,7 +164,7 @@ minetest.register_ore({
 	y_min          = -31000,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_basic:ore_rare",
 	wherein        = "mapgen_stone",
@@ -175,7 +175,7 @@ minetest.register_ore({
 	y_min          = -100,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_basic:ore",
 	wherein        = "mapgen_stone",
@@ -186,7 +186,7 @@ minetest.register_ore({
 	y_min          = -31000,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_basic:ore_super",
 	wherein        = "mapgen_stone",
@@ -197,7 +197,7 @@ minetest.register_ore({
 	y_min          = -31000,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_basic:ore_rare",
 	wherein        = "mapgen_stone",
@@ -208,7 +208,7 @@ minetest.register_ore({
 	y_min          = -31000,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "ul_basic:ore_rare",
 	wherein        = "mapgen_stone",

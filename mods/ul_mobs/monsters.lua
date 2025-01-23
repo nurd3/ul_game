@@ -1,10 +1,10 @@
-local abr = minetest.get_mapgen_setting('active_block_range')
+local abr = core.get_mapgen_setting('active_block_range')
 
 local S = ul_mobs.get_translator
 
 local player_enemies = {}
 
-local infighting_chance = 1 - ((minetest.settings:get('ul_mobs_monsters_loyalty')) or 0.2)
+local infighting_chance = 1 - ((core.settings:get('ul_mobs_monsters_loyalty')) or 0.2)
 infighting_chance = infighting_chance * infighting_chance
 
 -- check_prey function

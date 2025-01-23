@@ -170,7 +170,7 @@ end
 1.4 Entity definition
 ---------------------
 
-minetest.register_entity("mod:name",{
+core.register_entity("mod:name",{
 
 	-- required minetest api props
 
@@ -362,7 +362,7 @@ function mobkit.get_spawn_pos_abr(dtime,intrvl,radius,chance,reduction)
 	-- chance: (0,1) chance to spawn a mob if there are no other objects in area
 	-- reduction: (0,1) spawn chance is reduced by this factor for every object in range.
 	--usage:
-	minetest.register_globalstep(function(dtime)
+	core.register_globalstep(function(dtime)
 		local spawnpos = mobkit.get_spawn_pos_abr(...)
 		if spawnpos then
 			...								-- mod/game specific logic

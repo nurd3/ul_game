@@ -1,9 +1,9 @@
 lootblocks = {}
 
-local S = minetest.get_translator"lootblocks"
+local S = core.get_translator"lootblocks"
 
 lootblocks.get_translator = S
-lootblocks.get_modpath = minetest.get_modpath"lootblocks"
+lootblocks.get_modpath = core.get_modpath"lootblocks"
 
 lootblocks.registered_drops = {}
 lootblocks.registered_spawns = {}
@@ -35,7 +35,7 @@ function lootblocks.gen_spawn(pos)
     local ents = t[math.random(#t)]
 	if not ents then return end
     for _,w in ipairs(ents) do
-        minetest.add_entity(pos, w)
+        core.add_entity(pos, w)
     end
 end
 
@@ -49,17 +49,17 @@ function lootblocks.gen_drop(pos)
     local stacks = t[math.random(#t)]
 	if not stacks or #stacks <= 0 then stacks = lootblocks.defaultdrop end
     for _,w in ipairs(stacks) do
-        minetest.add_item(pos, ItemStack(w))
+        core.add_item(pos, ItemStack(w))
     end
 end
 
-minetest.register_node("lootblocks:lootblock", {
+core.register_node("lootblocks:lootblock", {
     description = S"Lootblock",
     groups = {lootblock = 1},
     drawtype = "normal",
     tiles = {"lootblocks_lootblock.png"},
     on_punch = function(pos, node, puncher)
-        minetest.set_node(pos, {name="air"})
+        core.set_node(pos, {name="air"})
         local inv = puncher:get_inventory()
 		if math.random() > 0.75 and lootblocks.gen_spawn(pos) then
 			return
@@ -71,13 +71,13 @@ minetest.register_node("lootblocks:lootblock", {
     end,
 })
 
-minetest.register_node("lootblocks:lootblock_rare", {
+core.register_node("lootblocks:lootblock_rare", {
     description = S"Rare Lootblock",
     groups = {lootblock = 1},
     drawtype = "normal",
     tiles = {"lootblocks_lootblock.png^[hsl:120"},
     on_punch = function(pos, node, puncher)
-        minetest.set_node(pos, {name="air"})
+        core.set_node(pos, {name="air"})
         local inv = puncher:get_inventory()
         lootblocks.gen_drop(pos)
 		if math.random() > 0.75 and lootblocks.gen_spawn(pos) then
@@ -91,13 +91,13 @@ minetest.register_node("lootblocks:lootblock_rare", {
 })
 
 
-minetest.register_node("lootblocks:lootblock_super", {
+core.register_node("lootblocks:lootblock_super", {
     description = S"Super Lootblock",
     groups = {lootblock = 1},
     drawtype = "normal",
     tiles = {"lootblocks_lootblock.png^[hsl:180"},
     on_punch = function(pos, node, puncher)
-        minetest.set_node(pos, {name="air"})
+        core.set_node(pos, {name="air"})
         local inv = puncher:get_inventory()
 		if math.random() > 0.75 and lootblocks.gen_spawn(pos) then
 			return
@@ -111,7 +111,7 @@ minetest.register_node("lootblocks:lootblock_super", {
 	light_source = 8
 })
 
-minetest.register_decoration({
+core.register_decoration({
 	name = "lootblocks:lootblock",
 	deco_type = "simple",
 	place_on = {"mapgen_stone"},
@@ -128,7 +128,7 @@ minetest.register_decoration({
 	y_min = -50,
 	decoration = "lootblocks:lootblock",
 })
-minetest.register_decoration({
+core.register_decoration({
 	name = "lootblocks:lootblock_rare",
 	deco_type = "simple",
 	place_on = {"mapgen_stone"},
@@ -146,7 +146,7 @@ minetest.register_decoration({
 	decoration = "lootblocks:lootblock_rare",
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "lootblocks:lootblock_rare",
 	wherein        = "mapgen_stone",
@@ -157,7 +157,7 @@ minetest.register_ore({
 	y_min          = -100,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "lootblocks:lootblock_super",
 	wherein        = "mapgen_stone",
@@ -168,7 +168,7 @@ minetest.register_ore({
 	y_min          = -100,
 })
 
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "lootblocks:lootblock_rare",
 	wherein        = "mapgen_stone",
@@ -178,7 +178,7 @@ minetest.register_ore({
 	y_max          = -100,
 	y_min          = -31000,
 })
-minetest.register_ore({
+core.register_ore({
 	ore_type       = "scatter",
 	ore            = "lootblocks:lootblock_super",
 	wherein        = "mapgen_stone",

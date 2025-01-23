@@ -18,10 +18,10 @@ ul_statfx.registered = {}
 function ul_statfx.register(name, func)
 	ul_statfx.registered[name] = func
 	
-	minetest.register_entity(name, {
+	core.register_entity(name, {
 		is_visible = false,
 		on_activate = function (self, staticdata, dtime_s)
-			local sdat = staticdata and minetest.deserialize(staticdata)
+			local sdat = staticdata and core.deserialize(staticdata)
 			
 			if sdat and type(sdat._ul_statfx_timer) == "number" then
 				self._ul_statfx_timer = sdat._ul_statfx_timer
@@ -46,7 +46,7 @@ function ul_statfx.register(name, func)
 			end
 		end,
 		get_staticdata = function(self)
-			return minetest.serialize({_ul_statfx_timer=self._ul_statfx_timer})
+			return core.serialize({_ul_statfx_timer=self._ul_statfx_timer})
 		end,
 		_ul_statfx_timer = 0
 	})
@@ -65,17 +65,17 @@ function ul_statfx.apply(obj, name, length)
 	end
 	
 	local fx = ul_statfx.registered[name]
-	local ent = minetest.registered_entities[name]
+	local ent = core.registered_entities[name]
 	
 	if not fx then
-		minetest.log("error", "undefined stat effect \""..name.."\"")
+		core.log("error", "undefined stat effect \""..name.."\"")
 		return
 	end
 	if not ent then
 		error("attempt to apply improperly defined stat effect \""..name.."\"", 1)
 	end
 	
-	local o2 = minetest.add_entity({x=0,y=0,z=0}, name, minetest.serialize({_ul_statfx_timer = length}))
+	local o2 = core.add_entity({x=0,y=0,z=0}, name, core.serialize({_ul_statfx_timer = length}))
 	
 	if o2 then
 		o2:set_attach(obj)

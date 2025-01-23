@@ -1,17 +1,17 @@
 ul_basic = {}
 
-local S = minetest.get_translator"ul_basic"
-local path = minetest.get_modpath"ul_basic"
+local S = core.get_translator"ul_basic"
+local path = core.get_modpath"ul_basic"
 
 ul_basic.get_translator = S
 ul_basic.get_modpath = path
 
 -- perma-dark
-minetest.set_timeofday(0)
-minetest.settings:set("time_speed", 0)
-minetest.settings:set("movement_speed_walk", 8.0)
+core.set_timeofday(0)
+core.settings:set("time_speed", 0)
+core.settings:set("movement_speed_walk", 8.0)
 
-minetest.register_on_joinplayer(function(plyr, last_login)
+core.register_on_joinplayer(function(plyr, last_login)
 	plyr:set_moon({visible = false})
 	plyr:set_stars({visible = false})
 	plyr:set_sun({texture="ul_basic_lamp.png"})
@@ -29,7 +29,7 @@ minetest.register_on_joinplayer(function(plyr, last_login)
 end)
 
 -- starting item
-minetest.register_on_newplayer(function(plyr)
+core.register_on_newplayer(function(plyr)
 	plyr:get_inventory():add_item("main", ItemStack"ul_basic:lantern")
 end)
 

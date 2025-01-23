@@ -1,6 +1,6 @@
 local S = ul_inv.get_translator
 
-minetest.register_on_joinplayer(function(plyr)
+core.register_on_joinplayer(function(plyr)
     local inv = plyr:get_inventory()
 	inv:set_size("outfit", 8)
 end)
@@ -27,7 +27,7 @@ function ul_inv.register_wearable(name, def)
 	
 	def.groups.wearable = def.groups.wearable or 1
 	
-	minetest.register_tool(name, def)
+	core.register_tool(name, def)
 end
 
 sfinv.register_page("ul_inv:outfit", {
