@@ -1,7 +1,7 @@
 
 function ul_magic.get_level(obj, rune)
 	local inv = obj.get_inventory and obj:get_inventory()
-	local lvl = 0
+	local lvl = 1
 	
 	if inv then
 		
