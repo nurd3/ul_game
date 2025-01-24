@@ -56,7 +56,6 @@ local function place_spawner(tab)
 	if below and below.name ~= "air" then
 		pos.y = pos.y + 1
 		core.set_node(pos, {name = "ul_totems:totem"})
-		core.log(vector.to_string(pos))
 	end
 end
 
