@@ -1,9 +1,9 @@
 
 function ul_magic.get_level(obj, rune)
 	local inv = obj.get_inventory and obj:get_inventory()
+	local lvl = 0
 	
 	if inv then
-		local lvl = 0
 		
 		local list = inv:get_list"outfit"
 		
@@ -12,9 +12,13 @@ function ul_magic.get_level(obj, rune)
 				lvl = lvl + 1
 			end
 		end
-		
-		return lvl + 1
 	end
+
+	if obj:is_player() then
+		ul_totems.get_rune_bonus(rune)
+	end
+
+	return lvl
 end
 
 function ul_magic.wear_level(obj, rune)

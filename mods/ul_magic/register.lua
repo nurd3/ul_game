@@ -3,14 +3,19 @@ local S = ul_magic.get_translator
 local index = 0
 
 ul_magic.registered_runes = {}
+ul_magic.rune_palette = "ul_magic_rune_palette.png"
 
 function ul_magic.register_rune(name, def)
 	index = index + 1
 	def.index = index
-	
+	local imgmod =  ""
+	if def.color then
+		ul_magic.rune_palette = ul_magic.rune_palette .. "^[fill:1x1:" .. tostring(index + 1) .. ",0:" .. def.color
+		
+		imgmod = "^[multiply:"..def.color
+	end
+
 	ul_magic.registered_runes[name] = def
-	
-	local imgmod = def.color and ("^[multiply:"..def.color) or ""
 	
 	core.register_craftitem(name, {
 		description = S("Rune of @1", def.description or name),
