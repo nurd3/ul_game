@@ -118,14 +118,14 @@ ul_magic.register_rune("ul_magic:vampirism", {
 	on_hitobj = function (user, victim, level)
 		if victim and user then
 			ul_basic.set_hp(user, level * 2)
-			ul_basic.set_hp(user, -level * 2)
+			ul_basic.set_hp(victim, -level * 2)
 			return true
 		end
 	end,
 	on_melee = function (user, victim, level, stats)
 		if victim and user then
 			ul_basic.set_hp(user, level * 2)
-			ul_basic.set_hp(user, -level * 2)
+			ul_basic.set_hp(victim, -level * 2)
 			return true
 		end
 	end
@@ -147,12 +147,30 @@ ul_magic.register_rune("ul_magic:poison", {
 		end
 	end
 })
+ul_magic.register_rune("ul_magic:darkness", {
+	type = "attack",
+	description = S"Darkness",
+	color = "#000001",
+	on_melee = function (user, victim, level, stats)
+		if victim and user then
+			if core.get_node_light(vector.round(user:get_pos()), 0) < 5 then
+				ul_basic.set_hp(victim, -level * 5)
+				ul_basic.set_hp(user, level)
+				ul_basic.objsound(user, "ul_activate")
+			else
+				ul_basic.set_hp(victim, 1)
+			end
+			return true
+		end
+	end
+})
 
 lootblocks.register_drop("ul_magic:spell", 0.5)
 lootblocks.register_drop("ul_magic:fireball", 0.5)
 lootblocks.register_drop("ul_magic:levitation", 0.3)
 lootblocks.register_drop("ul_magic:heal", 0.2)
 lootblocks.register_drop("ul_magic:vampirism", 0.2)
+lootblocks.register_drop("ul_magic:darkness", 0.2)
 lootblocks.register_drop("ul_magic:regen", 0.1)
 lootblocks.register_drop("ul_magic:poison", 0.1)
 lootblocks.register_drop("ul_magic:launch", 0.1)

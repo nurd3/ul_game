@@ -1,3 +1,11 @@
+function ul_magic.get_rune_by_index(index)
+	for k,v in ipairs(ul_magic.registered_runes) do
+		if v.index == index then
+			return k
+		end
+	end
+	return nil
+end
 
 function ul_magic.get_level(obj, rune)
 	local inv = obj.get_inventory and obj:get_inventory()

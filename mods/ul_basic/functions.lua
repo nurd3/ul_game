@@ -168,8 +168,6 @@ function ul_basic.on_melee(itemstack, user, pointed_thing, level)
 			if rune and rune.on_melee then
 				rune.on_melee(user, obj, lvl)
 				ul_magic.wear_level(user, enc)
-				if enc_ovr then
-				end
 			end
 		end
 	end
@@ -254,6 +252,7 @@ function ul_basic.is_alive(thing)		-- thing can be luaentity or objectref.
 end
 
 function ul_basic.set_hp(obj, add)
+	if not obj:get_properties() then return end
 	local luaent = obj:get_luaentity()
 	
 	local hp = (luaent and (luaent.hp or luaent.health)) or obj:get_hp()
