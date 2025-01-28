@@ -17,7 +17,7 @@ function ul_portal.get_formspec(pos, plyr)
 	local spos = vector.to_string(pos)
 	local locations_spec = ""
 	local offset = 0
-	local max_dist = 50 + 50 * ul_magic.get_level(plyr, "ul_magic:teleport")
+	local max_dist = 50 + 50 * ul_magic.get_rune_level(plyr, "ul_magic:teleport")
 
 	opened_portals[plyr:get_player_name()] = spos
 
@@ -71,6 +71,7 @@ core.register_on_player_receive_fields(function(plyr, formname, fields)
 		end
 		
 		portals[opened_portals[plyrname]] = fields.name_field
+		storage:set_string("portal_positions", core.serialize(portals))
 	end
 	
 end)

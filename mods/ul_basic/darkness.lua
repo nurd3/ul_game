@@ -26,8 +26,10 @@ core.register_globalstep(function (dtime)
 			
 				-- player must be in darkness for at least 5 seconnds
 				if plyrtimer >= 5 then
-
-					plyr:set_hp(plyr:get_hp() - 1, {type="drown"})
+					local defense = ul_magic.get_purpose_level(plyr, "darkness")
+					if math.random(defense) < 1 then
+						plyr:set_hp(plyr:get_hp() - 1, {type="drown"})
+					end
 					-- darkness should only cause damage every 2 seconds
 					plyrtimers[plyrnom] = 4
 

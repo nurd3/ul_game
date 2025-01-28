@@ -35,7 +35,7 @@ sfinv.register_page("ul_inv:enchanting", {
 		local inpdef = core.registered_items[input]
 		local enctype = inpdef and inpdef.enchantable
 		local runedef =  ul_magic.registered_runes[rune]
-		local func = runedef and runedef["on_"..enctype]
+		local func = runedef and runedef["on_"..(enctype or "")]
 		
 		if not enctype then
 			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S("@1 is not enchantable!", get_item_display_name(input))))
@@ -51,18 +51,10 @@ sfinv.register_page("ul_inv:enchanting", {
 			return
 		end
 		
-		local result = ItemStack(input)
-		local imgmod = runedef.color and ("^[multiply:"..runedef.color) or ""
-		local S2 = ul_magic.get_translator
-		
+		inv:set_stack("craft", 3, ul_magic.enchant(input, rune))
+
 		inv:remove_item("craft", ItemStack(input))
 		inv:remove_item("craft", ItemStack(rune))
-		
-		result:get_meta():set_string("_enchantment", rune)
-		result:get_meta():set_string("description", S2("@1 of @2", inpdef.description, runedef.description))
-		result:get_meta():set_string("inventory_image", inpdef.inventory_image..imgmod)
-		
-		inv:set_stack("craft", 3, result)
 	end
 })
 

@@ -44,13 +44,6 @@ ul_magic.register_rune("ul_magic:fireball", {
 			ul_statfx.apply(victim, "ul_magic:burning", 5)
 			return true
 		end
-	end,
-	on_melee = function (user, victim, level, stats)
-		if victim and user then
-			ul_basic.set_hp(victim, -level * 2)
-			ul_statfx.apply(victim, "ul_magic:burning", 5)
-			return true
-		end
 	end
 })
 ul_magic.register_rune("ul_magic:launch", {
@@ -151,16 +144,109 @@ ul_magic.register_rune("ul_magic:darkness", {
 	type = "attack",
 	description = S"Darkness",
 	color = "#000001",
+	disable_spell = true,
 	on_melee = function (user, victim, level, stats)
 		if victim and user then
 			if core.get_node_light(vector.round(user:get_pos()), 0) < 5 then
-				ul_basic.set_hp(victim, -level * 5)
-				ul_basic.set_hp(user, level)
+				ul_basic.set_hp(victim, -level * 2)
 				ul_basic.objsound(user, "ul_activate")
 			else
 				ul_basic.set_hp(victim, 1)
 			end
 			return true
+		end
+	end
+})
+ul_magic.register_rune("ul_magic:moon", {
+	type = "complex",
+	description = S"Moon",
+	color = "#a3fff1",
+	disable_spell = true,
+	on_melee = function (user, victim, level)
+		if victim and user then
+			ul_basic.set_hp(user, -level)
+			ul_basic.set_hp(victim, -level * 5)
+			return true
+		end
+	end,
+	on_wear = function (purpose, level)
+		if purpose == "stealth" then
+			return level * 0.25
+		end
+		if purpose == "defense" then
+			return -level
+		end
+		if purpose == "darkness" then
+			return 1
+		end
+	end
+})
+ul_magic.register_rune("ul_magic:sun", {
+	type = "complex",
+	description = S"Sun",
+	color = "#ffe16b",
+	disable_spell = true,
+	on_melee = function (user, victim, level)
+		if victim then
+			ul_basic.set_hp(victim, -level)
+			return true
+		end
+	end,
+	on_wear = function (purpose, level)
+		if purpose == "stealth" then
+			return -level * 5
+		end
+		if purpose == "defense" then
+			return level
+		end
+		if purpose == "darkness" then
+			return -1
+		end
+	end
+})
+ul_magic.register_rune("ul_magic:iridescence", {
+	type = "complex",
+	description = S"Iridescence",
+	color = "#2a335e",
+	disable_spell = true,
+	on_melee = function (user, victim, level)
+		if victim then
+			ul_basic.set_hp(victim, -level)
+			return true
+		end
+	end,
+	on_wear = function (purpose, level)
+		if purpose == "stealth" then
+			return level * 5
+		end
+		if purpose == "defense" then
+			return -level * 5
+		end
+		if purpose == "darkness" then
+			return -level
+		end
+	end
+})
+ul_magic.register_rune("ul_magic:light", {
+	type = "complex",
+	description = S"Light",
+	color = "#ffffff",
+	disable_spell = true,
+	on_melee = function (user, victim, level)
+		if victim then
+			ul_basic.set_hp(victim, -level)
+			return true
+		end
+	end,
+	on_wear = function (purpose, level)
+		if purpose == "stealth" then
+			return -15
+		end
+		if purpose == "defense" then
+			return 10
+		end
+		if purpose == "darkness" then
+			return -level
 		end
 	end
 })
@@ -175,3 +261,6 @@ lootblocks.register_drop("ul_magic:regen", 0.1)
 lootblocks.register_drop("ul_magic:poison", 0.1)
 lootblocks.register_drop("ul_magic:launch", 0.1)
 lootblocks.register_drop("ul_magic:teleport", 0.1)
+lootblocks.register_drop("ul_magic:moon", 0.1)
+lootblocks.register_drop("ul_magic:sun", 0.1)
+lootblocks.register_drop("ul_magic:iridescence", 0.1)

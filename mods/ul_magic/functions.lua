@@ -1,3 +1,5 @@
+local S = ul_magic.get_translator
+
 function ul_magic.get_rune_by_index(index)
 	for k,v in ipairs(ul_magic.registered_runes) do
 		if v.index == index then
@@ -7,23 +9,73 @@ function ul_magic.get_rune_by_index(index)
 	return nil
 end
 
-function ul_magic.get_level(obj, rune)
-	local inv = obj.get_inventory and obj:get_inventory()
-	local lvl = 1
+function ul_magic.get_wear_levels(list)
+	local lvls = {}
 	
-	if inv then
-		
-		local list = inv:get_list"outfit"
-		
+	if list then
 		for _,stack in ipairs(list) do
-			if stack:get_name() == rune.."_ring" then
-				lvl = lvl + 1
+			lvls[stack:get_name()] = (lvls[stack:get_name()] or 0) + 1 or 1
+		end
+	end
+
+	return lvls
+end
+
+function ul_magic.get_rune_levels(list)
+	local lvls = {}
+	
+	if list then
+		for _,stack in ipairs(list) do
+			local enc = stack:get_meta():get("_enchantment")
+			if enc then
+				local lvl = stack:get_definition() and stack:get_definition().on_wear and stack:get_definition().on_wear("enchantment") or 1
+				lvls[enc] = (lvls[enc] or 0) + lvl
 			end
 		end
 	end
 
+	return lvls
+end
+
+function ul_magic.get_purpose_level(obj, purpose)
+	local inv = obj.get_inventory and obj:get_inventory()
+	local lvl = 0
+	
+	if not inv or inv:is_empty"outfit" then
+		return 0
+	end
+
+	local lvls = ul_magic.get_rune_levels(inv:get_list"outfit")
+
+	for k,v in pairs(lvls) do
+		local rune = ul_magic.registered_runes[k]
+		if rune and rune.on_wear then
+			lvl = lvl + (rune.on_wear(purpose, v) or 0)
+		end
+	end
+
+	local wearlvls = ul_magic.get_wear_levels(inv:get_list"outfit")
+
+	for k,v in pairs(wearlvls) do
+		local item = core.registered_items[k]
+		if item and item.on_wear then
+			lvl = lvl + (item.on_wear(purpose, v) or 0)
+		end
+	end
+
+	return lvl
+end
+
+function ul_magic.get_rune_level(obj, rune)
+	local inv = obj.get_inventory and obj:get_inventory()
+	local lvl = 1
+	
+	if inv and not inv:is_empty"outfit" then
+		lvl = lvl + (ul_magic.get_rune_levels(inv:get_list"outfit")[rune] or 0)
+	end
+
 	if obj:is_player() then
-		ul_totems.get_rune_bonus(rune)
+		lvl = lvl + ul_totems.get_rune_bonus(rune)
 	end
 
 	return lvl
@@ -47,6 +99,23 @@ function ul_magic.wear_level(obj, rune)
 		
 		return lvl + 1
 	end
+end
+
+function ul_magic.enchant(itemname, rune)
+	if not itemname or not rune then return end
+	local def = core.registered_items[itemname]
+	return def and def.on_enchant and def.on_enchant(itemname, rune) or ul_magic.on_enchant_fallback(itemname, rune)
+end
+
+function ul_magic.on_enchant_fallback(itemname, rune)
+	local stack = ItemStack(itemname)
+	local def = core.registered_items[itemname]
+	local runedef = ul_magic.registered_runes[rune]
+	local imgmod = (runedef.color and ("^[multiply:"..runedef.color)) or ""
+	stack:get_meta():set_string("_enchantment", rune)
+	stack:get_meta():set_string("description", S("@1 of @2", def.description, def.description))
+	stack:get_meta():set_string("inventory_image", def.inventory_image..imgmod)
+	return stack
 end
 
 function ul_magic.shoot(self, target, name, level)

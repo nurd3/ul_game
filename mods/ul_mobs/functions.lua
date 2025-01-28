@@ -38,12 +38,12 @@ function ul_mobs.death_drops(...)
 	return func
 end
 
-function ul_mobs.can_see(self, tpos)
+function ul_mobs.can_see(self, tpos, obj)
 
 	if not self or not tpos or not mobkit.is_alive(self) then
 		return false
 	end
-
+	
 	local pos = self.object:get_pos()
 	
 	if not core.line_of_sight(pos, tpos) then
@@ -56,16 +56,21 @@ function ul_mobs.can_see(self, tpos)
 	if dist > view_range then
 		return false
 	end
-	
+
 	local night_vision = self.vision or 0
 	local light_level = core.get_node_light(tpos)
+	local stealth = 0
 	
+	if obj and obj:is_valid() then
+		stealth = math.random(ul_magic.get_purpose_level(obj, "stealth"))
+	end
+
 	if light_level < night_vision then
 		local dist_frac = (dist / view_range)
-		return light_level * dist_frac < night_vision * 0.5
+		return light_level * dist_frac < night_vision * 0.5 - stealth
 	end
 	
-	return true
+	return light_level * dist_frac > stealth
 end
 
 function ul_mobs.get_nearest_entity(self, checkfunc)
@@ -78,7 +83,7 @@ function ul_mobs.get_nearest_entity(self, checkfunc)
 	for _,obj in ipairs(self.nearby_objects) do
 		local ent = obj:get_luaentity()
 		if obj:get_pos() then
-			local can_see = ul_mobs.can_see(self, obj:get_pos())
+			local can_see = ul_mobs.can_see(self, obj:get_pos(), obj)
 			if can_see and check(self, obj) and not (ent and ent.disable_hunting) then
 				local opos = obj:get_pos()
 				local odist = math.abs(opos.x-pos.x) + math.abs(opos.z-pos.z)

@@ -125,7 +125,7 @@ function mobkit_plus.hq_hunt(self,prty,tgtobj)
 			local pos = mobkit.get_stand_pos(self)
 			local opos = tgtobj:get_pos()
 			local dist = vector.distance(pos,opos)
-			local can_see = ul_mobs.can_see(self, opos)
+			local can_see = ul_mobs.can_see(self, opos, tgtobj)
 			if can_see then
 				path = mobkit_plus.pathfind(self, opos, self.view_range)
 				index = 2

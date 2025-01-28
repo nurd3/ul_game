@@ -14,8 +14,6 @@ function ul_magic.register_rune(name, def)
 		
 		imgmod = "^[multiply:"..def.color
 	end
-
-	ul_magic.registered_runes[name] = def
 	
 	core.register_craftitem(name, {
 		description = S("Rune of @1", def.description or name),
@@ -115,72 +113,73 @@ function ul_magic.register_rune(name, def)
 		end
 	})
 	
-	core.register_tool(name.."_spell", {
-		description = S("@1 Spell", def.description or name),
-		inventory_image = "ul_magic_spell.png"..imgmod,
-		on_use = function(itemstack, user, pointed_thing)
-			if not def.disable_primary
-			then
-				local hvel = vector.multiply(vector.normalize(user:get_rotation() or user:get_look_dir()),8)
-				local pos = user:get_pos()
-				pos.y = pos.y + 1.5
-				local o = core.add_entity(pos, name.."_ball", core.serialize {
-					_velocity = hvel,
-					_level = ul_magic.get_level(user, name)
-				})
-				o:get_luaentity():set_shooter(user)
-				
-				ul_magic.wear_level(user, name)
-				itemstack:add_wear(65536 / 10)
-				ul_basic.objsound(user, "ul_magic_attack")
-			else
-				ul_basic.objsound(user, "ul_fail")
-			end
-			return itemstack
-		end,
-		
-		on_secondary_use = function(itemstack, user, pointed_thing)
-			if def.on_cast
-			and def.on_cast(user, pointed_thing.ref, ul_magic.get_level(user, name))
-			then
-				ul_magic.wear_level(user, name)
-				itemstack:add_wear(65536 / 10)
-				ul_basic.objsound(user, "ul_magic_cast")
-			else
-				ul_basic.objsound(user, "ul_fail")
-			end
-			return itemstack
-		end,
-		
-		on_place = function(itemstack, user, pointed_thing)
-			if def.on_cast
-			and def.on_cast(user, pointed_thing.ref, ul_magic.get_level(user, name))
-			then
-				ul_magic.wear_level(user, name)
-				itemstack:add_wear(65536 / 10)
-				ul_basic.objsound(user, "ul_magic_cast")
-			else
-				ul_basic.objsound(user, "ul_fail")
-			end
-			return itemstack
-		end,
-		
-		groups = {spell = 1}
-	})
+	if not def.disable_spell then
+		core.register_tool(name.."_spell", {
+			description = S("@1 Spell", def.description or name),
+			inventory_image = "ul_magic_spell.png"..imgmod,
+			on_use = function(itemstack, user, pointed_thing)
+				if not def.disable_primary
+				then
+					local hvel = vector.multiply(vector.normalize(user:get_rotation() or user:get_look_dir()),8)
+					local pos = user:get_pos()
+					pos.y = pos.y + 1.5
+					local o = core.add_entity(pos, name.."_ball", core.serialize {
+						_velocity = hvel,
+						_level = ul_magic.get_rune_level(user, name)
+					})
+					o:get_luaentity():set_shooter(user)
+					
+					ul_magic.wear_level(user, name)
+					itemstack:add_wear(65536 / 10)
+					ul_basic.objsound(user, "ul_magic_attack")
+				else
+					ul_basic.objsound(user, "ul_fail")
+				end
+				return itemstack
+			end,
+			
+			on_secondary_use = function(itemstack, user, pointed_thing)
+				if def.on_cast
+				and def.on_cast(user, pointed_thing.ref, ul_magic.get_rune_level(user, name))
+				then
+					ul_magic.wear_level(user, name)
+					itemstack:add_wear(65536 / 10)
+					ul_basic.objsound(user, "ul_magic_cast")
+				else
+					ul_basic.objsound(user, "ul_fail")
+				end
+				return itemstack
+			end,
+			
+			on_place = function(itemstack, user, pointed_thing)
+				if def.on_cast
+				and def.on_cast(user, pointed_thing.ref, ul_magic.get_rune_level(user, name))
+				then
+					ul_magic.wear_level(user, name)
+					itemstack:add_wear(65536 / 10)
+					ul_basic.objsound(user, "ul_magic_cast")
+				else
+					ul_basic.objsound(user, "ul_fail")
+				end
+				return itemstack
+			end,
+			
+			groups = {spell = 1}
+		})
+	end
 	
 	if not def.disable_ring then
 		ul_inv.register_wearable(name.."_ring", {
-			description = S("@1 Ring", def.description or name),
-			inventory_image = "ul_magic_ring.png^[fill:2x2:7,3:"..(def.color or "#ffffff"),
-			
+			short_description = S"Outdated Ring",
+			description = S"Outdated Ring, punch the ground with this ring to fix it",
+			on_use = function()
+				return ul_magic.enchant("ul_magic:ring", name)
+			end,
 			groups = {ring = 1}
 		})
-		
-		core.register_craft({
-			output = name.."_ring",
-			type = "shapeless",
-			recipe = {"ul_magic:ring", name}
-		})
+		if not def.on_wear then
+			def.on_wear = function () end
+		end
 	end
 	
 	core.register_craft({
@@ -189,4 +188,5 @@ function ul_magic.register_rune(name, def)
 		recipe = {"ul_magic:spell", name}
 	})
 	
+	ul_magic.registered_runes[name] = def
 end

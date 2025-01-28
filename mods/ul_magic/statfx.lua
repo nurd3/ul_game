@@ -47,3 +47,15 @@ ul_statfx.register("ul_magic:regen", {
 		end
 	end
 })
+
+ul_statfx.register("ul_magic:darkness", {
+	on_step = function (timer, dtime, obj)
+		if not ul_basic.is_alive(obj) then
+			return 0
+		end
+		
+		if ul_statfx.timer(timer, dtime, 1) and ul_basic.set_hp(obj, -1) then
+			obj:set_properties{_ul_sealthiness = 15}
+		end
+	end
+})

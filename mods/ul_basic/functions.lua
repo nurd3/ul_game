@@ -162,7 +162,7 @@ function ul_basic.on_melee(itemstack, user, pointed_thing, level)
 		
 		if obj:is_valid() and meta and meta:contains("_enchantment") then
 			local enc = meta:get("_enchantment")
-			local lvl = user and ul_magic.get_level(user, enc) or level or 1
+			local lvl = user and ul_magic.get_rune_level(user, enc) or level or 1
 			local rune = ul_magic.registered_runes[enc]
 			
 			if rune and rune.on_melee then
@@ -284,6 +284,9 @@ function ul_basic.punch(obj, puncher, time_from_last_punch, tool_capabilities, d
 	elseif type(obj) == "table" then
 		return ul_basic.punch(obj.object, puncher, time_from_last_punch, tool_capabilities, dir)
 	elseif type(obj) == "userdata" then
+		if tool_capabilities.damage_groups then
+			tool_capabilities.damage_groups.fleshy = tool_capabilities.damage_groups.fleshy - (16 / (16 + ul_magic.get_purpose_level(obj, defense)))
+		end
 		return obj:punch(puncher, time_from_last_punch, tool_capabilities, dir)
 	end
 end

@@ -24,5 +24,5 @@ dofile(path.."/arcanoids.lua")
 dofile(path.."/races.lua")
 
 if natural_entities then
-	dofile(path.."/natural_entities.lua")
+	-- dofile(path.."/natural_entities.lua")
 end
