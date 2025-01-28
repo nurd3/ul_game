@@ -80,7 +80,7 @@ function ul_basic.give_or_drop(inv, listname, pos, chance, stack, amount)
 
 	local lst = listname or "main"
 	if amount then
-		stack:set_amount(
+		stack:set_count(
 			handle_amount(amount)
 		)
 	end

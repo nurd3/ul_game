@@ -12,10 +12,10 @@ function ul_inv.register_wearable(name, def)
 	def.on_use = function(itemstack, user, pointed_thing)
 		local inv = user and user.get_inventory and user:get_inventory()
 		
-		if inv and inv:room_for_item("outfit", ItemStack(name)) then
+		if inv and inv:room_for_item("outfit", itemstack) then
 			ul_basic.objsound(user, equip_sound)
-			itemstack:set_count(itemstack:get_count() - 1)
-			inv:add_item("outfit", ItemStack(name))
+			inv:add_item("outfit", itemstack)
+			itemstack:take_item()
 		end
 		
 		return itemstack

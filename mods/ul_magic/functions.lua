@@ -1,7 +1,7 @@
 local S = ul_magic.get_translator
 
 function ul_magic.get_rune_by_index(index)
-	for k,v in ipairs(ul_magic.registered_runes) do
+	for k,v in pairs(ul_magic.registered_runes) do
 		if v.index == index then
 			return k
 		end
@@ -104,7 +104,7 @@ end
 function ul_magic.enchant(itemname, rune)
 	if not itemname or not rune then return end
 	local def = core.registered_items[itemname]
-	return def and def.on_enchant and def.on_enchant(itemname, rune) or ul_magic.on_enchant_fallback(itemname, rune)
+	return (def and def.on_enchant and def.on_enchant(itemname, rune)) or ul_magic.on_enchant_fallback(itemname, rune)
 end
 
 function ul_magic.on_enchant_fallback(itemname, rune)
@@ -113,7 +113,7 @@ function ul_magic.on_enchant_fallback(itemname, rune)
 	local runedef = ul_magic.registered_runes[rune]
 	local imgmod = (runedef.color and ("^[multiply:"..runedef.color)) or ""
 	stack:get_meta():set_string("_enchantment", rune)
-	stack:get_meta():set_string("description", S("@1 of @2", def.description, def.description))
+	stack:get_meta():set_string("description", S("@1 of @2", def.description, runedef.description))
 	stack:get_meta():set_string("inventory_image", def.inventory_image..imgmod)
 	return stack
 end

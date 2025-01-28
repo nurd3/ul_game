@@ -28,8 +28,10 @@ sfinv.register_page("ul_inv:enchanting", {
 		
 		if inv:get_stack("craft", 1):is_empty() then
 			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S"You can't enchant air!"))
+			return
 		elseif inv:get_stack("craft", 2):is_empty() then
 			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S"Air is not a rune!"))
+			return
 		end
 		
 		local inpdef = core.registered_items[input]
@@ -51,10 +53,11 @@ sfinv.register_page("ul_inv:enchanting", {
 			return
 		end
 		
-		inv:set_stack("craft", 3, ul_magic.enchant(input, rune))
-
 		inv:remove_item("craft", ItemStack(input))
 		inv:remove_item("craft", ItemStack(rune))
+
+		inv:set_stack("craft", 3, ul_magic.enchant(input, rune))
+
 	end
 })
 
