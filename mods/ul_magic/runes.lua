@@ -157,6 +157,17 @@ ul_magic.register_rune("ul_magic:darkness", {
 		end
 	end
 })
+ul_magic.register_rune("ul_magic:defense", {
+	type = "wear",
+	description = S"Defense",
+	color = "#00107a",
+	disable_spell = true,
+	on_wear = function (purpose, level)
+		if purpose == "defense" then
+			return 2 * level
+		end
+	end
+})
 ul_magic.register_rune("ul_magic:iridescence", {
 	type = "complex",
 	description = S"Iridescence",
@@ -196,7 +207,7 @@ ul_magic.register_rune("ul_magic:light", {
 			return -15
 		end
 		if purpose == "defense" then
-			return 10
+			return 4
 		end
 		if purpose == "darkness" then
 			return -level
@@ -275,6 +286,7 @@ ul_magic.register_rune("ul_magic:blood", {
 lootblocks.register_drop("ul_magic:spell", 0.5)
 lootblocks.register_drop("ul_magic:fireball", 0.5)
 lootblocks.register_drop("ul_magic:levitation", 0.3)
+lootblocks.register_drop("ul_magic:defense", 0.3)
 lootblocks.register_drop("ul_magic:heal", 0.2)
 lootblocks.register_drop("ul_magic:vampirism", 0.2)
 lootblocks.register_drop("ul_magic:darkness", 0.2)
