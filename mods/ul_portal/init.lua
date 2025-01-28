@@ -85,6 +85,7 @@ core.register_chatcommand("portals", {
 core.register_node("ul_portal:portal", {
 	description = S"Portal",
 	tiles = {"ul_portal_portal.png"},
+	light_source = 15,
 	on_place = function(stack, placer, pointed_thing)
 		core.set_node(pointed_thing.above, {name="ul_portal:portal"})
 		portals[vector.to_string(pointed_thing.above)] = S"Portal"
