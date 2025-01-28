@@ -84,10 +84,13 @@ core.register_chatcommand("portals", {
 
 core.register_node("ul_portal:portal", {
 	description = S"Portal",
+	tiles = {"ul_portal_portal.png"},
 	on_place = function(stack, placer, pointed_thing)
 		core.set_node(pointed_thing.above, {name="ul_portal:portal"})
 		portals[vector.to_string(pointed_thing.above)] = S"Portal"
 		storage:set_string("portal_positions", core.serialize(portals))
+		stack:take_item()
+		return stack
 	end,
 	on_punch = function (pos, puncher)
 		core.set_node(pos, {name="air"})
@@ -111,5 +114,5 @@ core.register_node("ul_portal:portal", {
 core.register_craft({
 	output = "ul_portal:portal 2",
 	type = "shapeless",
-	recipe = {"ul_magic:teleport", "ul_basic:ore"}
+	recipe = {"ul_magic:teleport", "ul_magic:crystal"}
 })
