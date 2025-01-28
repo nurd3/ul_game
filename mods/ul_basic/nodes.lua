@@ -28,7 +28,7 @@ core.register_node("ul_basic:building", {
 core.register_node("ul_basic:window", {
     description = S"Window",
 	sounds = ul_basic.node_sound_defaults(),
-    drawtype = "glasslike_framed_optional",
+    drawtype = "glasslike_framed",
     tiles = {"ul_basic_window.png", "ul_basic_window_detail.png"},
     groups = {oddly_breakable_by_hand = 3},
 	sunlight_propagates = true,
