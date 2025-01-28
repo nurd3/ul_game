@@ -148,7 +148,7 @@ ul_magic.register_rune("ul_magic:darkness", {
 	on_melee = function (user, victim, level, stats)
 		if victim and user then
 			if core.get_node_light(vector.round(user:get_pos()), 0) < 5 then
-				ul_basic.set_hp(victim, -level * 2)
+				ul_basic.set_hp(victim, -level * 3)
 				ul_basic.objsound(user, "ul_activate")
 			else
 				ul_basic.set_hp(victim, 1)
@@ -187,7 +187,7 @@ ul_magic.register_rune("ul_magic:iridescence", {
 			return -level * 5
 		end
 		if purpose == "darkness" then
-			return -level
+			return -2
 		end
 	end
 })
@@ -210,7 +210,7 @@ ul_magic.register_rune("ul_magic:light", {
 			return 4
 		end
 		if purpose == "darkness" then
-			return -level
+			return -5
 		end
 	end
 })
@@ -254,7 +254,7 @@ ul_magic.register_rune("ul_magic:sun", {
 			return -level * 5
 		end
 		if purpose == "defense" then
-			return level
+			return level * 2
 		end
 		if purpose == "darkness" then
 			return -1
