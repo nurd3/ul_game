@@ -227,9 +227,6 @@ ul_magic.register_rune("ul_magic:moon", {
 		end
 	end,
 	on_wear = function (purpose, level)
-		if purpose == "stealth" then
-			return level * 0.25
-		end
 		if purpose == "defense" then
 			return -level
 		end
@@ -274,6 +271,9 @@ ul_magic.register_rune("ul_magic:blood", {
 		end
 	end,
 	on_wear = function (purpose, level)
+		if purpose == "stealth" then
+			return level * 2
+		end
 		if purpose == "defense" then
 			return -level * 4
 		end
