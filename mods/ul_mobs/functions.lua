@@ -64,9 +64,10 @@ function ul_mobs.can_see(self, tpos, obj)
 	if obj and obj:is_valid() then
 		stealth = math.random(ul_magic.get_purpose_level(obj, "stealth"))
 	end
+	
+	local dist_frac = (dist / view_range)
 
 	if light_level < night_vision then
-		local dist_frac = (dist / view_range)
 		return light_level * dist_frac < night_vision * 0.5 - stealth
 	end
 	
