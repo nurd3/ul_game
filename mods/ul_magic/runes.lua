@@ -210,7 +210,7 @@ ul_magic.register_rune("ul_magic:light", {
 			return 4
 		end
 		if purpose == "darkness" then
-			return -5
+			return -2
 		end
 	end
 })
