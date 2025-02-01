@@ -54,13 +54,12 @@ local function compile_recipes()
 end
 
 core.register_on_mods_loaded(function()
-    compile_recipes()
+	compile_recipes()
 end)
 
 sfinv.override_page("sfinv:crafting", {
     title = S"Crafting",
-	get = function(self, plyr, context, recipe)
-
+	get = function(self, plyr, context)
 		
 		local recipe = ""
 		
