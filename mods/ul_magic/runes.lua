@@ -285,7 +285,7 @@ ul_magic.register_rune("ul_magic:blood", {
 
 lootblocks.register_drop("ul_magic:spell", 0.5)
 lootblocks.register_drop("ul_magic:fireball", 0.5)
-lootblocks.register_drop("ul_magic:levitation", 0.3)
+lootblocks.register_drop("ul_magic:levitate", 0.3)
 lootblocks.register_drop("ul_magic:defense", 0.3)
 lootblocks.register_drop("ul_magic:heal", 0.2)
 lootblocks.register_drop("ul_magic:vampirism", 0.2)

@@ -47,7 +47,8 @@ local function compile_recipes()
 			img = itm.tiles[1]
 		end
 		
-		recipes_formspec = recipes_formspec.."image_button[0,0;1,1;"..img..";"..i..";]\n"
+		recipes_formspec = recipes_formspec.."image_button[0,0;1,1;"..img..";"..i..";]\n" .. 
+			"tooltip["..i..";".. core.formspec_escape(itm.short_description or itm.description or i) .."]"
 		
 		recipes_formspec = recipes_formspec.."container_end[]\n"
 	end
