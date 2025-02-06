@@ -102,10 +102,14 @@ function ul_storage.to_inv(invref, list, str)
 			local stack = ItemStack(v.name.." "..v.count)
 			local stack_meta = stack:get_meta()
 			
-			stack_meta:set_string("_inventory", v._inventory)
-			stack_meta:set_string("_magic", v._magic)
-			
-			ul_storage.set_stack_name(stack_meta, v._name)
+			if v.meta then
+				stack_meta:from_table(v.meta)
+			else
+				stack_meta:set_string("_inventory", v._inventory)
+				stack_meta:set_string("_magic", v._magic)
+				
+				ul_storage.set_stack_name(stack_meta, v._name)
+			end
 			
 			stack:set_wear(v.wear or 0 )
 			
@@ -133,9 +137,7 @@ function ul_storage.from_inv(invref, list)
 			name = stack:get_name(),
 			count = stack:get_count(),
 			wear = stack:get_wear(),
-			_inventory = stack_meta:get("_inventory"),
-			_name = stack_meta:get("_name"),
-			_magic = stack_meta:get("_magic")
+			meta = stack_meta:to_table()
 		}
 		
 		table.insert(data, tbl)
