@@ -147,6 +147,7 @@ ul_mobs.register_mob("ul_mobs:rgull", {
 	melee = {dmg = 10},
 	disable_fall_damage = true,
 	on_punch = function (self, puncher)
+		if not puncher then return end
 		local playername = puncher:get_player_name()
 		if self._owner and playername and self._owner ~= playername then
 			return

@@ -28,14 +28,13 @@ core.register_node("ul_storage:crate", {
 	description = S"Crate",
 	tiles = {"ul_storage_crate.png"},
 	stack_max = 1,
-	on_place = function (pos, placer, pointed_thing)
+	on_place = function (stack, placer, pointed_thing)
 		core.set_node(pointed_thing.above, {name="ul_storage:crate"})
 		
 		local node_meta = core.get_meta(pointed_thing.above)
 		local invref = node_meta:get_inventory()
 		invref:set_size("main", 4*4)
 		
-		local stack = placer:get_wielded_item()
 		local stack_meta = stack:get_meta()
 		
 		ul_storage.to_inv(invref, "main", stack_meta:get_string("_inventory"))
