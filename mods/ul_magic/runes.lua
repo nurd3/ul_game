@@ -227,6 +227,9 @@ ul_magic.register_rune("ul_magic:moon", {
 		end
 	end,
 	on_wear = function (purpose, level)
+		if purpose == "stealth" then
+			return 2
+		end
 		if purpose == "defense" then
 			return -level
 		end
