@@ -30,8 +30,8 @@ core.register_globalstep(function (dtime)
 					if math.random() + math.random() * defense < 1 then
 						plyr:set_hp(plyr:get_hp() - 1, {type="drown"})
 					end
-					-- darkness should only cause damage every 2 seconds
-					plyrtimers[plyrnom] = 4
+					-- darkness should only cause damage every 2 seconds (without armour)
+					plyrtimers[plyrnom] = 4 - math.max(math.min(defense, 1), -1)
 
 				else
 
