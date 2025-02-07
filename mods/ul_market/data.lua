@@ -532,6 +532,7 @@ ul_market.register_goods {
 		["ul_magic:crystal"] = {supply = 0.75},
 		["ul_mobs:kobold"] = {supply = 0.5},
 
+		["ul_lives:life"] = {demand = 6.0},
 		["ul_portal:portal"] = {demand = 24.0},
 		["ul_magic:launch"] = {demand = 24.0},
 		["ul_basic:pick"] = {demand = 24.0},
@@ -549,6 +550,7 @@ ul_market.register_goods {
 		["ul_mobs:vampire"] = {supply = 0.25},
 		["ul_mobs:zombie"] = {supply = 0.25},
 
+		["ul_lives:life"] = {demand = 6.0},
 		["ul_mobs:rgull"] = {demand = 3.0},
 		["ul_basic:sword"] = {demand = 3.0},
 		["ul_basic:knife"] = {demand = 3.0},
@@ -570,7 +572,8 @@ ul_market.register_goods {
 		["ul_mobs:rgull"] = {supply = 0.75, demand = 0.5},
 		["ul_mobs:horbold"] = {supply = 0.5},
 		["ul_mobs:lich"] = {supply = 0.5},
-	
+		
+		["ul_lives:life"] = {demand = 6.0},
 		["ul_basic:sword"] = {demand = 6.0},
 		["ul_basic:knife"] = {demand = 6.0},
 		["ul_magic:defense"] = {demand = 3.0},
@@ -602,12 +605,6 @@ ul_market.register_goods {
 
 		["ul_magic:runestone"] = {demand = 384.0},
 		["ul_mobs:mgull"] = {demand = 12.0},
-	}
-}
-ul_market.register_goods {
-	industry = "ul_market:industry_slavery",
-	items = {
-		["ul_portal:portal"] = {demand = 12.0}
 	}
 }
 
@@ -663,6 +660,7 @@ ul_market.register_goods {
 	industry = "ul_market:industry_medicine",
 	items = {
 		["ul_market:hp_vial"] = {supply = 6.0},
+		["ul_lives:life"] = {supply = 6.0},
 
 		["ul_magic:heal"] = {demand = 12.0},
 		["ul_basic:ore"] = {demand = 12.0}
@@ -691,6 +689,7 @@ ul_market.register_goods {
 		["ul_basic:knife"] = {demand = 24.0},
 		["ul_magic:cloak"] = {demand = 24.0},
 		["ul_market:hp_vial"] = {demand = 12.0},
+		["ul_lives:life"] = {demand = 6.0},
 		["ul_magic:heal"] = {demand = 6.0},
 		["ul_magic:ring"] = {demand = 6.0}
 	}
@@ -747,7 +746,8 @@ ul_market.register_goods {
 		["ul_magic:spell"] = {demand = 12.0},
 		["ul_magic:regen"] = {demand = 12.0},
 		["ul_magic:heal"] = {demand = 12.0},
-		["ul_basic:lamp"] = {demand = 12.0}
+		["ul_basic:lamp"] = {demand = 12.0},
+		["ul_lives:life"] = {demand = 6.0}
 	}
 }
 ul_market.register_goods {
@@ -758,10 +758,11 @@ ul_market.register_goods {
 		["ul_magic:moon"] = {demand = 24.0},
 		["ul_magic:sun"] = {demand = 24.0},
 		["ul_magic:blood"] = {demand = 24.0},
+		["ul_lives:life"] = {demand = 6.0},
+		["ul_mobs:rgull"] = {demand = 6.0},
 		["ul_magic:fireball"] = {demand = 3.0},
 		["ul_magic:poison"] = {demand = 3.0},
 		["ul_mobs:mgull"] = {demand = 3.0},
-		["ul_mobs:rgull"] = {demand = 3.0},
 	}
 }
 ul_market.register_goods {
