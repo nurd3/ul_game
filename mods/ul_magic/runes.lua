@@ -234,7 +234,7 @@ ul_magic.register_rune("ul_magic:moon", {
 			return -level
 		end
 		if purpose == "darkness" then
-			return 1
+			return level
 		end
 	end
 })
