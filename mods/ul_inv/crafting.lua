@@ -117,10 +117,14 @@ sfinv.override_page("sfinv:crafting", {
 			end
 			
 			for nom,amt in pairs(rec.input) do
-				local i = 0
-				while i < amt do
-					inv:remove_item("main", ItemStack(nom))
-					i = i + 1
+				local count = amt
+				if count > 0 then
+					for i,stack in ipairs(inv:get_list"main") do
+						if count ~= 0 and stack:get_name() == nom and #stack:get_meta():get_keys() == 0 then
+							count = count - math.min(count, stack:get_count())
+							stack:take_item(math.min(count, stack:get_count()))
+						end
+					end
 				end
 			end
 			
