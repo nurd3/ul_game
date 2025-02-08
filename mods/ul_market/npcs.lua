@@ -182,7 +182,7 @@ natural_entities.register_spawn("ul_market:npcs", {
 	max_y = 64,
 	
 	entities = {
-		["ul_markets:npc"] = 0.8
+		["ul_market:npc"] = 0.8
 	},
 	
 	check = function (pos)
