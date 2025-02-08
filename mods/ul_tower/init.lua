@@ -39,7 +39,7 @@ ul_tower.register_pickable_items {
 	["ul_mobs:rgull"] = 16,
 	["ul_storage:crate"] = 16,
 
-	["ul_basic:pickaxe"] = 8,
+	["ul_basic:pick"] = 8,
 	["ul_basic:sword"] = 8,
 	["ul_magic:runestone"] = 8,
 

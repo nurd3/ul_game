@@ -160,7 +160,13 @@ sfinv.register_page("ul_tower:inv_tower", {
 })
 
 core.register_on_mods_loaded(function()
-	if not rec then
+	local invalid = false
+	for _,str in ipairs(rec) do
+		if not ItemStack(str):is_known() then
+			invalid = true
+		end
+	end
+	if not rec or invalid then
 		generate_random_recipe()
 	end
 end)
