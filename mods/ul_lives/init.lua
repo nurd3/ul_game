@@ -28,7 +28,9 @@ end
 function ul_lives.set_life(plyrname, val)
 	if not plyrname or not val then return end
 	storage:set_int(plyrname, val)
-	core.get_player_by_name(plyrname):hud_change(hud_ids[plyrname], "text", string.format(S("%i Live(s) Left"), val))
+	if hud_ids[plyrname] then
+		core.get_player_by_name(plyrname):hud_change(hud_ids[plyrname], "text", string.format(S("%i Live(s) Left"), val))
+	end
 end
 function ul_lives.add_life(plyrname, val)
 	if not plyrname then return end

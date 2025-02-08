@@ -231,7 +231,7 @@ end)
 
 ul_market.register_marketstep(function()
 	if math.random() < 0.1 then
-		local tries = 50
+		local tries = 5
 		local policy, intensity = generate_random_party_policy(generate_random_party())
 		while tries > 0 and (not policy or not intensity) do
 			policy, intensity = generate_random_party_policy(generate_random_party())
