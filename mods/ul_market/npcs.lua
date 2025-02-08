@@ -157,9 +157,9 @@ ul_mobs.register_mob("ul_market:npc", {
 		local name = clicker:get_player_name()
 		if name then
 			self.memory.dialogue_group = self.memory.dialogue_group or random_dialogue_group()
-			self._dialogue_index = math.min((self._dialogue_index or 0) + 1, #dialogue[self.memory.dialogue_group])
+			self._dialogue_index[name] = math.min((self._dialogue_index[name] or 0) + 1, #dialogue[self.memory.dialogue_group])
 			core.chat_send_player(name, S("<NPC> @1", 
-				S(dialogue[self.memory.dialogue_group][self._dialogue_index])
+				S(dialogue[self.memory.dialogue_group][self._dialogue_index[name]])
 			))
 		end
 	end,
