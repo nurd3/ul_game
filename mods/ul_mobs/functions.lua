@@ -164,7 +164,7 @@ function ul_mobs.brain(self)
 		local sitting = mobkit.recall(self, "sitting")
 		if not self._owner then
 			local closest = math.huge
-			for _,plyr in ipairs(core.get_connected_players) do
+			for _,plyr in ipairs(core.get_connected_players()) do
 				local dist = vector.distance(plyr:get_pos(), self.object:get_pos()) 
 				closest = closest > dist and dist or closest
 			end

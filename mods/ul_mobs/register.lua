@@ -69,7 +69,7 @@ function ul_mobs.register_mob(name, def)
 		get_staticdata = function (self)	-- mobkit does not save hp or owner
 			if not self._owner then
 				local closest = math.huge
-				for _,plyr in ipairs(core.get_connected_players) do
+				for _,plyr in ipairs(core.get_connected_players()) do
 					local dist = vector.distance(plyr:get_pos(), self.object:get_pos()) 
 					closest = closest > dist and dist or closest
 				end
