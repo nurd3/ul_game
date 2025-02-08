@@ -93,3 +93,9 @@ function ul_market.get_portfolio_shares(plyrname, company)
 	local portfolio = ul_market.get_portfolio_or_nil(plyrname)
 	return portfolio and portfolio.companies and portfolio.companies[company]
 end
+
+core.register_on_dieplayer(function (plyr)
+	local plyrname = plyr:get_player_name()
+	ul_market.get_portfolio(plyrname).wallet = ul_market.get_wallet(plyrname) - 500
+	ul_market.save_portfolios()
+end)
