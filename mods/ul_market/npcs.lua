@@ -13,7 +13,7 @@ local function check_pred(self, obj)
 	return false
 end
 
-local dialogue = {
+ul_market.npc_dialogue = {
 	gross = {
 		"Ew... You're naked.",
 		"I do not speak to peasants.",
@@ -48,7 +48,7 @@ local dialogue = {
 		"Wait... Do poor people wear clothes?"
 	},
 	small_talk1 = {
-		"I heard if you enchant a lamp with Rune of Sun, you can build a tower to anger the moon god."
+		"I heard if you mix a bunch of junk together, you can make a tower up to the sky to summon the sun god... not sure if I believe it."
 	},
 	small_talk2 = {
 		"Apparently there was a sun god named Jerry or whatever until Luna overcame him.",
@@ -108,20 +108,29 @@ local dialogue = {
 		"...",
 		"...",
 		"Hehe... I wasted your time."
+	},
+	small_talk8 = {
+		"Legend has it, the last person who built a tower died. The moon god probably smited them."
 	}
 }
+
 if ul_music then
-	dialogue.small_talk8 = {
+	ul_market.npc_dialogue.ul_music1 = {
 		"I know I'm not supposed to break the 4th wall...",
 		"But I quite enjoy Unlit's soundtrack.",
 		"Thanks for using it."
+	}
+	ul_market.npc_dialogue.ul_music2 = {
+		"What's this music that's playing?",
+		"I can hear it as if it's playing through headphones...",
+		"Impressive... I guess that's just how far tech has come!"
 	}
 end
 
 local function random_dialogue_group()
 	local temp = {}
 
-	for k,_ in pairs(dialogue) do
+	for k,_ in pairs(ul_market.npc_dialogue) do
 		table.insert(temp, k)
 	end
 
@@ -157,9 +166,9 @@ ul_mobs.register_mob("ul_market:npc", {
 		local name = clicker:get_player_name()
 		if name then
 			self.memory.dialogue_group = self.memory.dialogue_group or random_dialogue_group()
-			self._dialogue_index[name] = math.min((self._dialogue_index[name] or 0) + 1, #dialogue[self.memory.dialogue_group])
+			self._dialogue_index[name] = math.min((self._dialogue_index[name] or 0) + 1, #ul_market.npc_dialogue[self.memory.dialogue_group])
 			core.chat_send_player(name, S("<NPC> @1", 
-				S(dialogue[self.memory.dialogue_group][self._dialogue_index[name]])
+				S(ul_market.npc_dialogue[self.memory.dialogue_group][self._dialogue_index[name]])
 			))
 		end
 	end,

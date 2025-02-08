@@ -56,7 +56,7 @@ end)
 
 core.register_craftitem("ul_lives:life", {
 	short_description = S"Revive",
-	description = S"Gives you an extra life before you lose items.",
+	description = S"Rivive\nGives you an extra life before you lose items.",
 	inventory_image = "ul_lives_life.png",
 	light_source = 14,
 	on_use = function(stack, user)

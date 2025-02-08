@@ -9,7 +9,6 @@ ul_mobs.register_mob("ul_mobs:alien", {
 					-- engine values
 	description = S"Alien",
 	visual = "upright_sprite",
-	egg_colors = {"#ff8000", "#ffff00", "#ff0000"},
 	textures = {"ul_mobs_monster_alien.png", "ul_mobs_monster_alien_back.png"},
 	visual_size = {x = 2.5, y = 2.5},
 	collisionbox = {-0.4, -1.25, -0.4, 0.4, 0.75, 0.4},

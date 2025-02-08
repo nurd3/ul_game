@@ -110,7 +110,7 @@ sfinv.override_page("sfinv:crafting", {
 			local out = ItemStack(rec.output)
 			for nom,amt in pairs(rec.input) do
 				local stack = ItemStack(nom.." "..amt)
-				if not inv:contains_item("main", stack) then
+				if not inv:contains_item("main", stack, true) then
 					core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S("Not enough @1!", get_item_display_name(nom))))
 					return
 				end

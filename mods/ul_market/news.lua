@@ -17,7 +17,7 @@ core.register_on_joinplayer(function(plyr)
 		position = {x=1, y=0.5},
 		name = "news",
 		scale = {x = 1, y = 1},
-		text = "",
+		text = table.concat(news_log, "\n"),
 		number = 0xffffff,
 		direction = 0,
 		offset = {x = -10, y= -10},
