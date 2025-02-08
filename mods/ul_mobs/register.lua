@@ -67,6 +67,17 @@ function ul_mobs.register_mob(name, def)
 			end
 		end,
 		get_staticdata = function (self)	-- mobkit does not save hp or owner
+			if not self._owner then
+				local closest = math.huge
+				for _,plyr in ipairs(core.get_connected_players) do
+					local dist = vector.distance(plyr:get_pos(), self.object:get_pos()) 
+					closest = closest > dist and dist or closest
+				end
+				if closest > 512 and mobkit.timer(self, 30) then
+					self.hp = 0
+					return ""
+				end
+			end
 			local ret = core.deserialize(mobkit.statfunc(self))
 			ret._owner = self._owner or self.owner
 			ret.hp = self.hp

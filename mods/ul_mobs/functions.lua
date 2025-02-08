@@ -122,7 +122,7 @@ function ul_mobs.brain(self)
 	if mobkit.timer(self,1) then mobkit_plus.node_dps_dmg(self) end
 	mobkit_plus.vitals(self)
 
-	if self.hp <= 0 or (not self._owner and self.time_total > 120) then	-- if is dead
+	if self.hp <= 0 then	-- if is dead
 		if self._dead then
 			return
 		end
@@ -162,6 +162,17 @@ function ul_mobs.brain(self)
 		local prty = mobkit.get_queue_priority(self)
 		local owner = self._owner and core.get_player_by_name(self._owner)
 		local sitting = mobkit.recall(self, "sitting")
+		if not self._owner then
+			local closest = math.huge
+			for _,plyr in ipairs(core.get_connected_players) do
+				local dist = vector.distance(plyr:get_pos(), self.object:get_pos()) 
+				closest = closest > dist and dist or closest
+			end
+			if closest > 512 and mobkit.timer(self, 30) then
+				self.hp = 0
+				return
+			end
+		end
 		
 		if owner then
 			local text = ""
