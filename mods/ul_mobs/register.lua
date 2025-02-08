@@ -70,6 +70,7 @@ function ul_mobs.register_mob(name, def)
 			local ret = core.deserialize(mobkit.statfunc(self))
 			ret._owner = self._owner or self.owner
 			ret.hp = self.hp
+			ret.time_total = self.time_total
 			return core.serialize(ret)
 		end,
 											-- api props

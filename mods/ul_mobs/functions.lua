@@ -122,7 +122,7 @@ function ul_mobs.brain(self)
 	if mobkit.timer(self,1) then mobkit_plus.node_dps_dmg(self) end
 	mobkit_plus.vitals(self)
 
-	if self.hp <= 0 then	-- if is dead
+	if self.hp <= 0 or (not self._owner and self.time_total > 120) then	-- if is dead
 		if self._dead then
 			return
 		end
