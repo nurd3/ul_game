@@ -1,7 +1,7 @@
 local storage = core.get_mod_storage()
 
 local tower_pos = core.deserialize(storage:get_string("pos"))
-local function update() end
+function ul_tower.update() end
 
 function ul_tower.check(pos)
 	return math.random() < math.random() * (ul_tower.get_height() * 0.25)
@@ -32,8 +32,8 @@ function ul_tower.set_pos(val)
 end
 
 function ul_tower.register_on_towerupdate(func)
-	local prev = update
-	update = function()
+	local prev = ul_tower.update
+	ul_tower.update = function()
 		prev()
 		func()
 	end
