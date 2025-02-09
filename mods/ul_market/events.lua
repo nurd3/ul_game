@@ -18,6 +18,19 @@ local function generate_random_industry()
 	return temp[math.random(#temp)]
 end
 
+local event_bonus_calc = function(event_bonuses) 
+	for k,v in pairs(ul_market.registered_events) do
+		event_bonuses[k] = {chance = 1.0, intensity = 1.0}
+	end
+	return event_bonuses 
+end
+function ul_market.register_on_eventbonuscalc(func)
+	local og = event_bonus_calc
+	event_bonus_calc = function(event_bonuses)
+		return func(og(event_bonuses) or event_bonuses)
+	end
+end
+
 function ul_market.generate_event_target(target_table)
 	if not target_table then
 		return
@@ -70,7 +83,6 @@ end
 function ul_market.generate_random_event()
 	local temp = {}
 
-	event_bonuses = event_bonus_calc(event_bonuses)
 	for k,v in pairs(event_bonuses) do
 		if k ~= "overall" and math.random() * v.chance * event_bonuses.overall.chance > math.random() * 5 then
 			table.insert(temp, k)
@@ -81,6 +93,7 @@ function ul_market.generate_random_event()
 end
 
 function ul_market.generate_event(event)
+	event_bonuses = event_bonus_calc(event_bonuses)
 	event = event or ul_market.generate_random_event()
 	if not event then
 		return
@@ -150,19 +163,6 @@ core.register_on_mods_loaded(function()
 		event_bonuses[k] = {chance = 1.0, intensity = 1.0}
 	end
 end)
-
-local event_bonus_calculate = function(event_bonuses) 
-	for k,v in pairs(ul_market.registered_events) do
-		event_bonuses[k] = {chance = 1.0, intensity = 1.0}
-	end
-	return event_bonuses 
-end
-function ul_market.register_on_eventbonuscalc(func)
-	local og = event_bonus_calc
-	event_bonus_calc = function(event_bonuses)
-		return func(og(event_bonuses) or event_bonuses)
-	end
-end
 
 ul_market.register_marketstep(function()
 	for k,t in pairs(events) do

@@ -51,22 +51,34 @@ local function step()
 	local index = 1
 	for k,v in pairs(updated_industries) do
 		update_industry(k)
-		core.after((index + math.random()) * 0.1, ul_market.calculate_stats, v)
-		core.after((index + math.random()) * 0.1, ul_market.apply_policies, v)
-		core.after((index + math.random()) * 0.1, ul_market.industry_apply_events, k, v)
+		core.after((index + math.random()) * 0.1, function(k, v)
+			ul_market.apply_policies(v)
+			ul_market.calculate_stats(v)
+			ul_market.industry_apply_events(k, v)
+			v.supply = math.min(math.max(v.supply, -1.0), 10.0)
+			v.demand = math.min(math.max(v.demand, -1.0), 10.0)
+			v.strive = math.min(math.max(v.strive, -1.0), 10.0)
+			v.cline = math.min(math.max(v.cline, -1.0), 10.0)
+		end, k, v)
 		if save_counter > 4 then
-			core.after((index + math.random()) * 0.1, storage.set_string, storage, string.format("industry:%s", k), core.serialize(v))
+			core.after((index + math.random()) * 0.5, storage.set_string, storage, string.format("industry:%s", k), core.serialize(v))
 		end
 		index = index + 1
 	end
 	index = 1
 	for k,v in pairs(updated_companies) do
 		update_company(k)
-		core.after((index + math.random()) * 0.1, ul_market.calculate_stats, v)
-		core.after((index + math.random()) * 0.1, ul_market.apply_policies, v)
-		core.after((index + math.random()) * 0.1, ul_market.company_apply_events, k, v)
+		core.after((index + math.random()) * 0.1, function(k, v)
+			ul_market.apply_policies(v)
+			ul_market.company_apply_events(k, v)
+			ul_market.calculate_stats(v)
+			v.supply = math.min(math.max(v.supply, -1.0), 10.0)
+			v.demand = math.min(math.max(v.demand, -1.0), 10.0)
+			v.strive = math.min(math.max(v.strive, -1.0), 10.0)
+			v.cline = math.min(math.max(v.cline, -1.0), 10.0)
+		end, k, v)
 		if save_counter > 4 then
-			core.after((index + math.random()) * 0.1, storage.set_string, storage, string.format("company:%s", k), core.serialize(v))
+			core.after((index + math.random()) * 0.5, storage.set_string, storage, string.format("company:%s", k), core.serialize(v))
 		end
 		index = index + 1
 	end
