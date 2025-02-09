@@ -20,7 +20,7 @@ core.register_node("ul_tower:tower", {
 			return stack
 		end
 
-		if pos.x ~= tpos.x and pos.z ~= tpos.z then
+		if pos.x ~= tpos.x or pos.z ~= tpos.z then
 			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S"Tower must only go up."))
 			return
 		end

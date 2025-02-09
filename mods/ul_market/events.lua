@@ -2,7 +2,7 @@ local storage = core.get_mod_storage()
 local S = ul_market.get_translator
 
 local events = core.deserialize(storage:get_string("events")) or {}
-local event_bonuses = {}
+local event_bonuses = {overall = {chance = 1.0, intensity = 1.0}}
 
 local function generate_random_company()
 	return ul_market.stocks_order[math.random(#ul_market.stocks_order)]
@@ -63,14 +63,16 @@ end
 
 function ul_market.get_event_bonus(event)
 	event_bonuses[event] = event_bonuses[event] or {chance = 1, intensity = 1}
-	return event_bonuses[event]
+	event_bonuses.overall = event_bonuses.overall or {chance = 1, intensity = 1}
+	return {chance = event_bonuses[event].chance * event_bonuses.overall.chance, intensity = event_bonuses[event].intensity * event_bonuses.overall.intensity}
 end
 
-local function generate_random_event()
+function ul_market.generate_random_event()
 	local temp = {}
 
+	event_bonuses = event_bonus_calc(event_bonuses)
 	for k,v in pairs(event_bonuses) do
-		if math.random() * v.chance > math.random() * 5 then
+		if k ~= "overall" and math.random() * v.chance * event_bonuses.overall.chance > math.random() * 5 then
 			table.insert(temp, k)
 		end
 	end
@@ -79,7 +81,7 @@ local function generate_random_event()
 end
 
 function ul_market.generate_event(event)
-	event = event or generate_random_event()
+	event = event or ul_market.generate_random_event()
 	if not event then
 		return
 	end
@@ -115,6 +117,7 @@ function ul_market.add_intensity(event, intensity, target)
 		return
 	end
 	events[event][target] = (events[event][target] or 0) + intensity
+	storage:set_string("events", core.serialize(events))
 end
 
 function ul_market.set_intensity(event, intensity, target)
@@ -134,6 +137,7 @@ function ul_market.set_intensity(event, intensity, target)
 		return
 	end
 	events[event][target] = intensity
+	storage:set_string("events", core.serialize(events))
 end
 
 core.register_on_mods_loaded(function()
@@ -143,9 +147,22 @@ core.register_on_mods_loaded(function()
 		end
 	end
 	for k,v in pairs(ul_market.registered_events) do
-		event_bonuses[k] = {chance = 1.0, intensity = 0.5}
+		event_bonuses[k] = {chance = 1.0, intensity = 1.0}
 	end
 end)
+
+local event_bonus_calculate = function(event_bonuses) 
+	for k,v in pairs(ul_market.registered_events) do
+		event_bonuses[k] = {chance = 1.0, intensity = 1.0}
+	end
+	return event_bonuses 
+end
+function ul_market.register_on_eventbonuscalc(func)
+	local og = event_bonus_calc
+	event_bonus_calc = function(event_bonuses)
+		return func(og(event_bonuses) or event_bonuses)
+	end
+end
 
 ul_market.register_marketstep(function()
 	for k,t in pairs(events) do
@@ -175,15 +192,7 @@ ul_market.register_marketstep(function()
 		end
 	end
 	if math.random() < 0.2 then
-		for policy,intensity in pairs(ul_market.get_active_policies()) do
-			for event,tbl in pairs(ul_market.registered_policies[policy].effect_events) do
-				if math.random() < 0.5 then
-					ul_market.add_event_bonus(event, tbl)
-				else
-					ul_market.set_event_bonus(event, tbl)
-				end
-			end
-		end
+		storage:set_string("events", core.serialize(events))
 		core.after(math.random() * 120, ul_market.generate_event)
 	end
 end)

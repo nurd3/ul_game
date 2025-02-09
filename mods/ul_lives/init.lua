@@ -102,17 +102,35 @@ core.register_on_dieplayer(function (plyr)
 		local plyrinv = plyr:get_inventory()
 		local maximum = 64
 		local continue = true
+		-- prevent infinite loops
+		local iterations_left = 512
 
 		while continue do
-			continue = maximum > 0 and not plyrinv:is_empty("main")
+			continue = maximum > 0 and not plyrinv:is_empty"main" and iterations_left > 0
+			iterations_left = iterations_left - 1
 			for i,stack in ipairs(plyrinv:get_list"main") do
+				-- do not take empty stacks
 				if stack:get_count() > 0 then
-					local new_stack = stack
-					local amt = math.min(math.random(0, stack:get_count()), maximum)
+
+					-- this stack goes into the grave
+					local new_stack = plyrinv:get_stack("main", i)
+					-- the amount to take
+					local amt = math.min(
+						math.random(0, maximum),
+						stack:get_count()	-- do not take more than stack amount
+					)
+
+					-- set new_stack count
+					new_stack:set_count(amt)
+
+					-- only take the stack if the grave has room for it
 					if nodeinv:room_for_item("main", new_stack) then
+						-- add new stack to the grave
 						nodeinv:add_item("main", new_stack)
-						stack:set_count(stack:get_count() - amt)
-						maximum = maximum - amt
+						-- take items
+						stack:take_item(amt)
+						maximum = maximum - amt		-- only take 64 items in total
+						-- set stack
 						plyrinv:set_stack("main", i, stack)
 					else
 						return

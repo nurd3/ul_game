@@ -51,3 +51,10 @@ ul_tower.register_pickable_items {
 	["ul_magic:teleport_spell"] = 1,
 	["ul_market:tradeinator_super"] = 1,
 }
+
+ul_market.register_on_eventbonuscalc(function(event_bonuses)
+	event_bonuses.overall = event_bonuses.overall or {chance = 1.0, intensity = 1.0}
+	event_bonuses.overall.chance = (event_bonuses.overall.chance or 1) + ul_tower.get_height()
+	event_bonuses.overall.intensity = (event_bonuses.overall.intensity or 1) + ul_tower.get_height()
+	return event_bonuses
+end)

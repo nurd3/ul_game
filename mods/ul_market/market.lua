@@ -43,7 +43,6 @@ function ul_market.register_marketstep(func)
 	end
 end
 
-local pause = false
 local timer = 1.1
 local save_counter = 0
 
@@ -80,28 +79,10 @@ end
 core.register_globalstep(function (dtime) timer = timer + dtime; if timer > 1.0 then step(); timer = 0.0 end end)
 
 function ul_market.reset_market()
-	pause = true
-	for k,v in pairs(ul_market.registered_industries) do
-		local stats = v.stats or {}
-		updated_industries[k].chaos = stats.chaos or 1.0
-		updated_industries[k].base_price = stats.base_price or 1.0
-		updated_industries[k].supply = stats.supply or 1.0
-		updated_industries[k].demand = stats.demand or 1.0
-		updated_industries[k].strive = stats.strive or 1.0
-		updated_industries[k].cline = stats.cline or 1.0
-		updated_industries[k].groups = v.groups or {}
-	end
-	for k,v in pairs(ul_market.registered_companies) do
-		local stats = v.stats or {}
-		updated_companies[k].chaos = stats.chaos or 1.0
-		updated_companies[k].base_price = stats.base_price or 1.0
-		updated_companies[k].supply = stats.supply or 1.0
-		updated_companies[k].demand = stats.demand or 1.0
-		updated_companies[k].strive = stats.strive or 1.0
-		updated_companies[k].cline = stats.cline or 1.0
-		updated_companies[k].groups = v.groups or {}
-	end
-	core.after(1.0, function() pause = false end)
+	storage:set_string("reset", "true")
+	core.request_shutdown(
+		ul_market.get_translator"Market reset, server must be restarted."
+	)
 end
 
 function ul_market.calculate_price(t)
@@ -173,9 +154,6 @@ local market_acceleration = 1
 -- 		d_dest: short for demand destination, where the demand stat is going towards
 --		  pull: how fast the demand approaches d_dest
 function ul_market.calculate_stats(t)
-	if pause then
-		return false
-	end
 	local save = false
 
 	-- check if a new supply destination needs to be set
@@ -208,9 +186,6 @@ function ul_market.calculate_stats(t)
 end
 
 function ul_market.apply_policies(t)
-	if pause then
-		return false
-	end
 	for name,intensity in pairs(ul_market.get_active_policies()) do
 		local def = ul_market.registered_policies[name]
 
@@ -233,9 +208,6 @@ function ul_market.apply_policies(t)
 end
 
 function ul_market.company_apply_events(company, t)
-	if pause then
-		return false
-	end
 	for name,table in pairs(ul_market.get_active_events()) do
 		local def = ul_market.registered_events[name]
 		local intensity = table.overall
@@ -264,9 +236,6 @@ function ul_market.company_apply_events(company, t)
 end
 
 function ul_market.industry_apply_events(industry, t)
-	if pause then
-		return false
-	end
 	for name,table in pairs(ul_market.get_active_events()) do
 		local def = ul_market.registered_events[name]
 		local intensity = table.overall

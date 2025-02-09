@@ -251,3 +251,15 @@ ul_market.register_marketstep(function()
 	end
 	storage:set_int("election", till_election)
 end)
+
+ul_market.register_on_eventbonuscalc(function(event_bonuses)
+	for policy,intensity in pairs(policies) do
+		local def = ul_market.registered_policies[policy]
+		if def then
+			for event,t in pairs(def.effect_events) do
+				ul_market.add_event_bonus(event, t)
+			end
+		end
+	end
+	return event_bonuses
+end)
