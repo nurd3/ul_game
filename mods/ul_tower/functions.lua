@@ -13,12 +13,12 @@ end
 
 function ul_tower.set_height(val)
 	storage:set_int("height", val)
-	update()
+	ul_tower.update()
 end
 
 function ul_tower.add_height(val)
 	storage:set_int("height", ul_tower.get_height() + (val or 1))
-	update()
+	ul_tower.update()
 end
 
 function ul_tower.get_pos()
@@ -28,7 +28,7 @@ end
 function ul_tower.set_pos(val)
 	tower_pos = val
 	storage:set_string("pos", core.serialize(tower_pos))
-	update()
+	ul_tower.update()
 end
 
 function ul_tower.register_on_towerupdate(func)
