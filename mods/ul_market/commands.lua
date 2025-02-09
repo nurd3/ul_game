@@ -44,6 +44,18 @@ core.register_chatcommand("events", {
 		core.chat_send_player(plyrname, str)
 	end
 })
+core.register_chatcommand("event_bonuses", {
+	params = "",
+	description = S"Shows the event bonuses",
+	privs = {},
+	func = function(plyrname, params)
+		local str = "--- EVENT_BONUSES ---\n"
+		for k,v in pairs(ul_market.get_active_event_bonuses()) do
+			str = str .. string.format("%.2f:%.2f %s\n", v.chance, v.intensity, (ul_market.registered_events[k] or {title = k}).title)
+		end
+		core.chat_send_player(plyrname, str)
+	end
+})
 core.register_chatcommand("policies", {
 	params = "",
 	description = S"Shows the policies",

@@ -133,17 +133,29 @@ sfinv.register_page("ul_market:inv_govt", {
 			chart_offset = chart_offset + size
 			offset = offset + 0.5
 		end
+
+		local offset = 0.0
+		local policies = ""
+		for i,v in ipairs(ul_market.policy_order) do
+			local plcy = ul_market.registered_policies[v] or {title = v, description = "N/A"}
+			local lvl = ul_market.get_policy_intensity(v)
+			policies = policies ..
+				string.format("label[0.5," .. offset .. ";%s]", ul_market.get_policy_name(lvl, plcy.title))
+			offset = offset + 0.5
+		end
 		
 		return sfinv.make_formspec(plyr, context,
-			string.format("label[2,0;$%.2f]", math.abs(ul_market.get_unrest_bonus() * 5000))..
-			string.format("button[3,0;2,0.5;ul_fund_unrest;%s]", T{"Fund Unrest $500"})..
-			string.format("button[3,1;2,0.5;ul_fund_stab;%s]", T{"Fund Stability $500"})..
+			string.format("label[2,0;%s]", T{"Policies"})..
+			"scrollbar[2,0.5;0.5,3;vertical;ul_policies;]\n"..
+			"scroll_container[2.5,1;4,3.5;ul_policies;vertical]" ..
+			policies..
+			"scroll_container_end[]"..
 			"container[0,0]"..
 			parties..
 			"container_end[]"..
 			string.format("label[0,3.5;%s]", T{"Seat Distribution:"}) ..
 			"container[0,4]"..
-			chart ..
+			chart..
 			"container_end[]"..
 			"container[5,0]"..
 			party..
@@ -162,16 +174,6 @@ sfinv.register_page("ul_market:inv_govt", {
 			selected_party[plyrname] = prty
 			sfinv.set_page(plyr, "ul_market:inv_govt")
 			return
-		end
-		if fields.ul_fund_unrest and ul_market.get_wallet(plyrname) > 500 then
-			ul_market.get_portfolio(plyrname).wallet = ul_market.get_wallet(plyrname) - 500
-			ul_market.save_portfolios()
-			ul_market.add_unrest_bonus(0.1)
-		end
-		if fields.ul_fund_stab and ul_market.get_wallet(plyrname) > 500 then
-			ul_market.get_portfolio(plyrname).wallet = ul_market.get_wallet(plyrname) - 500
-			ul_market.save_portfolios()
-			ul_market.add_unrest_bonus(-0.1)
 		end
 		if fields.ul_fund_party and selected_party[plyrname] and ul_market.get_wallet(plyrname) > 500 then
 			ul_market.get_portfolio(plyrname).wallet = ul_market.get_wallet(plyrname) - 500

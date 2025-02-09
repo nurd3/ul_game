@@ -61,6 +61,10 @@ function ul_market.get_active_events()
 	return events
 end
 
+function ul_market.get_active_event_bonuses()
+	return event_bonus_calc(event_bonuses)
+end
+
 function ul_market.set_event_bonus(event, t)
 	event_bonuses[event] = event_bonuses[event] or {chance = 1, intensity = 1}
 	event_bonuses[event].chance = t.chance or event_bonuses[event].chance
@@ -76,8 +80,8 @@ end
 
 function ul_market.get_event_bonus(event)
 	event_bonuses[event] = event_bonuses[event] or {chance = 1, intensity = 1}
-	event_bonuses.overall = event_bonuses.overall or {chance = 1, intensity = 1}
-	return {chance = event_bonuses[event].chance * event_bonuses.overall.chance, intensity = event_bonuses[event].intensity * event_bonuses.overall.intensity}
+	event_bonuses.overall = event_bonuses.overall or {chance = 1, intensity = 0}
+	return {chance = event_bonuses[event].chance * event_bonuses.overall.chance, intensity = event_bonuses[event].intensity + event_bonuses.overall.intensity}
 end
 
 function ul_market.generate_random_event()

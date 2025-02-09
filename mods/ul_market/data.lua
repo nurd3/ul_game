@@ -801,13 +801,35 @@ ul_market.register_goods {
 
 ul_market.register_event("ul_market:event_growth", {
 	title = S"Golden Age",
-	description = S"Prosperity",
+	description = S"Prosperity across Sexland",
 	effect_groups = {
 		overall = {strive = 0, cline = 0.5}
+	},
+	unrest = -1.0
+})
+
+ul_market.register_event("ul_market:event_bubble", {
+	title = S"Market Bubble",
+	description = S"A sudden explosion of value",
+	effect_groups = {
+		overall = {strive = 0, cline = 1.0}
 	},
 	target = {
 		company = 10,
 		industry = 10
+	},
+	unrest = -1.0
+})
+
+ul_market.register_event("ul_market:event_subsidies", {
+	title = S"Subsidization",
+	description = S"The government has invested",
+	effect_groups = {
+		overall = {strive = 0, cline = 0.1}
+	},
+	target = {
+		company = 1,
+		industry = 1
 	},
 	unrest = -1.0
 })
@@ -904,6 +926,21 @@ ul_market.register_event("ul_market:event_coup", {
 -- POLICIES --
 --------------
 
+-- subsidies: fund companies/industries
+-- in the extreme:
+	-- money goes up
+ul_market.register_policy("ul_market:policy_subsidies", {
+	title = S"Subsidies",
+	description = S"Subsidize the market.",
+	effect_groups = {
+		criminal = {strive = 0, cline = -0.5}
+	},
+	effect_events = {
+		["ul_market:event_subsidies"] = {chance = 0.1, intensity = 0.5},
+		["ul_market:event_bubble"] = {chance = -0.1, intensity = 1.0}
+	}
+})
+
 -- public_education: make education more accessible
 -- in the extreme:
 	-- education is massive
@@ -963,6 +1000,8 @@ ul_market.register_policy("ul_market:policy_regulation", {
 		criminal = {strive = 0.05, cline = 0.1}
 	},
 	effect_events = {
+		["ul_market:event_subsidies"] = {chance = 0.1, intensity = 0.1},
+		["ul_market:event_bubble"] = {chance = -0.1, intensity = -1.0},
 		["ul_market:event_coup"] = {chance = 0.1, intensity = 5.0},
 		["ul_market:event_famine"] = {chance = 0.05}
 	}
@@ -980,6 +1019,8 @@ ul_market.register_policy("ul_market:policy_busting", {
 		criminal = {strive = -0.1, cline = 0.05}
 	},
 	effect_events = {
+		["ul_market:event_bubble"] = {chance = 0.1, intensity = 0.1},
+		["ul_market:event_subsidies"] = {chance = -0.1, intensity = -1.0},
 		["ul_market:event_strike"] = {chance = -0.1},
 		["ul_market:event_assassination"] = {chance = 0.1, intensity = 0.5},
 		["ul_market:event_uprising"] = {chance = 0.05, intensity = 1.5},
@@ -1135,6 +1176,7 @@ ul_market.register_party("ul_market:party_pps", {
 		["ul_market:policy_welfare"] = 5,
 		["ul_market:policy_regulation"] = 5,
 		["ul_market:policy_abolition"] = 5,
+		["ul_market:policy_subsidies"] = 5,
 		["ul_market:policy_busting"] = 0
 	}
 })
@@ -1153,6 +1195,7 @@ ul_market.register_party("ul_market:party_ssp", {
 		["ul_market:policy_prohibition"] = 0,
 		["ul_market:policy_social_healthcare"] = 3,
 		["ul_market:policy_public_education"] = 4,
+		["ul_market:policy_subsidies"] = 4,
 		["ul_market:policy_welfare"] = 2,
 		["ul_market:policy_regulation"] = 3,
 		["ul_market:policy_martial_law"] = 0,
@@ -1175,6 +1218,7 @@ ul_market.register_party("ul_market:party_lps", {
 		["ul_market:policy_social_healthcare"] = 1,
 		["ul_market:policy_public_education"] = 3,
 		["ul_market:policy_secularism"] = 3,
+		["ul_market:policy_subsidies"] = 1,
 		["ul_market:policy_welfare"] = 1,
 		["ul_market:policy_regulation"] = 0,
 		["ul_market:policy_martial_law"] = 0
@@ -1196,6 +1240,7 @@ ul_market.register_party("ul_market:party_scp", {
 		["ul_market:policy_martial_law"] = 1,
 		["ul_market:policy_social_healthcare"] = 0,
 		["ul_market:policy_public_education"] = 3,
+		["ul_market:policy_subsidies"] = 0,
 		["ul_market:policy_welfare"] = 0,
 		["ul_market:policy_regulation"] = 0
 	}
@@ -1217,6 +1262,7 @@ ul_market.register_party("ul_market:party_spp", {
 		["ul_market:policy_social_healthcare"] = 0,
 		["ul_market:policy_public_education"] = 2,
 		["ul_market:policy_secularism"] = 1,
+		["ul_market:policy_subsidies"] = 1,
 		["ul_market:policy_welfare"] = 0,
 		["ul_market:policy_regulation"] = 0,
 		["ul_market:policy_abolition"] = 0
@@ -1239,8 +1285,21 @@ ul_market.register_party("ul_market:party_nps", {
 		["ul_market:policy_social_healthcare"] = 0,
 		["ul_market:policy_public_education"] = 0,
 		["ul_market:policy_secularism"] = 0,
+		["ul_market:policy_subsidies"] = 5,
 		["ul_market:policy_welfare"] = 0,
 		["ul_market:policy_regulation"] = 0,
 		["ul_market:policy_abolition"] = 0
 	}
 })
+
+ul_market.policy_intensities = {
+	"No @1",
+	"Low @1",
+	"Moderate @1",
+	"High @1",
+	"Very High @1",
+	"Extreme @1",
+}
+function ul_market.get_policy_name(lvl, name)
+	return S(ul_market.policy_intensities[math.min(lvl + 1, #ul_market.policy_intensities)], name)
+end

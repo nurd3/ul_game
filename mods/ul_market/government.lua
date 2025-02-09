@@ -139,6 +139,11 @@ function ul_market.get_parties()
 	return parties
 end
 
+function ul_market.get_policy_intensity(policy)
+	if not policy then return end
+	return policies[policy] or 0
+end
+
 function ul_market.set_unrest_bonus(bonus)
 	unrest_bonus = bonus
 	storage:set_int("unrest_bonus", unrest_bonus)

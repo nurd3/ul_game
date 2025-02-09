@@ -105,7 +105,7 @@ function ul_magic.register_rune(name, def)
 				end
 			end
 			if disappear or self._timer > 30 then
-				core.after(0.05, self.object.remove, self.object)
+				core.after(dtime, self.object.remove, self.object)
 			end
 		end,
 		get_staticdata = function(self)

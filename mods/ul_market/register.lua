@@ -6,6 +6,7 @@ ul_market.registered_policies = {}
 ul_market.registered_parties = {}
 ul_market.stocks_order = {}
 ul_market.goods_order = {}
+ul_market.policy_order = {}
 ul_market.party_order = {}
 
 function ul_market.register_industry(name, def)
@@ -40,7 +41,11 @@ function ul_market.register_event(name, def)
 end
 
 function ul_market.register_policy(name, def)
+	if not ul_market.registered_policies[name] then
+		table.insert(ul_market.policy_order, name)
+	end
 	ul_market.registered_policies[name] = def
+	table.sort(ul_market.policy_order)
 end
 
 function ul_market.register_party(name, def)

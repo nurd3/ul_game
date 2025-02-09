@@ -55,10 +55,10 @@ local function step()
 			ul_market.apply_policies(v)
 			ul_market.calculate_stats(v)
 			ul_market.industry_apply_events(k, v)
-			v.supply = math.min(math.max(v.supply, -1.0), 10.0)
-			v.demand = math.min(math.max(v.demand, -1.0), 10.0)
-			v.strive = math.min(math.max(v.strive, -1.0), 10.0)
-			v.cline = math.min(math.max(v.cline, -1.0), 10.0)
+			v.supply = math.min(math.max(v.supply, -10.0), 10.0)
+			v.demand = math.min(math.max(v.demand, -10.0), 10.0)
+			v.strive = math.min(math.max(v.strive, -10.0), 10.0)
+			v.cline = math.min(math.max(v.cline, -10.0), 10.0)
 		end, k, v)
 		if save_counter > 4 then
 			core.after((index + math.random()) * 0.5, storage.set_string, storage, string.format("industry:%s", k), core.serialize(v))
@@ -72,10 +72,10 @@ local function step()
 			ul_market.apply_policies(v)
 			ul_market.company_apply_events(k, v)
 			ul_market.calculate_stats(v)
-			v.supply = math.min(math.max(v.supply, -1.0), 10.0)
-			v.demand = math.min(math.max(v.demand, -1.0), 10.0)
-			v.strive = math.min(math.max(v.strive, -1.0), 10.0)
-			v.cline = math.min(math.max(v.cline, -1.0), 10.0)
+			v.supply = math.min(math.max(v.supply, -30.0), 30.0)
+			v.demand = math.min(math.max(v.demand, -30.0), 30.0)
+			v.strive = math.min(math.max(v.strive, -30.0), 30.0)
+			v.cline = math.min(math.max(v.cline, -30.0), 30.0)
 		end, k, v)
 		if save_counter > 4 then
 			core.after((index + math.random()) * 0.5, storage.set_string, storage, string.format("company:%s", k), core.serialize(v))
@@ -223,8 +223,8 @@ function ul_market.company_apply_events(company, t)
 	for name,table in pairs(ul_market.get_active_events()) do
 		local def = ul_market.registered_events[name]
 		local intensity = table.overall
-
-		if table[company] then
+		
+		if table[company] and def.target then
 			intensity = table[company] * def.target.company
 		end
 
@@ -252,7 +252,7 @@ function ul_market.industry_apply_events(industry, t)
 		local def = ul_market.registered_events[name]
 		local intensity = table.overall
 
-		if def and table[industry] then
+		if def and table[industry] and def.target then
 			intensity = table[industry] * def.target.industry
 		end
 

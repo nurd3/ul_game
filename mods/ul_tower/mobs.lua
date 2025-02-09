@@ -1,7 +1,7 @@
 local S = ul_tower.get_translator
 
 local function check_prey(self, obj)
-	if not mobkit.is_alive(obj) then return end
+	if not ul_basic.is_alive(obj) then return end
 	local luaent = obj:get_luaentity()
 	
 	if luaent and luaent.type == "neutral" then
@@ -29,15 +29,15 @@ ul_mobs.register_mob("ul_tower:babylon_eye", {
 	max_hp = 5,
 	melee = {dmg = 5, range = 5},
 	disable_fall_damage = true,
+	disable_taming = true,
 	
 						-- behaviour
 	range_power = 0,
 	melee_power = 5,
-	on_check_prey = function()
-		
-	end,
+	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.1, "ul_magic:heal"}),
-	type = "babylon"
+	type = "monster",
+	category = "babylon"
 })
 
 ul_mobs.register_mob("ul_tower:babylonian", {
@@ -46,7 +46,7 @@ ul_mobs.register_mob("ul_tower:babylonian", {
 	visual = "upright_sprite",
 	egg_colors = {"#00ffff", "#ff0000"},
 	textures = {"ul_tower_babylonian.png", "ul_tower_babylonian_back.png"},
-	visual_size = {x = 1.0, y = 2.0},
+	visual_size = {x = 2.0, y = 2.0},
 	collisionbox = {-0.3, -1.0, -0.3, 0.3, 1.0, 0.3},
 	
 					-- stats
@@ -62,11 +62,13 @@ ul_mobs.register_mob("ul_tower:babylonian", {
 		range = 5
 	},
 	melee = {dmg = 5, range = 5},
+	disable_taming = true,
 	
 					-- behaviour
 	range_power = 5,
 	melee_power = 5,
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.1, "ul_magic:light"}, {0.2, "ul_basic:rod"}),
-	type = "babylon"
+	type = "monster",
+	category = "babylon"
 })
