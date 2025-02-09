@@ -118,18 +118,17 @@ sfinv.register_page("ul_tower:inv_tower", {
 	end,
 	on_player_receive_fields = function(self, plyr, ctx, fields)
 		if fields.ul_craft then
-			local rec = recipes[selected[plyr:get_player_name()]]
 			local inv = plyr:get_inventory()
-			for nom,amt in pairs(rec) do
-				local stack = ItemStack(nom.." "..amt)
+			for _,str in pairs(rec) do
+				local stack = ItemStack(str)
 				if not inv:contains_item("main", stack, true) then
 					core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S("Not enough @1!", get_item_display_name(nom))))
 					return
 				end
 			end
 			
-			for nom,amt in pairs(rec) do
-				local count = amt
+			for _,str in pairs(rec) do
+				local count, nom = ItemStack(str):get_count(), ItemStack(str):get_name()
 				if count > 0 then
 					for i,stack in ipairs(inv:get_list"main") do
 						if count ~= 0 and stack:get_name() == nom and #stack:get_meta():get_keys() == 0 then
@@ -147,6 +146,8 @@ sfinv.register_page("ul_tower:inv_tower", {
 			else
 				core.add_item(plyr:get_pos(), ItemStack"ul_tower:tower")
 			end
+
+			generate_random_recipe()
 			
 			return
 		end
