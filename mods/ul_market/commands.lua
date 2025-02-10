@@ -153,7 +153,7 @@ core.register_chatcommand("reset_market", {
 })
 
 core.register_on_player_receive_fields(function(plyr, formname, fields)
-	if not formname == "ul_market:reset_confirm" then
+	if formname ~= "ul_market:reset_confirm" then
 		return
 	end
 

@@ -262,7 +262,7 @@ ul_market.register_on_eventbonuscalc(function(event_bonuses)
 		local def = ul_market.registered_policies[policy]
 		if def then
 			for event,t in pairs(def.effect_events) do
-				ul_market.add_event_bonus(event, t)
+				ul_market.add_event_bonus(event_bonuses, event, t)
 			end
 		end
 	end

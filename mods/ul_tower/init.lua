@@ -54,6 +54,6 @@ ul_tower.register_pickable_items {
 
 ul_market.register_on_eventbonuscalc(function(event_bonuses)
 	local hgt = ul_tower.get_height() * 0.125
-	ul_market.add_event_bonus("overall", {chance = hgt, intensity = hgt})
+	ul_market.add_event_bonus(event_bonuses, "overall", {chance = hgt, intensity = hgt})
 	return event_bonuses
 end)
