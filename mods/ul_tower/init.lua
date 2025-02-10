@@ -7,6 +7,7 @@ ul_tower.get_translator = S
 ul_tower.get_modpath = path
 
 dofile(path.."/functions.lua")
+dofile(path.."/commands.lua")
 dofile(path.."/nodes.lua")
 dofile(path.."/mobs.lua")
 dofile(path.."/natural_entities.lua")

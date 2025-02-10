@@ -36,7 +36,7 @@ local function compile_recipes()
 	end
 	
 	for i,rec in ipairs(recipes) do
-		recipes_formspec = recipes_formspec.."container["..((i - 1) % 3 + 1)..","..(math.floor((i - 1) / 3)).."]\n"
+		recipes_formspec = recipes_formspec.."container["..((i - 1) % 3 + 1)..","..(math.floor((i - 1) / 3)).."]"
 		local offset = 0
 		
 		local itm, amt = core.registered_items[ItemStack(rec.output):get_name()], ItemStack(rec.output):get_count()
@@ -47,10 +47,10 @@ local function compile_recipes()
 			img = itm.tiles[1]
 		end
 		
-		recipes_formspec = recipes_formspec.."image_button[0,0;1,1;"..img..";"..i..";]\n" .. 
+		recipes_formspec = recipes_formspec.."image_button[0,0;1,1;"..img..";"..i..";]" .. 
 			"tooltip["..i..";".. core.formspec_escape(itm.short_description or itm.description or i) .."]"
 		
-		recipes_formspec = recipes_formspec.."container_end[]\n"
+		recipes_formspec = recipes_formspec.."container_end[]"
 	end
 end
 
@@ -72,7 +72,7 @@ sfinv.override_page("sfinv:crafting", {
 			recipe = recipe.."label[0,0;"..prepend..get_item_display_name(ist:get_name()).."]"
 			for nom,amt in pairs(rec.input) do
 				local name = get_item_display_name(nom)
-				recipe = recipe.."label[0.1,"..offset..";"..amt.."X "..name.."]\n"
+				recipe = recipe.."label[0.1,"..offset..";"..amt.."X "..name.."]"
 				offset = offset + 0.3
 			end
 			recipe = recipe.."button[0,4;2,1;ul_craft;Craft]"
@@ -81,11 +81,12 @@ sfinv.override_page("sfinv:crafting", {
 		local scroll = scrolls[plyr:get_player_name()] or 0
 		
 		return sfinv.make_formspec(player, context,
-			"scrollbar[0,0;0.5,4.5;vertical;ul_recipes;"..scroll.."]\n"..
-			"scroll_container[0,0.5;10,5;ul_recipes;vertical]\n"..
+			"scrollbaroptions[max=".. (math.floor((#recipes - 1) / 3) * 8) .."]" ..
+			"scrollbar[0,0;0.5,4.5;vertical;ul_recipes;"..scroll.."]"..
+			"scroll_container[0,0.5;10,5;ul_recipes;vertical]"..
             recipes_formspec..
-			"scroll_container_end[]\n"..
-			"container[5,0]\n"..
+			"scroll_container_end[]"..
+			"container[5,0]"..
 			recipe..
 			"container_end[]"
 		, true)

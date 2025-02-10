@@ -48,6 +48,7 @@ sfinv.register_page("ul_market:inv_companies", {
 		return sfinv.make_formspec(plyr, context,
 			string.format("label[0,0;Wallet: $%.2f]", ul_market.get_wallet(plyrname)) ..
 			string.format("tooltip[0,0;2,0.5;($%.2f) %i shares]", ul_market.calculate_player_value(plyrname), ul_market.get_portfolio_total_shares(plyrname)) ..
+			"scrollbaroptions[max=".. offset * 8 .."]"..
 			"scrollbar[0,0.5;0.5,4;vertical;ul_companies;"..scroll.."]\n"..
 			"scroll_container[0.5,1;10,4.5;ul_companies;vertical]\n"..
             companies..
@@ -116,14 +117,14 @@ sfinv.register_page("ul_market:inv_govt", {
 
 		local chart = ""
 		local parties = ""
-		local offset = 0.0
+		local party_offset = 0.0
 		local chart_offset = 0.0
 		for _,v in pairs(ul_market.party_order) do
 			local prty = ul_market.registered_parties[v] or {title = v, short_title = v, description = "N/A", tag = "NIL"}
 			parties = parties .. 
-				string.format("label[0.25," .. offset .. ";%s]", prty.tag) ..
-				string.format("button[1," .. offset .. ";1,0.5;" .. v .. ";%s]", T{"Info"}) ..
-				string.format("box[0," .. offset .. ";0.25,0.5;%s]", prty.color.."ff") ..
+				string.format("label[0.25," .. party_offset .. ";%s]", prty.tag) ..
+				string.format("button[1," .. party_offset .. ";1,0.5;" .. v .. ";%s]", T{"Info"}) ..
+				string.format("box[0," .. party_offset .. ";0.25,0.5;%s]", prty.color.."ff") ..
 				string.format("tooltip[".. v ..";%s]", core.formspec_escape(prty.title))
 			local seats = ul_market.get_party_seats(v)
 			local size = seats * 0.0075
@@ -131,22 +132,24 @@ sfinv.register_page("ul_market:inv_govt", {
 				string.format("box[%f,0;%f,0.5;%s]", chart_offset, size + 0.001, prty.color.."ff") ..
 				string.format("tooltip[%f,0;%f,0.5;%s %s]", chart_offset, size, prty.tag, T{"@1 seats", seats})
 			chart_offset = chart_offset + size
-			offset = offset + 0.5
+			party_offset = party_offset + 0.5
 		end
 
-		local offset = 0.0
+		local policy_offset = 0.0
 		local policies = ""
 		for i,v in ipairs(ul_market.policy_order) do
 			local plcy = ul_market.registered_policies[v] or {title = v, description = "N/A"}
 			local lvl = ul_market.get_policy_intensity(v)
 			policies = policies ..
-				string.format("label[0.5," .. offset .. ";%s]", ul_market.get_policy_name(lvl, plcy.title))
-			offset = offset + 0.5
+				string.format("label[0.5," .. policy_offset .. ";%s]", ul_market.get_policy_name(lvl, plcy.title)) ..
+				string.format("tooltip[0.5,".. policy_offset ..";4,0.5;%s]", core.formspec_escape(plcy.description))
+			policy_offset = policy_offset + 0.5
 		end
 		
 		return sfinv.make_formspec(plyr, context,
 			string.format("label[2,0;%s]", T{"Policies"})..
-			"scrollbar[2,0.5;0.5,3;vertical;ul_policies;]\n"..
+			"scrollbaroptions[max=".. policy_offset * 8 .."]" ..
+			"scrollbar[2,0.5;0.5,3;vertical;ul_policies;]"..
 			"scroll_container[2.5,1;4,3.5;ul_policies;vertical]" ..
 			policies..
 			"scroll_container_end[]"..

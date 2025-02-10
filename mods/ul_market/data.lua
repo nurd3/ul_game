@@ -801,7 +801,7 @@ ul_market.register_goods {
 
 ul_market.register_event("ul_market:event_growth", {
 	title = S"Golden Age",
-	description = S"Prosperity across Sexland",
+	description = S"Prosperity across Sexonland",
 	effect_groups = {
 		overall = {strive = 0, cline = 0.5}
 	},
@@ -931,22 +931,22 @@ ul_market.register_event("ul_market:event_coup", {
 	-- money goes up
 ul_market.register_policy("ul_market:policy_subsidies", {
 	title = S"Subsidies",
-	description = S"Subsidize the market.",
+	description = S"I feed who I want to.",
 	effect_groups = {
 		criminal = {strive = 0, cline = -0.5}
 	},
 	effect_events = {
 		["ul_market:event_subsidies"] = {chance = 0.1, intensity = 0.5},
+		["ul_market:event_famine"] = {chance = -0.1, intensity = 0.5},
 		["ul_market:event_bubble"] = {chance = -0.1, intensity = 1.0}
 	}
 })
-
 -- public_education: make education more accessible
 -- in the extreme:
 	-- education is massive
 ul_market.register_policy("ul_market:policy_public_education", {
 	title = S"Public Education",
-	description = S"Educate the masses.",
+	description = S"Bring school and bullying to the masses.",
 	effect_groups = {
 		overall = {strive = 0, cline = 0.1},
 		education = {strive = -0.05, cline = 0.0},
@@ -962,13 +962,12 @@ ul_market.register_policy("ul_market:policy_public_education", {
 		["ul_market:event_uprising"] = {chance = 0.05, intensity = 1.0}
 	}
 })
-
 -- secularism: less religious government
 -- in the extreme:
 	-- religion is dead
 ul_market.register_policy("ul_market:policy_secularism", {
 	title = S"Secularism",
-	description = S"Separation of church and government.",
+	description = S"God is dead or something.",
 	effect_groups = {
 		overall = {strive = 0, cline = 0.1},
 		education = {strive = -0.05, cline = 0.0},
@@ -985,7 +984,6 @@ ul_market.register_policy("ul_market:policy_secularism", {
 		["ul_market:event_coup"] = {chance = 0.05, intensity = 1.0},
 	}
 })
-
 -- regulation: make prices more consistent
 -- in the extreme:
 	-- all stocks sit at 0.87 (excluding criminal industries)
@@ -994,7 +992,7 @@ ul_market.register_policy("ul_market:policy_secularism", {
 	-- coups daily
 ul_market.register_policy("ul_market:policy_regulation", {
 	title = S"Regulation",
-	description = S"Better for workers, probably.",
+	description = S"I decide the prices.",
 	effect_groups = {
 		overall = {strive = 0.05, cline = -0.05},
 		criminal = {strive = 0.05, cline = 0.1}
@@ -1013,7 +1011,7 @@ ul_market.register_policy("ul_market:policy_regulation", {
 	-- demand goes up for criminal industries
 ul_market.register_policy("ul_market:policy_busting", {
 	title = S"Union Busting",
-	description = S"Divided, they won't get in my darn way.",
+	description = S"Teamwork makes my teeth hurt.",
 	effect_groups = {
 		overall = {strive = 0.05, cline = 0},
 		criminal = {strive = -0.1, cline = 0.05}
@@ -1035,7 +1033,7 @@ ul_market.register_policy("ul_market:policy_busting", {
 	-- demand goes up for criminal industries
 ul_market.register_policy("ul_market:policy_martial_law", {
 	title = S"Martial Law",
-	description = S"Obey.",
+	description = S"They need to let out their anger somewhere.",
 	effect_groups = {
 		overall = {strive = -0.05, cline = 0},
 		civilian = {strive = -0.1, cline = 0.1},
@@ -1094,7 +1092,7 @@ ul_market.register_policy("ul_market:policy_prohibition", {
 	-- rich people get mad
 ul_market.register_policy("ul_market:policy_abolition", {
 	title = S"Abolition",
-	description = S"We'll find a way around it.",
+	description = S"I promise to never call them slaves again.",
 	effect_groups = {
 		slave_trade = {strive = 0, cline = -0.1},
 		criminal = {strive = 0, cline = 0.1},
@@ -1122,7 +1120,7 @@ ul_market.register_policy("ul_market:policy_welfare", {
 		["ul_market:event_strike"] = {chance = -0.05},
 		["ul_market:event_protest"] = {chance = -0.05},
 		["ul_market:event_assassination"] = {chance = -0.05},
-		["ul_market:event_famine"] = {chance = 0.1, intensity = 0.1},
+		["ul_market:event_famine"] = {chance = -0.1, intensity = 0.5},
 		["ul_market:event_epidemic"] = {chance = -0.025, intensity = -0.05}
 	}
 })
@@ -1147,7 +1145,7 @@ ul_market.register_policy("ul_market:policy_social_healthcare", {
 	-- shortages become more common
 ul_market.register_policy("ul_market:policy_tariffs", {
 	title = S"Tariffs",
-	description = S"Make Great Again.",
+	description = S"It's not a sales tax. Shut up.",
 	effect_groups = {
 		overall = {strive = -0.1, cline = 0.1},
 		criminal = {strive = 0.05, cline = 0.1}
@@ -1157,15 +1155,33 @@ ul_market.register_policy("ul_market:policy_tariffs", {
 		["ul_market:event_epidemic"] = {chance = 0.025, intensity = 0.05}
 	}
 })
+-- taxes: tax imported goods
+-- in the extreme:
+	-- everything is hyperexpensive
+ul_market.register_policy("ul_market:policy_taxes", {
+	title = S"Taxes",
+	description = S"Necessary evil. Rich people find a way around it anyways.",
+	effect_groups = {
+		overall = {strive = -0.1, cline = 0.1},
+		criminal = {strive = 0.05, cline = 0.1}
+	},
+	effect_events = {
+		["ul_market:event_famine"] = {chance = 0.1, intensity = 0.1},
+		["ul_market:event_epidemic"] = {chance = 0.025, intensity = 0.05},
+		["ul_market:event_protest"] = {chance = 0.025, intensity = 0.5},
+		["ul_market:event_uprising"] = {chance = 0.025, intensity = 0.5},
+		["ul_market:event_growth"] = {chance = -0.1, intensity = -0.1},
+	}
+})
 
 -------------
 -- PARTIES --
 -------------
 ul_market.register_party("ul_market:party_pps", {
 	tag = S"PPS",
-	title = S"Proletarian Party of Sexland",
+	title = S"Proletarian Party of Sexonland",
 	short_title = S"Proletarian",
-	motto = S"Sexland For Workers",
+	motto = S"Sexonland For Workers",
 	description = S"A controversial party due to its historical ties to authoritarian dicatatorships.",
 	color = "#ff0000",
 	starting_seats = 100,
@@ -1177,6 +1193,7 @@ ul_market.register_party("ul_market:party_pps", {
 		["ul_market:policy_regulation"] = 5,
 		["ul_market:policy_abolition"] = 5,
 		["ul_market:policy_subsidies"] = 5,
+		["ul_market:policy_taxes"] = 3,
 		["ul_market:policy_busting"] = 0
 	}
 })
@@ -1184,7 +1201,7 @@ ul_market.register_party("ul_market:party_ssp", {
 	tag = S"SSP",
 	title = S"Sexon Social Party",
 	short_title = S"Social",
-	motto = S"Sexland For People",
+	motto = S"Sexonland For People",
 	description = S"Historically the party of the working class.",
 	color = "#ff7700",
 	starting_seats = 200,
@@ -1196,6 +1213,7 @@ ul_market.register_party("ul_market:party_ssp", {
 		["ul_market:policy_social_healthcare"] = 3,
 		["ul_market:policy_public_education"] = 4,
 		["ul_market:policy_subsidies"] = 4,
+		["ul_market:policy_taxes"] = 5,
 		["ul_market:policy_welfare"] = 2,
 		["ul_market:policy_regulation"] = 3,
 		["ul_market:policy_martial_law"] = 0,
@@ -1204,9 +1222,9 @@ ul_market.register_party("ul_market:party_ssp", {
 })
 ul_market.register_party("ul_market:party_lps", {
 	tag = S"LPS",
-	title = S"Liberal Party of Sexland",
+	title = S"Liberal Party of Sexonland",
 	short_title = S"Liberal",
-	motto = S"God Bless Sexland",
+	motto = S"God Bless Sexonland",
 	description = S"The ancient party of the centre.",
 	color = "#ffff00",
 	starting_seats = 300,
@@ -1219,6 +1237,7 @@ ul_market.register_party("ul_market:party_lps", {
 		["ul_market:policy_public_education"] = 3,
 		["ul_market:policy_secularism"] = 3,
 		["ul_market:policy_subsidies"] = 1,
+		["ul_market:policy_taxes"] = 2,
 		["ul_market:policy_welfare"] = 1,
 		["ul_market:policy_regulation"] = 0,
 		["ul_market:policy_martial_law"] = 0
@@ -1228,8 +1247,8 @@ ul_market.register_party("ul_market:party_scp", {
 	tag = S"SCP",
 	title = S"Sexon Conservative Party",
 	short_title = S"Conservative",
-	motto = S"Made in Sexland",
-	description = S"The spiritual successor to the now defunct Progressive Conservative Party of Sexland.",
+	motto = S"Made in Sexonland",
+	description = S"The spiritual successor to the now defunct Progressive Conservative Party of Sexonland.",
 	color = "#0000ff",
 	starting_seats = 200,
 	policies = {
@@ -1241,6 +1260,7 @@ ul_market.register_party("ul_market:party_scp", {
 		["ul_market:policy_social_healthcare"] = 0,
 		["ul_market:policy_public_education"] = 3,
 		["ul_market:policy_subsidies"] = 0,
+		["ul_market:policy_taxes"] = 1,
 		["ul_market:policy_welfare"] = 0,
 		["ul_market:policy_regulation"] = 0
 	}
@@ -1250,7 +1270,7 @@ ul_market.register_party("ul_market:party_spp", {
 	title = S"Sexon Patriot Party",
 	short_title = S"Patriot",
 	description = S"Made up of defecters from the SCP who agreed more with the NPS. Signs often vandalized.",
-	motto = S"Save Sexland",
+	motto = S"Save Sexonland",
 	color = "#7700ff",
 	starting_seats = 100,
 	policies = {
@@ -1263,6 +1283,7 @@ ul_market.register_party("ul_market:party_spp", {
 		["ul_market:policy_public_education"] = 2,
 		["ul_market:policy_secularism"] = 1,
 		["ul_market:policy_subsidies"] = 1,
+		["ul_market:policy_taxes"] = 0,
 		["ul_market:policy_welfare"] = 0,
 		["ul_market:policy_regulation"] = 0,
 		["ul_market:policy_abolition"] = 0
@@ -1270,9 +1291,9 @@ ul_market.register_party("ul_market:party_spp", {
 })
 ul_market.register_party("ul_market:party_nps", {
 	tag = S"NPS",
-	title = S"National Party of Sexland",
+	title = S"National Party of Sexonland",
 	short_title = S"National",
-	motto = S"Make Sexland Great Again",
+	motto = S"Make Sexonland Great Again",
 	description = S"A controversial party due to its historical ties to authoritarian dictatorships.",
 	color = "#000000",
 	starting_seats = 100,
@@ -1286,6 +1307,7 @@ ul_market.register_party("ul_market:party_nps", {
 		["ul_market:policy_public_education"] = 0,
 		["ul_market:policy_secularism"] = 0,
 		["ul_market:policy_subsidies"] = 5,
+		["ul_market:policy_taxes"] = 2,
 		["ul_market:policy_welfare"] = 0,
 		["ul_market:policy_regulation"] = 0,
 		["ul_market:policy_abolition"] = 0

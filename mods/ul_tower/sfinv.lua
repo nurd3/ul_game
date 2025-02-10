@@ -90,14 +90,18 @@ sfinv.register_page("ul_tower:inv_tower", {
 	get = function(self, plyr, context)
 		
 		local recipe = ""
-		local offset = 0.5
-		for _,str in ipairs(rec) do
-			local stack = ItemStack(str)
-			local name = get_item_display_name(stack:get_name())
-			recipe = recipe.."label[0.1,"..offset..";"..stack:get_count().."X "..name.."]\n"
-			offset = offset + 0.3
+		if ul_tower.get_height() < #babel then
+			local offset = 0.5
+			for _,str in ipairs(rec) do
+				local stack = ItemStack(str)
+				local name = get_item_display_name(stack:get_name())
+				recipe = recipe.."label[0.1,"..offset..";"..stack:get_count().."X "..name.."]\n"
+				offset = offset + 0.3
+			end
+			recipe = recipe.."button[0,4;2,1;ul_craft;Craft]"
+		else
+			recipe = "label[0.1,0.5;Tower is complete.]"
 		end
-		recipe = recipe.."button[0,4;2,1;ul_craft;Craft]"
 
 		local babel_text = ""
 
@@ -107,6 +111,7 @@ sfinv.register_page("ul_tower:inv_tower", {
 		
 		return sfinv.make_formspec(player, context,
 			string.format("label[0,0;%s]", T{"Tower"}) ..
+			"scrollbaroptions[max=".. #babel * 4 .."]" ..
 			"scrollbar[0,0.5;0.5,3.5;vertical;ul_babel;]\n"..
 			"scroll_container[0.5,1;5,4;ul_babel;vertical]\n"..
 			string.format("label[0.5,0;%s]", babel_text)..
@@ -122,7 +127,7 @@ sfinv.register_page("ul_tower:inv_tower", {
 			for _,str in pairs(rec) do
 				local stack = ItemStack(str)
 				if not inv:contains_item("main", stack, true) then
-					core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S("Not enough @1!", get_item_display_name(nom))))
+					core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S("Not enough @1!", get_item_display_name(stack:get_name()))))
 					return
 				end
 			end

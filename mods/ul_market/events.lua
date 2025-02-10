@@ -173,7 +173,7 @@ ul_market.register_marketstep(function()
 		local sum = 0
 		for n,v in pairs(t) do
 			if math.random() < 0.5 and v then
-				t[n] = v - 0.05
+				t[n] = v - 0.01 * math.max(v, 5)
 			end
 			sum = sum + math.max(t[n], 0)
 			if t[n] and t[n] <= 0 then

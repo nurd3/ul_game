@@ -10,7 +10,7 @@ natural_entities.register_spawn("ul_tower:babylonoids", {
 		["ul_tower:babylonian"] = 0.8,
 	},
 	
-	check = ul_tower.check
+	check = ul_tower.spawn_check
 	
 })
 
@@ -37,7 +37,7 @@ natural_entities.register_spawn("ul_tower:surface_monsters", {
 		["ul_mobs:anocula"] = 0.05
 	},
 	
-	check = ul_tower.check
+	check = ul_tower.spawn_check
 	
 })
 
@@ -59,7 +59,7 @@ natural_entities.register_spawn("ul_tower:caves_monsters", {
 		["ul_mobs:kobold"] = 1.0,
 	},
 	
-	check = ul_tower.check
+	check = ul_tower.spawn_check
 	
 })
 
@@ -82,7 +82,7 @@ natural_entities.register_spawn("ul_tower:deep_caves_monsters", {
 		["ul_mobs:horbold"] = 0.1,
 	},
 	
-	check = ul_tower.check
+	check = ul_tower.spawn_check
 	
 })
 
@@ -101,6 +101,6 @@ natural_entities.register_spawn("ul_tower:deeper_caves_monsters", {
 		["ul_mobs:skeleton"] = 1.0,
 	},
 	
-	check = ul_tower.check
+	check = ul_tower.spawn_check
 	
 })
