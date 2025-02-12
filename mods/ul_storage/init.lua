@@ -128,6 +128,8 @@ function ul_storage.from_inv(invref, list)
 	local size = invref:get_size(list)
 	
 	if not size then return "" end
+
+	if invref:is_empty("main") then return end
 	
 	while index <= size do
 		local stack = invref:get_stack(list, index)

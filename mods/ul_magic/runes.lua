@@ -198,7 +198,8 @@ ul_magic.register_rune("ul_magic:light", {
 	disable_spell = true,
 	on_melee = function (user, victim, level)
 		if victim then
-			ul_basic.set_hp(victim, -level)
+			ul_basic.set_hp(victim, -level * 2)
+			ul_basic.set_hp(user, 1)
 			return true
 		end
 	end,
@@ -231,7 +232,7 @@ ul_magic.register_rune("ul_magic:moon", {
 			return 2
 		end
 		if purpose == "defense" then
-			return -level
+			return -level * 2
 		end
 		if purpose == "darkness" then
 			return level
@@ -257,7 +258,7 @@ ul_magic.register_rune("ul_magic:sun", {
 			return level * 2
 		end
 		if purpose == "darkness" then
-			return -1
+			return level
 		end
 	end
 })

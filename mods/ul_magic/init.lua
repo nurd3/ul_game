@@ -19,6 +19,7 @@ core.register_craftitem("ul_magic:spell", {
 })
 
 dofile(path.."/functions.lua")
+dofile(path.."/commands.lua")
 dofile(path.."/register.lua")
 dofile(path.."/crystals.lua")
 dofile(path.."/runestones.lua")
