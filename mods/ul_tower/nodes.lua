@@ -79,7 +79,7 @@ core.register_node("ul_tower:tower", {
 			return
 		end
 
-		if thgt >= tower_max_level then
+		if tpos.y + tower_max_level < pos.y then
 			core.chat_send_player(plyr:get_player_name(), core.colorize("#00ff00", S"Tower is complete."))
 			if tower_max_level + tpos.y then
 				core.set_node(pos, {name="air"})
