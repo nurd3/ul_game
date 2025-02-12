@@ -106,11 +106,11 @@ ul_mobs.register_mob("ul_mobs:cult", {
 ul_mobs.register_mob("ul_mobs:anocula", {
 					-- engine values
 	description = S"Anocula",
-	egg_colors = {"#808080", "#000000"},
+	egg_colors = {"#808080", "#ffff00"},
 	visual = "upright_sprite",
 	textures = {"ul_mobs_race_anocula.png", "ul_mobs_race_anocula_back.png^[transformFX"},
-	visual_size = {x = 1.5, y = 1.5},
-	collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
+	visual_size = {x = 1.0, y = 1.0},
+	collisionbox = {-0.3, -0.5, -0.3, 0.3, 0.5, 0.3},
 	
 					-- stats
 	max_speed = 12,
