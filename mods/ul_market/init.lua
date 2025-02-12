@@ -12,7 +12,6 @@ if storage:get("reset") then
 	storage:from_table{}
 end
 
-dofile(path.."/game_items.lua")
 dofile(path.."/npcs.lua")
 dofile(path.."/news.lua")
 
@@ -29,3 +28,4 @@ dofile(path.."/government.lua")
 
 dofile(path.."/commands.lua")
 dofile(path.."/sfinv.lua")
+dofile(path.."/game_items.lua")

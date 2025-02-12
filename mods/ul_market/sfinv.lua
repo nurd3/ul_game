@@ -111,7 +111,7 @@ sfinv.register_page("ul_market:inv_govt", {
 			party = party..string.format("label[0,0.5;\"%s\"]", core.formspec_escape(prty.motto))
 			party = party..string.format("label[0,1;%i seats]", seats)
 
-			party = party..string.format("button[0,2;2,0.5;ul_fund_party;%s]", T{"Fund Party"})
+			party = party..string.format("button[0,2;2,0.5;ul_fund_party;%s]", T{"Fund Party $500"})
 			party = party..string.format("label[0,3;$%.2f]", ul_market.get_party_bonus(selected_party[plyrname]) * 5000)
 		end
 

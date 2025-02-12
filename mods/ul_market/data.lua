@@ -720,11 +720,13 @@ ul_market.register_goods {
 ul_market.register_goods {
 	industry = "ul_market:industry_gambling",
 	items = {
+		["ul_market:card_pack"] = {supply = 12.0, demand = 6.0},
+
 		["lootblocks:lootblock_super"] = {demand = 96.0},
 		["lootblocks:lootblock_rare"] = {demand = 48.0},
 		["lootblocks:lootblock"] = {demand = 24.0},
 		["ul_storage:crate"] = {demand = 12.0},
-		["ul_basic:lamp"] = {demand = 12.0}
+		["ul_basic:lamp"] = {demand = 12.0},
 	}
 }
 ul_market.register_goods {
