@@ -16,34 +16,32 @@ core.register_craftitem("ul_market:hp_vial", {
 	end
 })
 
--- cards
-local cards = {}
-for i,v in ipairs(ul_market.party_order) do
-	local name = ul_market.registered_parties[v].short_title or ul_market.registered_parties[v].title or v
-	local color = ul_market.registered_parties[v].color or "#ffffff"
-	core.register_craftitem("ul_market:card_" .. i, {
-		short_description = S("@1 Card", name),
-		stack_max = 65535,
-		description = S("@1 Card\nSexonland Political Trading Cards\nUse to fund party", name),
-		inventory_image = "ul_market_card.png^[multiply:" .. color,
-		party = v,
-		on_use = function(stack, user, pointed_thing)
-			stack:take_item()
-			ul_market.add_party_bonus(v, 0.1)
-			return stack
-		end
-	})
-	table.insert(cards, "ul_market:card_" .. i)
+local index = 1
+for _,name in ipairs(ul_market.party_order) do
+	if string.sub(name, 1,9) == "ul_market" then
+		core.register_craftitem("ul_market:card_" .. index, {
+			short_description = S"Old Card",
+			description = S"Old Card\nSeems to be dusty...\nUse to undust",
+			inventory_image = "ul_market_card.png",
+			on_use = function(stack, user, pointed_thing)
+				ul_basic.give_or_drop(user:get_inventory(), "main", pointed_thing.above, 2, ItemStack(name.."_card "..stack:get_count()))
+				stack:set_count(0)
+				return stack
+			end
+		})
+		index = index + 1
+	end
 end
 
 local function random_card()
 	local temp = {}
-	for _,v in ipairs(cards) do
-		if math.random() < ul_market.get_party_seats(core.registered_items[v].party) * 0.001 then
-			table.insert(temp, v)
-		end
+	for _,v in ipairs(ul_market.party_order) do
+		table.insert(temp, {v.."_card", ul_market.get_party_seats(v) * math.random()})
 	end
-	return temp[math.random(#temp)]
+	table.sort(temp, function(a,b)
+		return a[2] > b[2]
+	end)
+	return temp[1][1]
 end
 
 core.register_craftitem("ul_market:card_pack", {
@@ -52,8 +50,8 @@ core.register_craftitem("ul_market:card_pack", {
 	inventory_image = "ul_market_card_pack.png",
 	on_use = function(stack, user, pointed_thing)
 		stack:take_item()
-		for i = 1, #cards do
-			ul_basic.give_or_drop(user:get_inventory(), "main", pointed_thing.above, 2, ItemStack(random_card()))
+		for i = 1, #ul_market.party_order do
+			ul_basic.give_or_drop(user:get_inventory(), "main", pointed_thing.above or user:get_pos(), 2, ItemStack(random_card()))
 		end
 		return stack
 	end

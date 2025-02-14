@@ -185,11 +185,7 @@ function ul_mobs.brain(self)
 			}
 		end
 		
-		if prty < 25 and sitting then
-			mobkit.clear_queue_high(self)
-			return
-		end
-		if prty < 20 and owner and vector.distance(owner:get_pos(), self.object:get_pos()) > self.view_range then
+		if not sitting and prty < 20 and owner and vector.distance(owner:get_pos(), self.object:get_pos()) > self.view_range then
 			local pos = owner:get_pos()
 			pos.x = pos.x + math.random(-1,1)
 			pos.y = pos.y + 1
@@ -202,13 +198,13 @@ function ul_mobs.brain(self)
 			ul_mobs.midfunc(self, prty)
 		end
 
+		if prty < 1 and not sitting and owner then
+			mobkit_plus.hq_follow(self, 1, owner)
+		end
+
 		-- if doing nothing
 		if mobkit.is_queue_empty_high(self) then
-			if owner then
-				mobkit_plus.hq_follow(self, 0, owner)
-			else
-				mobkit.hq_roam(self, 0)
-			end
+			mobkit.hq_roam(self, 0)
 		end
 	end
 	

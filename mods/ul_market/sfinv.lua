@@ -148,7 +148,7 @@ sfinv.register_page("ul_market:inv_govt", {
 		
 		return sfinv.make_formspec(plyr, context,
 			string.format("label[2,0;%s]", T{"Policies"})..
-			"scrollbaroptions[max=".. policy_offset * 8 .."]" ..
+			"scrollbaroptions[max=".. policy_offset * 7.5 .."]" ..
 			"scrollbar[2,0.5;0.5,3;vertical;ul_policies;]"..
 			"scroll_container[2.5,1;4,3.5;ul_policies;vertical]" ..
 			policies..

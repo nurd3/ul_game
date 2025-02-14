@@ -39,7 +39,7 @@ function ul_market.get_formspec_tradeinator(plyrname, pos)
 		"size[8,10]" ..
 		string.format("label[0,0;Wallet: $%.2f]", ul_market.get_wallet(plyrname)) ..
 		string.format("tooltip[0,0;2,0.5;($%.2f) %i shares]", ul_market.calculate_player_value(plyrname), ul_market.get_portfolio_total_shares(plyrname)) ..
-		"scrollbaroptions[max=".. (math.floor((#ul_market.goods_order - 1) / 3) * 8) .."]" ..
+		"scrollbaroptions[max=".. (math.floor((#ul_market.goods_order - 1) / 3) * 9.5) .."]" ..
 		"scrollbar[0,0.5;0.5,5;vertical;ul_goods;"..scroll.."]\n"..
 		"scroll_container[0.5,1;10,5.7;ul_goods;vertical]\n"..
 		string.format(goods_formatted, table.unpack(goods_prices))..

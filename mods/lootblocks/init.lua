@@ -22,17 +22,18 @@ lootblocks.defaultdrop = {"lootblocks:lootblock"}
 
 function lootblocks.register_defaultdrop(stacks)
 	if type(stacks) == "string" then stacks = {stacks} end
-    lootblocks.defaultdrop = stacks
+	lootblocks.defaultdrop = stacks
 end
 
 function lootblocks.gen_spawn(pos)
 	local t = {}
-    for _,v in ipairs(lootblocks.registered_spawns) do
-        if math.random() < v.chance then
-            table.insert(t, v.ents)
-        end
-    end
-    local ents = t[math.random(#t)]
+	for _,v in ipairs(lootblocks.registered_spawns) do
+		table.insert(t, {v.ents, math.random() * v.chance})
+	end
+	table.sort(t, function(a,b)
+		return a[2] > b[2]
+	end)
+    local ents = t[1][1]
 	if not ents then return end
     for _,w in ipairs(ents) do
         core.add_entity(pos, w)
@@ -40,13 +41,14 @@ function lootblocks.gen_spawn(pos)
 end
 
 function lootblocks.gen_drop(pos)
-	local t = {lootblocks.defaultdrop}
-    for _,v in ipairs(lootblocks.registered_drops) do
-        if math.random() < v.chance then
-            table.insert(t, v.stacks)
-        end
-    end
-    local stacks = t[math.random(#t)]
+	local t = {}
+	for _,v in ipairs(lootblocks.registered_drops) do
+		table.insert(t, {v.stacks, math.random() * v.chance})
+	end
+	table.sort(t, function(a,b)
+		return a[2] > b[2]
+	end)
+    local stacks = t[1][1]
 	if not stacks or #stacks <= 0 then stacks = lootblocks.defaultdrop end
     for _,w in ipairs(stacks) do
         core.add_item(pos, ItemStack(w))

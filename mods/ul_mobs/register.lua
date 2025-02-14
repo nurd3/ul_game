@@ -119,10 +119,11 @@ function ul_mobs.register_mob(name, def)
 				if name == self._owner then
 					if mobkit.recall(self, "sitting") then
 						mobkit.forget(self, "sitting")
-						core.chat_send_player(name, "this mob is now standing")
+						core.chat_send_player(name, "this mob will follow you")
 					else
 						mobkit.remember(self, "sitting", "true")
-						core.chat_send_player(name, "this mob is now sitting")
+						core.chat_send_player(name, "this mob is no longer following you")
+						mobkit.clear_queue_high(self)
 					end
 				else
 					core.chat_send_player(name, "this mob is owned by "..self._owner)
