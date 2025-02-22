@@ -14,7 +14,7 @@ function ul_mobs.register_mob(name, def)
 		colors[3] = colors[2] or colors[1]
 	end
 	
-	core.register_craftitem(name, {
+	local egg_def = {
 		description = S("@1 Spawn Egg", def.description),
 		inventory_image = 
 			"(ul_mobs_egg.png^[multiply:"..colors[1]..":255)"..
@@ -28,8 +28,14 @@ function ul_mobs.register_mob(name, def)
 				stack:set_count(stack:get_count() - 1)
 				return stack
 			end
-		end
-	})
+		end,
+		groups = def.groups or {}
+	}
+
+	egg_def.groups.egg = 1
+	core.register_craftitem(name, egg_def)
+
+	
 	
 	local sounds = {}
 	
@@ -73,7 +79,7 @@ function ul_mobs.register_mob(name, def)
 					local dist = vector.distance(plyr:get_pos(), self.object:get_pos()) 
 					closest = closest > dist and dist or closest
 				end
-				if closest > 512 and mobkit.timer(self, 30) then
+				if closest > 512 then
 					self.hp = 0
 					return ""
 				end
@@ -108,6 +114,10 @@ function ul_mobs.register_mob(name, def)
 			end
 			
 			mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)
+
+			if self.hp <= 0 then
+				self._killer = puncher
+			end
 		end,
 		
 		on_rightclick = function(self, clicker)

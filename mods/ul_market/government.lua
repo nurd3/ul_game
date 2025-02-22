@@ -10,14 +10,18 @@ local unrest_bonus = storage:get("unrest_bonus") or 0
 local function sign(number)
 	return (number == 0 and 0) or (number > 0 and 1) or -1
 end
+
 local function generate_random_party()
 	local temp = {}
 
-	for k,_ in pairs(parties) do
-		table.insert(temp, k)
+	for _,v in ipairs(ul_market.party_order) do
+		table.insert(temp, {v, ul_market.get_party_seats(v) * math.random()})
 	end
+	table.sort(temp, function(a,b)
+		return a[2] > b[2]
+	end)
 
-	return temp[math.random(#temp)]
+	return temp[1][1]
 end
 
 local function generate_random_party_policy(party)

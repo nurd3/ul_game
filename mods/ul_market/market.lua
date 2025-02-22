@@ -45,12 +45,16 @@ end
 
 local timer = 1.1
 local save_counter = 0
+local update_timer = false
 
 local function step()
 	save_counter = save_counter + 1
+	update_timer = not update_timer
 	local index = 1
 	for k,v in pairs(updated_industries) do
-		update_industry(k)
+		if update_timer then
+			update_industry(k)
+		end
 		core.after((index + math.random()) * 0.1, function(k, v)
 			ul_market.apply_policies(v)
 			ul_market.calculate_stats(v)
@@ -60,14 +64,16 @@ local function step()
 			v.strive = math.min(math.max(v.strive, -10.0), 10.0)
 			v.cline = math.min(math.max(v.cline, -10.0), 10.0)
 		end, k, v)
-		if save_counter > 4 then
+		if save_counter == 4 then
 			core.after((index + math.random()) * 0.5, storage.set_string, storage, string.format("industry:%s", k), core.serialize(v))
 		end
 		index = index + 1
 	end
 	index = 1
 	for k,v in pairs(updated_companies) do
-		update_company(k)
+		if update_timer then
+			update_company(k)
+		end
 		core.after((index + math.random()) * 0.1, function(k, v)
 			ul_market.apply_policies(v)
 			ul_market.company_apply_events(k, v)
@@ -77,15 +83,17 @@ local function step()
 			v.strive = math.min(math.max(v.strive, -30.0), 30.0)
 			v.cline = math.min(math.max(v.cline, -30.0), 30.0)
 		end, k, v)
-		if save_counter > 4 then
+		if save_counter == 4 then
 			core.after((index + math.random()) * 0.5, storage.set_string, storage, string.format("company:%s", k), core.serialize(v))
 		end
 		index = index + 1
 	end
-	if save_counter > 4 then
+	if save_counter == 4 then
 		save_counter = 0
 	end
-	marketstep()
+	if update_timer then
+		marketstep()
+	end
 end
 
 core.register_globalstep(function (dtime) timer = timer + dtime; if timer > 1.0 then step(); timer = 0.0 end end)

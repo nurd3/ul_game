@@ -89,7 +89,7 @@ sfinv.override_page("sfinv:crafting", {
 			"container[5,0]"..
 			recipe..
 			"container_end[]"
-		, true)
+		, true, "size[9,9.1]")
 	end,
 	on_player_receive_fields = function(self, plyr, ctx, fields)
 		local rec = nil

@@ -87,7 +87,7 @@ function ul_basic.give_or_drop(inv, listname, pos, chance, stack, amount)
 
 	-- positioning
 	local pos = vector.copy(pos)
-	pos.y = pos.y + 1
+	pos.y = pos.y
 
 	if math.random() < chance then
 		if inv and inv:room_for_item(lst, stack) then
@@ -108,7 +108,7 @@ function ul_basic.drop(pos, chance, item, amount)
 
 	-- positioning
 	local pos = vector.copy(pos)
-	pos.y = pos.y + 2
+	pos.y = pos.y
 
 	if math.random() < chance then
 		-- drop the item
@@ -155,8 +155,6 @@ function ul_basic.on_melee(itemstack, user, pointed_thing, level)
 		local obj = pointed_thing.ref
 		local meta = itemstack:get_meta()
 		local luaent = obj:get_luaentity()
-		
-		local delta = ul_basic.get_attackdtime(user:get_player_name(), tool_capabilities.full_punch_interval, true)
 		
 		ul_basic.punch(obj, user, delta, tool_capabilities, user:get_look_dir())
 		

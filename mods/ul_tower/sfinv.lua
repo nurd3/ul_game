@@ -119,7 +119,7 @@ sfinv.register_page("ul_tower:inv_tower", {
 			"container[5,0]\n"..
 			recipe..
 			"container_end[]"
-		, true)
+		, true, "size[9,9.1]")
 	end,
 	on_player_receive_fields = function(self, plyr, ctx, fields)
 		if fields.ul_craft then

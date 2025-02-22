@@ -15,7 +15,7 @@ sfinv.register_page("ul_inv:enchanting", {
 			"label[5,1.5;Result]"..
 			"list[current_player;craft;5,2;1,1;2]"..
 			"button[2.5,2;2,1;ul_enchant;Enchant]"
-		, true)
+		, true, "size[9,9.1]")
 	end,
 	on_player_receive_fields = function(self, plyr, ctx, fields)
 		if not fields.ul_enchant then

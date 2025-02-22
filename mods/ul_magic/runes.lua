@@ -4,6 +4,7 @@ ul_magic.register_rune("ul_magic:heal", {
 	type = "support",
 	description = S"Health",
 	color = "#ff00ff",
+
 	on_hitobj = function (user, victim, level)
 		if victim then
 			ul_basic.set_hp(victim, level * 2)
@@ -15,12 +16,15 @@ ul_magic.register_rune("ul_magic:heal", {
 			ul_basic.set_hp(user, level * 2)
 			return true
 		end
-	end
+	end,
+
+	groups = {healing = 1}
 })
 ul_magic.register_rune("ul_magic:regen", {
 	type = "support",
 	description = S"Regeneration",
 	color = "#ff0077",
+
 	on_hitobj = function (user, victim, level)
 		if victim then
 			ul_statfx.apply(victim, "ul_magic:regen", 3 * level)
@@ -32,12 +36,15 @@ ul_magic.register_rune("ul_magic:regen", {
 			ul_statfx.apply(user, "ul_magic:regen", 3 * level)
 			return true
 		end
-	end
+	end,
+
+	groups = {healing = 1}
 })
 ul_magic.register_rune("ul_magic:fireball", {
 	type = "attack",
 	description = S"Fireball",
 	color = "#ff8000",
+
 	on_hitobj = function (user, victim, level)
 		if victim then
 			ul_basic.set_hp(victim, -level * 2)
@@ -51,6 +58,7 @@ ul_magic.register_rune("ul_magic:launch", {
 	description = S"Launching",
 	color = "#0080ff",
 	disable_ring = true,
+
 	on_hitobj = function (user, victim, level)
 		if victim then
 			victim:add_velocity({x=0,y=20,z=0})
@@ -74,6 +82,7 @@ ul_magic.register_rune("ul_magic:levitate", {
 	type = "prank",
 	description = S"Levitation",
 	color = "#00ffff",
+
 	on_hitobj = function (user, victim, level)
 		if victim then
 			ul_statfx.apply(victim, "ul_magic:levitate", 2 * level)
@@ -98,6 +107,7 @@ ul_magic.register_rune("ul_magic:teleport", {
 	description = S"Teleportation",
 	color = "#0000ff",
 	disable_ring = true,
+
 	on_hitnode = function (user, pos, level)
 		if user then
 			user:set_pos(pos)
@@ -108,6 +118,7 @@ ul_magic.register_rune("ul_magic:vampirism", {
 	type = "attack",
 	description = S"Vampirism",
 	color = "#ff0000",
+
 	on_hitobj = function (user, victim, level)
 		if victim and user then
 			ul_basic.set_hp(user, level * 2)
@@ -127,6 +138,7 @@ ul_magic.register_rune("ul_magic:poison", {
 	type = "attack",
 	description = S"Poison",
 	color = "#00ff00",
+
 	on_hitobj = function (user, victim, level)
 		if victim then
 			ul_statfx.apply(victim, "ul_magic:poison", 3 * level)
@@ -145,6 +157,7 @@ ul_magic.register_rune("ul_magic:darkness", {
 	description = S"Darkness",
 	color = "#000001",
 	disable_spell = true,
+
 	on_melee = function (user, victim, level, stats)
 		if victim and user then
 			if core.get_node_light(vector.round(user:get_pos()), 0) < 5 then
@@ -162,6 +175,7 @@ ul_magic.register_rune("ul_magic:defense", {
 	description = S"Defense",
 	color = "#00107a",
 	disable_spell = true,
+
 	on_wear = function (purpose, level)
 		if purpose == "defense" then
 			return 2 * level
@@ -173,6 +187,7 @@ ul_magic.register_rune("ul_magic:iridescence", {
 	description = S"Iridescence",
 	color = "#2a335e",
 	disable_spell = true,
+
 	on_melee = function (user, victim, level)
 		if victim then
 			ul_basic.set_hp(victim, -level)
@@ -196,6 +211,7 @@ ul_magic.register_rune("ul_magic:light", {
 	description = S"Light",
 	color = "#ffe16b",
 	disable_spell = true,
+
 	on_melee = function (user, victim, level)
 		if victim then
 			ul_basic.set_hp(victim, -level * 2)
@@ -220,6 +236,7 @@ ul_magic.register_rune("ul_magic:moon", {
 	description = S"Moon",
 	color = "#8c00ff",
 	disable_spell = true,
+
 	on_melee = function (user, victim, level)
 		if victim and user then
 			ul_basic.set_hp(user, -level)
@@ -244,6 +261,7 @@ ul_magic.register_rune("ul_magic:sun", {
 	description = S"Sun",
 	color = "#ffff00",
 	disable_spell = true,
+
 	on_melee = function (user, victim, level)
 		if victim then
 			ul_basic.set_hp(victim, -level)
@@ -267,6 +285,7 @@ ul_magic.register_rune("ul_magic:blood", {
 	description = S"Blood",
 	color = "#660202",
 	disable_spell = true,
+	
 	on_melee = function (user, victim, level)
 		if victim then
 			ul_basic.set_hp(victim, -(level - 1) * 5)

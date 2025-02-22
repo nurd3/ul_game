@@ -46,7 +46,7 @@ sfinv.register_page("common_storage:common_storage", {
 				list[detached:common_storage;main;2,0.3;4,4;]
 				listring[current_player;main]
 				listring[detached:common_storage;main]
-			]], true)
+			]], true, "size[9,9.1]")
 	end,
 	on_leave = save,
 	on_player_receive_fields = save

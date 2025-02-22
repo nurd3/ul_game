@@ -56,9 +56,10 @@ sfinv.register_page("ul_market:inv_companies", {
 			"container[5,0]\n"..
 			company..
 			"container_end[]"
-		, true)
+		, true, "size[9,9.1]")
 	end,
 	on_player_receive_fields = function(self, plyr, ctx, fields)
+		local plyrname = plyr:get_player_name()
 		local cmp = nil
 		local buy = nil
 		local sell = nil
@@ -71,16 +72,21 @@ sfinv.register_page("ul_market:inv_companies", {
 				sell = tonumber(k:sub(8))
 			end
 		end
-		scrolls_companies[plyr:get_player_name()] = fields.ul_companies and fields.ul_companies:sub(5)
+		scrolls_companies[plyrname] = fields.ul_companies and fields.ul_companies:sub(5)
 		if cmp then
-			selected_company[plyr:get_player_name()] = cmp
+			selected_company[plyrname] = cmp
 			sfinv.set_page(plyr, "ul_market:inv_companies")
 			return
 		end
 		if buy then
-			ul_market.portfolio_buy(plyr:get_player_name(), selected_company[plyr:get_player_name()], buy)
+			if not ul_market.portfolio_buy(plyrname, selected_company[plyrname], buy) then
+				core.chat_send_player(plyrname, core.colorize("#ff0000", S"Not enough Money!"))
+			end
 		elseif sell then
-			ul_market.portfolio_sell(plyr:get_player_name(), selected_company[plyr:get_player_name()], sell)
+			if not ul_market.portfolio_sell(plyrname, selected_company[plyrname], sell) then
+				local tag = ul_market.registered_companies[selected_company[plyrname]] and ul_market.registered_companies[selected_company[plyrname]].tag or selected_company[plyrname]
+				core.chat_send_player(plyrname, core.colorize("#ff0000", S("Not enough @1!", tag)))
+			end
 		end
 		sfinv.set_page(plyr, "ul_market:inv_companies")
 	end,
@@ -163,7 +169,7 @@ sfinv.register_page("ul_market:inv_govt", {
 			"container[5,0]"..
 			party..
 			"container_end[]"
-		, true)
+		, true, "size[9,9.1]")
 	end,
 	on_player_receive_fields = function(self, plyr, ctx, fields)
 		local plyrname = plyr:get_player_name()
@@ -178,10 +184,14 @@ sfinv.register_page("ul_market:inv_govt", {
 			sfinv.set_page(plyr, "ul_market:inv_govt")
 			return
 		end
-		if fields.ul_fund_party and selected_party[plyrname] and ul_market.get_wallet(plyrname) > 500 then
-			ul_market.get_portfolio(plyrname).wallet = ul_market.get_wallet(plyrname) - 500
-			ul_market.save_portfolios()
-			ul_market.add_party_bonus(selected_party[plyrname], 0.1)
+		if fields.ul_fund_party and selected_party[plyrname] then
+			if ul_market.get_wallet(plyrname) >= 500 then
+				ul_market.get_portfolio(plyrname).wallet = ul_market.get_wallet(plyrname) - 500
+				ul_market.save_portfolios()
+				ul_market.add_party_bonus(selected_party[plyrname], 0.1)
+			else
+				core.chat_send_player(plyrname, core.colorize("#ff0000", S"Not enough Money!"))
+			end
 		end
 		sfinv.set_page(plyr, "ul_market:inv_govt")
 	end,

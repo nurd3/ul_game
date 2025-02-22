@@ -8,9 +8,28 @@ ul_portal.get_modpath = path
 ul_portal.get_translator = S
 
 local portals = core.deserialize(storage:get_string("portal_positions")) or {}
+local portal_order = {}
+
+
+local function sort_portals()
+	portal_order = {}
+
+	for k,v in pairs(portals) do
+		table.insert(portal_order, v..k)
+	end
+
+	table.sort(portal_order)
+end
+
+sort_portals()
+
+function ul_portal.get_portal_count()
+	return #portal_order
+end
 
 local scrolls = {}
 local opened_portals = {}
+
 -- stolen from MT game's default/chests.lua
 function ul_portal.get_formspec(pos, plyr)
 	local scroll = scrolls[plyr:get_player_name()] or 0
@@ -89,6 +108,7 @@ core.register_node("ul_portal:portal", {
 	on_place = function(stack, placer, pointed_thing)
 		core.set_node(pointed_thing.above, {name="ul_portal:portal"})
 		portals[vector.to_string(pointed_thing.above)] = S"Portal"
+		sort_portals()
 		storage:set_string("portal_positions", core.serialize(portals))
 		stack:take_item()
 		return stack
@@ -97,6 +117,7 @@ core.register_node("ul_portal:portal", {
 		core.set_node(pos, {name="air"})
 		core.add_item(pos, ItemStack"ul_portal:portal")
 		portals[vector.to_string(pos)] = nil
+		sort_portals()
 		storage:set_string("portal_positions", core.serialize(portals))
 	end,
 	on_rightclick = function (pos, node, puncher)

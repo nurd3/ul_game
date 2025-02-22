@@ -6,6 +6,8 @@ local path = core.get_modpath"natural_entities"
 natural_entities.get_translator = S
 natural_entities.get_modpath = path
 
+local MAX_ENTS = minetest.settings:get("natural_entities_maximum") or 64
+
 local function generate_ent(entities)
 	local temp = {}
 	for name,chance in pairs(entities) do
@@ -87,36 +89,45 @@ local function do_spawns(dtime, plyr)
 			if not (pos.y > min - 32 and pos.y < max + 32) then
 				return 
 			end
-			min = math.max(min, pos.y - 32)
-			max = math.min(min, pos.y + 32)
-			pos = vector.offset(pos,
-				math.random(4, 256) * math.random(-1, 1),
-				math.random(min, max),
-				math.random(4, 256) * math.random(-1, 1)
-			)
-		
-			-- get entity
-			local entities = def.entities or {}
+			local count = 0
+			for _ in core.objects_in_area(vector.offset(pos, -256, min, -256), vector.offset(pos, 256, max, 256)) do
+				count = count + 1
+			end
+
+			if count < MAX_ENTS then
+
+				min = math.max(min, pos.y - 32)
+				max = math.min(max, pos.y + 32)
+				pos = vector.offset(pos,
+					math.random(4, 256) * math.random(-1, 1),
+					math.random(min, max),
+					math.random(4, 256) * math.random(-1, 1)
+				)
 			
-			local ent_name = generate_ent(entities)
-			
-			if ent_name then
+				-- get entity
+				local entities = def.entities or {}
 				
-				local spawn, pos2 = adjust(pos, min, max)
+				local ent_name = generate_ent(entities)
 				
-				local repeats = 1
-				
-				while repeats < 4 and not spawn do
-					spawn, pos2 = adjust(pos2, min, max)
-					repeats = repeats + 1
-					if def.check and not def.check(pos2, ent_name) then
-						spawn = false
+				if ent_name then
+					
+					local spawn, pos2 = adjust(pos, min, max)
+					
+					local repeats = 1
+					
+					while repeats < 4 and not spawn do
+						spawn, pos2 = adjust(pos2, min, max)
+						repeats = repeats + 1
+						if def.check and not def.check(pos2, ent_name) then
+							spawn = false
+						end
+					end
+					
+					if spawn and (not def.check or def.check(pos2, ent_name)) then
+						core.add_entity(pos2, ent_name)
 					end
 				end
-				
-				if spawn and (not def.check or def.check(pos2, ent_name)) then
-					core.add_entity(pos2, ent_name)
-				end
+
 			end
 		end
 	end

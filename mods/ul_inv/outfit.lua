@@ -37,6 +37,6 @@ sfinv.register_page("ul_inv:outfit", {
 				list[current_player;outfit;1.0,0.5;2,4;]
 				listring[current_player;main]
 				listring[current_player;outfit]
-			]], true)
+			]], true, "size[9,9.1]")
 	end
 })

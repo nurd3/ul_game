@@ -181,7 +181,9 @@ ul_mobs.register_mob("ul_market:npc", {
 						-- behaviour
 	on_check_pred = check_pred,
 	on_die = died,
-	type = "npc"
+	type = "animal",
+	category = "npc",
+	groups = {market = 1}
 })
 
 natural_entities.register_spawn("ul_market:npcs", {

@@ -7,13 +7,16 @@ local S = ul_market.get_translator
 -----------------
 
 core.register_craftitem("ul_market:hp_vial", {
-	description = S"Vial of Health",
+	short_description = S"Vial of Health",
+	description = S"Vial of Health\nGives drinker 4 hp",
 	inventory_image = "ul_market_hp_vial.png",
 	on_use = function(stack, user, pointed_thing)
 		stack:take_item()
 		ul_basic.set_hp(user, 4)
+		ul_basic.objsound(user, "ul_magic_cast")
 		return stack
-	end
+	end,
+	groups = {healing = 1}
 })
 
 local index = 1

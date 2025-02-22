@@ -37,7 +37,8 @@ function ul_magic.register_rune(name, def)
 			core.add_item(pos, ItemStack(name))
 			ul_basic.possound(pos, "ul_take")
 		end,
-		light_source = 14
+		light_source = 14,
+		groups = def.groups
 	})
 	
 	core.register_entity(name.."_ball", {
@@ -110,11 +111,12 @@ function ul_magic.register_rune(name, def)
 		end,
 		get_staticdata = function(self)
 			return "return nil"
-		end
+		end,
+		groups = def.groups
 	})
 	
 	if not def.disable_spell then
-		core.register_tool(name.."_spell", {
+		local spell_def = {
 			description = S("@1 Spell", def.description or name),
 			inventory_image = "ul_magic_spell.png"..imgmod,
 			on_use = function(itemstack, user, pointed_thing)
@@ -164,19 +166,23 @@ function ul_magic.register_rune(name, def)
 				return itemstack
 			end,
 			
-			groups = {spell = 1}
-		})
+			groups = def.groups or {}
+		}
+		spell_def.groups.spell = 1
+		core.register_tool(name.."_spell", spell_def)
 	end
 	
 	if not def.disable_ring then
-		ul_inv.register_wearable(name.."_ring", {
+		local ring_def = {
 			short_description = S"Outdated Ring",
 			description = S"Outdated Ring, punch the ground with this ring to fix it",
 			on_use = function()
 				return ul_magic.enchant("ul_magic:ring", name)
 			end,
-			groups = {ring = 1}
-		})
+			groups = def.groups or {}
+		}
+		ring_def.groups.ring = 1
+		ul_inv.register_wearable(name.."_ring", ring_def)
 		if not def.on_wear then
 			def.on_wear = function () end
 		end

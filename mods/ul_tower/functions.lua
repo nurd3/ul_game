@@ -3,8 +3,8 @@ local storage = core.get_mod_storage()
 local tower_pos = core.deserialize(storage:get_string("pos"))
 function ul_tower.update() end
 
-function ul_tower.spawn_check()
-	return math.random() < math.random() * (ul_tower.get_height() * 0.25)
+function ul_tower.spawn_check(min)
+	return function() return math.random() < math.random() * (math.max(ul_tower.get_height(), min - 1) - min + 1) * 0.25 end
 end
 
 function ul_tower.reset()

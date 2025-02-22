@@ -9,220 +9,189 @@ local S = ul_market.get_translator
 ul_market.register_industry("ul_market:industry_mining", {
 	title = S"Mining Industry",
 	description = S"Lithorlogistics; Extractulation of Metallogenic Assets and other Eductionable Apophenons.",
-	sector = 1,
-	groups = {labour = 1.0},
+	groups = {labour = 1.0, primary = 1.0},
 	stats = {base_price = 15.0}
 })
 ul_market.register_industry("ul_market:industry_bones", {
 	title = S"Boning Industry",
 	description = S"You should already know what these are.",
-	sector = 1,
-	groups = {labour = 0.5},
+	groups = {labour = 0.5, primary = 1.0},
 	stats = {base_price = 10.0}
 })
 ul_market.register_industry("ul_market:industry_breeding", {
 	title = S"Breeding Business",
 	description = S"Domesticatology; Entelechation of Animated Automatons, especially Luxurious Troglodytic Beasts.",
-	sector = 1,
-	groups = {luxury = 0.5},
+	groups = {luxury = 0.5, primary = 1.0},
 	stats = {base_price = 100.0}
 })
 ul_market.register_industry("ul_market:industry_magic", {
 	title = S"Runes & Spells Business",
 	description = S"Alchematruductionology; Production of Runes and Spells. Not much more to say.",
-	sector = 1,
-	groups = {war = 0.5, trades = 1.0, medical = 0.1},
+	groups = {war = 0.5, trades = 1.0, medical = 0.1, primary = 1.0},
 	stats = {base_price = 50.0}
 })
 ul_market.register_industry("ul_market:industry_statlantic", {
 	title = S"Atlantic Slave Trade",
 	description = S"This is illegal.",
-	sector = 1,
-	groups = {criminal = 1.0, slave_trade = 1.0},
+	groups = {criminal = 1.0, slave_trade = 1.0, primary = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_stpacific", {
 	title = S"Pacific Slave Trade",
 	description = S"This is illegal.",
-	sector = 1,
-	groups = {criminal = 1.0, slave_trade = 1.0},
+	groups = {criminal = 1.0, slave_trade = 1.0, primary = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_stmediterranean", {
 	title = S"Mediterranean Slave Trade",
 	description = S"This is illegal.",
-	sector = 1,
-	groups = {criminal = 1.0, slave_trade = 1.0},
+	groups = {criminal = 1.0, slave_trade = 1.0, primary = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_stafrican", {
 	title = S"African Slave Trade",
 	description = S"This is illegal.",
-	sector = 1,
-	groups = {criminal = 1.0, slave_trade = 1.0},
+	groups = {criminal = 1.0, slave_trade = 1.0, primary = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_stslavic", {
 	title = S"Slavic Slave Trade",
 	description = S"This is illegal.",
-	sector = 1,
-	groups = {criminal = 1.0, slave_trade = 1.0},
+	groups = {criminal = 1.0, slave_trade = 1.0, primary = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_stamerican", {
 	title = S"American Slave Trade",
 	description = S"This is illegal.",
-	sector = 1,
-	groups = {criminal = 1.0, slave_trade = 1.0},
+	groups = {criminal = 1.0, slave_trade = 1.0, primary = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_stindian", {
 	title = S"Indian Slave Trade",
 	description = S"This is illegal.",
-	sector = 1,
-	groups = {criminal = 1.0, slave_trade = 1.0},
+	groups = {criminal = 1.0, slave_trade = 1.0, primary = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_stasian", {
 	title = S"Asian Slave Trade",
 	description = S"This is illegal.",
-	sector = 1,
-	groups = {criminal = 1.0, slave_trade = 1.0},
+	groups = {criminal = 1.0, slave_trade = 1.0, primary = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 
 ul_market.register_industry("ul_market:industry_smithery", {
 	title = S"Smithery Business",
 	description = S"Swords, Knives, Pickaxes, &c...",
-	sector = 2,
-	groups = {war = 1.0, labour = 1.0, trades = 1.0},
+	groups = {war = 1.0, labour = 1.0, trades = 1.0, secondary = 1.0},
 	stats = {base_price = 10.0}
 })
 ul_market.register_industry("ul_market:industry_construction", {
 	title = S"Construction Business",
 	description = S"Windows, Doors, Building, &c...",
-	sector = 2,
-	groups = {labour = 1.0, trades = 1.0, civilian = 0.5},
+	groups = {labour = 1.0, trades = 1.0, civilian = 0.5, secondary = 1.0},
 	stats = {base_price = 50.0}
 })
 ul_market.register_industry("ul_market:industry_tech", {
 	title = S"Tech Industry",
 	description = S"Portals, Runestones, &c...",
-	sector = 2,
-	groups = {snobby = 1.0, trades = 1.0, civilian = 0.5},
+	groups = {snobby = 1.0, trades = 1.0, civilian = 0.5, secondary = 1.0},
 	stats = {base_price = 100.0}
 })
 ul_market.register_industry("ul_market:industry_light", {
 	title = S"Light Manufacturing Business",
 	description = S"Lanterns, Lamps, &c...",
-	sector = 2,
-	groups = {snobby = 1.0, civilian = 1.0},
+	groups = {snobby = 1.0, civilian = 1.0, secondary = 1.0},
 	stats = {base_price = 100.0}
 })
 ul_market.register_industry("ul_market:industry_medicine", {
 	title = S"Medical Manufacturing Industry",
 	description = S"Stuff that makes you feel less sick.",
-	sector = 2,
-	groups = {medical = 1.0, civilian = 0.5},
+	groups = {medical = 1.0, civilian = 0.5, secondary = 1.0},
 	stats = {base_price = 100.0}
 })
 ul_market.register_industry("ul_market:industry_forgery", {
 	title = S"Forgery Business",
 	description = S"Illegal.",
-	sector = 2,
-	groups = {criminal = 1.0},
+	groups = {criminal = 1.0, secondary = 1.0},
 	stats = {base_price = 100.0, chaotic = 500.0}
 })
 
 ul_market.register_industry("ul_market:industry_enlistment", {
 	title = S"Enlistment Business",
 	description = S"Good ol' war machine.",
-	sector = 3,
-	groups = {war = 1.0},
+	groups = {war = 1.0, tertiary = 1.0},
 	stats = {base_price = 10.0}
 })
 ul_market.register_industry("ul_market:industry_retail", {
 	title = S"Retail Industry",
 	description = S"Horrible.",
-	sector = 3,
-	groups = {civilian = 1.0},
+	groups = {civilian = 1.0, tertiary = 1.0},
 	stats = {base_price = 10.0}
 })
 ul_market.register_industry("ul_market:industry_housing", {
 	title = S"Housing Industry",
 	description = S"Modern day feudalism.",
-	sector = 3,
-	groups = {civilian = 0.5},
+	groups = {civilian = 0.5, tertiary = 1.0},
 	stats = {base_price = 10.0}
 })
 ul_market.register_industry("ul_market:industry_gambling", {
 	title = S"Gambling Business",
 	description = S"A distraction from the hole in your heart.",
-	sector = 3,
-	groups = {civilian = 0.5, entertainment = 1.0},
+	groups = {civilian = 0.5, entertainment = 1.0, tertiary = 1.0},
 	stats = {base_price = 10.0}
 })
 ul_market.register_industry("ul_market:industry_art", {
 	title = S"Luxury Arts Industry",
 	description = S"Poisoned by political brainrot and controversy. Trolling is quite the effective marketing strategy.",
-	sector = 3,
-	groups = {civilian = 0.5, entertainment = 1.0},
+	groups = {civilian = 0.5, entertainment = 1.0, tertiary = 1.0},
 	stats = {base_price = 1000.0}
 })
 ul_market.register_industry("ul_market:industry_healthcare", {
 	title = S"Healthcare Industry",
 	description = S"Wee-oo.",
-	sector = 3,
-	groups = {medical = 1.0, civilian = 0.25},
+	groups = {medical = 1.0, civilian = 0.25, tertiary = 1.0},
 	stats = {base_price = 100.0}
 })
 ul_market.register_industry("ul_market:industry_black_market", {
 	title = S"Black Market",
 	description = S"This is illegal.",
-	sector = 3,
-	groups = {criminal = 1.0},
+	groups = {criminal = 1.0, tertiary = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_illtrade_rune", {
 	title = S"Illegal Rune Trade",
 	description = S"This is illegal.",
-	sector = 3,
-	groups = {criminal = 1.0},
+	groups = {criminal = 1.0, tertiary = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_illtrade_mobs", {
 	title = S"Illegal Mob Trade",
 	description = S"This is illegal.",
-	sector = 3,
 	groups = {criminal = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_piracy", {
 	title = S"Piracy",
 	description = S"This is illegal.",
-	sector = 3,
 	groups = {criminal = 1.0},
 	stats = {base_price = 100.0, chaos = 10.0}
 })
 ul_market.register_industry("ul_market:industry_edu_secondary", {
 	title = S"Education",
 	description = S"Learning.",
-	sector = 3,
-	groups = {civilian = 1.0, education = 1.0},
+	groups = {civilian = 1.0, education = 1.0, tertiary = 1.0},
 	stats = {base_price = 100.0}
 })
 ul_market.register_industry("ul_market:industry_edu_ps", {
 	title = S"Post-Secondary Education",
 	description = S"Learning.",
-	sector = 3,
-	groups = {civilian = 1.0, education = 1.0, snobby = 1.0, trades = 1.0},
+	groups = {civilian = 1.0, education = 1.0, snobby = 1.0, trades = 1.0, tertiary = 1.0},
 	stats = {base_price = 100.0}
 })
 ul_market.register_industry("ul_market:industry_religion", {
 	title = S"Religion",
 	description = S"Faith.",
-	sector = 3,
-	groups = {civilian = 1.0, religion = 1.0, snobby = 1.0, trades = 1.0},
+	groups = {civilian = 1.0, religion = 1.0, snobby = 1.0, trades = 1.0, tertiary = 1.0},
 	stats = {base_price = 100.0}
 })
 
@@ -809,7 +778,6 @@ ul_market.register_event("ul_market:event_growth", {
 	},
 	unrest = -1.0
 })
-
 ul_market.register_event("ul_market:event_bubble", {
 	title = S"Market Bubble",
 	description = S"A sudden explosion of value",
@@ -822,7 +790,6 @@ ul_market.register_event("ul_market:event_bubble", {
 	},
 	unrest = -1.0
 })
-
 ul_market.register_event("ul_market:event_subsidies", {
 	title = S"Subsidization",
 	description = S"The government has invested",
@@ -836,6 +803,14 @@ ul_market.register_event("ul_market:event_subsidies", {
 	unrest = -1.0
 })
 
+ul_market.register_event("ul_market:event_inflation", {
+	title = S"Inflation",
+	description = S"Inflation across Sexonland",
+	effect_groups = {
+		overall = {strive = -1.0, cline = 0}
+	},
+	unrest = 2.0
+})
 ul_market.register_event("ul_market:event_famine", {
 	title = S"Famine",
 	description = S"Famine",
@@ -935,11 +910,13 @@ ul_market.register_policy("ul_market:policy_subsidies", {
 	title = S"Subsidies",
 	description = S"I feed who I want to.",
 	effect_groups = {
-		criminal = {strive = 0, cline = -0.5}
+		criminal = {strive = 0, cline = -0.5},
+		tertiary = {strive = -0.1, cline = 0}
 	},
 	effect_events = {
 		["ul_market:event_subsidies"] = {chance = 0.1, intensity = 0.5},
 		["ul_market:event_famine"] = {chance = -0.1, intensity = 0.5},
+		["ul_market:event_inflation"] = {chance = -0.1, intensity = 0.5},
 		["ul_market:event_bubble"] = {chance = -0.1, intensity = 1.0}
 	}
 })
@@ -956,7 +933,10 @@ ul_market.register_policy("ul_market:policy_public_education", {
 		war = {strive = 0, cline = -0.1},
 		slave_trade = {strive = 0, cline = -0.1},
 		criminal = {strive = 0, cline = -0.1},
-		religion = {strive = 0, cline = 0.1}
+		religion = {strive = 0, cline = 0.1},
+		primary = {strive = -0.1, cline = 0},
+		secondary = {strive = -0.1, cline = 0},
+		tertiary = {strive = 0.1, cline = 0}
 	},
 	effect_events = {
 		["ul_market:event_protest"] = {chance = 0.05, intensity = 1.0},
@@ -997,13 +977,16 @@ ul_market.register_policy("ul_market:policy_regulation", {
 	description = S"I decide the prices.",
 	effect_groups = {
 		overall = {strive = 0.05, cline = -0.05},
-		criminal = {strive = 0.05, cline = 0.1}
+		criminal = {strive = 0.05, cline = 0.1},
+		tertiary = {strive = -0.1, cline = 0},
+		secondary = {strive = 0.1, cline = 0}
 	},
 	effect_events = {
 		["ul_market:event_subsidies"] = {chance = 0.1, intensity = 0.1},
 		["ul_market:event_bubble"] = {chance = -0.1, intensity = -1.0},
 		["ul_market:event_coup"] = {chance = 0.1, intensity = 5.0},
-		["ul_market:event_famine"] = {chance = 0.05}
+		["ul_market:event_famine"] = {chance = 0.05},
+		["ul_market:event_inflation"] = {chance = -0.1, intensity = 0.5},
 	}
 })
 -- busting: get rid of strikes
@@ -1016,9 +999,11 @@ ul_market.register_policy("ul_market:policy_busting", {
 	description = S"Teamwork makes my teeth hurt.",
 	effect_groups = {
 		overall = {strive = 0.05, cline = 0},
-		criminal = {strive = -0.1, cline = 0.05}
+		criminal = {strive = -0.1, cline = 0.05},
+		secondary = {strive = -0.1, cline = 0}
 	},
 	effect_events = {
+		["ul_market:event_inflation"] = {chance = -0.1, intensity = 0.5},
 		["ul_market:event_bubble"] = {chance = 0.1, intensity = 0.1},
 		["ul_market:event_subsidies"] = {chance = -0.1, intensity = -1.0},
 		["ul_market:event_strike"] = {chance = -0.1},
@@ -1040,7 +1025,8 @@ ul_market.register_policy("ul_market:policy_martial_law", {
 		overall = {strive = -0.05, cline = 0},
 		civilian = {strive = -0.1, cline = 0.1},
 		criminal = {strive = 0, cline = 0.05},
-		war = {strive = 0.05, cline = 0.05}
+		war = {strive = 0.05, cline = 0.05},
+		tertiary = {strive = -0.1, cline = 0}
 	},
 	effect_events = {
 		["ul_market:event_strike"] = {chance = -0.1},
@@ -1063,7 +1049,8 @@ ul_market.register_policy("ul_market:policy_militarism", {
 	effect_groups = {
 		overall = {strive = -0.05, cline = 0},
 		criminal = {strive = 0, cline = 0.05},
-		war = {strive = 0.05, cline = 0.05}
+		war = {strive = 0.05, cline = 0.05},
+		tertiary = {strive = -0.1, cline = 0}
 	},
 	effect_events = {
 		["ul_market:event_strike"] = {chance = 0.1, intensity = 0.5},
@@ -1098,6 +1085,7 @@ ul_market.register_policy("ul_market:policy_abolition", {
 	effect_groups = {
 		slave_trade = {strive = 0, cline = -0.1},
 		criminal = {strive = 0, cline = 0.1},
+		primary = {strive = -0.1, cline = 0}
 	},
 	effect_events = {
 		["ul_market:event_coup"] = {chance = 0.1, intensity = 5.0},
@@ -1116,9 +1104,10 @@ ul_market.register_policy("ul_market:policy_welfare", {
 		overall = {strive = -0.05, cline = 0.05},
 		civilian = {strive = -0.1, cline = 0.1},
 		criminal = {strive = -0.1, cline = 0},
-		[1] = {strive = -0.1, cline = 0}
+		primary = {strive = -0.1, cline = 0}
 	},
 	effect_events = {
+		["ul_market:event_inflation"] = {chance = 0.1, intensity = 0.5},
 		["ul_market:event_strike"] = {chance = -0.05},
 		["ul_market:event_protest"] = {chance = -0.05},
 		["ul_market:event_assassination"] = {chance = -0.05},
@@ -1134,7 +1123,8 @@ ul_market.register_policy("ul_market:policy_social_healthcare", {
 	description = S"Something something, hypocritical oats or whatever.",
 	effect_groups = {
 		overall = {strive = 0.05, cline = 0.05},
-		medical = {strive = 0, cline = -0.5}
+		medical = {strive = 0, cline = -0.5},
+		primary = {strive = -0.1, cline = 0}
 	},
 	effect_events = {
 		["ul_market:event_assassination"] = {chance = -0.05},
@@ -1154,7 +1144,8 @@ ul_market.register_policy("ul_market:policy_tariffs", {
 	},
 	effect_events = {
 		["ul_market:event_famine"] = {chance = 0.1, intensity = 0.1},
-		["ul_market:event_epidemic"] = {chance = 0.025, intensity = 0.05}
+		["ul_market:event_epidemic"] = {chance = 0.025, intensity = 0.05},
+		["ul_market:event_inflation"] = {chance = 0.1, intensity = 0.5},
 	}
 })
 -- taxes: tax imported goods
@@ -1165,11 +1156,13 @@ ul_market.register_policy("ul_market:policy_taxes", {
 	description = S"Necessary evil. Rich people find a way around it anyways.",
 	effect_groups = {
 		overall = {strive = -0.1, cline = 0.1},
-		criminal = {strive = 0.05, cline = 0.1}
+		criminal = {strive = 0.05, cline = 0.1},
+		primary = {strive = -0.1, cline = 0}
 	},
 	effect_events = {
 		["ul_market:event_famine"] = {chance = 0.1, intensity = 0.1},
 		["ul_market:event_epidemic"] = {chance = 0.025, intensity = 0.05},
+		["ul_market:event_inflation"] = {chance = 0.1, intensity = 0.5},
 		["ul_market:event_protest"] = {chance = 0.025, intensity = 0.5},
 		["ul_market:event_uprising"] = {chance = 0.025, intensity = 0.5},
 		["ul_market:event_growth"] = {chance = -0.1, intensity = -0.1},

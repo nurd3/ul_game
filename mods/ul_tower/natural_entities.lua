@@ -1,4 +1,4 @@
-natural_entities.register_spawn("ul_tower:babylonoids", {
+natural_entities.register_spawn("ul_tower:babylonoids_1", {
 	
 	spawn_rate = 0.5,
 	
@@ -6,11 +6,55 @@ natural_entities.register_spawn("ul_tower:babylonoids", {
 	max_y = 31000,
 	
 	entities = {
-		["ul_tower:babylon_eye"] = 0.8,
-		["ul_tower:babylonian"] = 0.8,
+		["ul_tower:babylon_eye"] = 0.8
 	},
 	
-	check = ul_tower.spawn_check
+	check = ul_tower.spawn_check(1)
+	
+})
+natural_entities.register_spawn("ul_tower:babylonoids_2", {
+	
+	spawn_rate = 0.5,
+	
+	min_y = -31000,
+	max_y = 31000,
+	
+	entities = {
+		["ul_tower:snail"] = 0.8
+	},
+	
+	check = ul_tower.spawn_check(8)
+	
+})
+natural_entities.register_spawn("ul_tower:babylonoids_3", {
+	
+	spawn_rate = 0.5,
+	
+	min_y = -31000,
+	max_y = 31000,
+	
+	entities = {
+		["ul_tower:ranger"] = 0.8,
+		["ul_tower:big_eye"] = 0.8,
+		["ul_tower:big_snail"] = 0.8
+	},
+	
+	check = ul_tower.spawn_check(16)
+	
+})
+natural_entities.register_spawn("ul_tower:babylonoids_4", {
+	
+	spawn_rate = 0.5,
+	
+	min_y = -31000,
+	max_y = 31000,
+	
+	entities = {
+		["ul_tower:babylonian"] = 0.8,
+		["ul_tower:guard"] = 0.8
+	},
+	
+	check = ul_tower.spawn_check(24)
 	
 })
 

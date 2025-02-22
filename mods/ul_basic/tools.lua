@@ -1,39 +1,39 @@
 local S = ul_basic.get_translator
 
-core.register_item(':', {
-    type = 'none',
-    wield_image = 'blank.png',
-    tool_capabilities = {
-        full_punch_interval = 1.0,
-        max_drop_level = 0,
-        groupcaps = {
-            crumbly = {
-                times = {[2] = 3.00, [3] = 0.70},
-                uses = 0,
-                maxlevel = 1,
-            },
-            snappy = {
-                times = {[3] = 0.40},
-                uses = 0,
-                maxlevel = 1,
-            },
-            oddly_breakable_by_hand = {
-                times = {[1] = 3.50, [2] = 2.00, [3] = 0.70},
-                uses = 0,
-            },
-            cracky = {
-                times = {[3] = 3.50},
-                uses = 0,
-            },
-        },
-        damage_groups = {fleshy = 2},
-    }
+core.register_item(":", {
+	type = "none",
+	wield_image = "blank.png",
+	tool_capabilities = {
+		full_punch_interval = 0.5,
+		max_drop_level = 0,
+		groupcaps = {
+			crumbly = {
+				times = {[2] = 3.00, [3] = 0.70},
+				uses = 0,
+				maxlevel = 1,
+			},
+			snappy = {
+				times = {[3] = 0.40},
+				uses = 0,
+				maxlevel = 1,
+			},
+			oddly_breakable_by_hand = {
+				times = {[1] = 3.50, [2] = 2.00, [3] = 0.70},
+				uses = 0,
+			},
+			cracky = {
+				times = {[3] = 3.50},
+				uses = 0,
+			},
+		},
+		damage_groups = {fleshy = 2},
+	}
 })
 
 
 core.register_tool("ul_basic:pick", {
-    description = S"Pickaxe",
-    inventory_image = "ul_basic_pick.png",
+	description = S"Pickaxe",
+	inventory_image = "ul_basic_pick.png",
 
     tool_capabilities = {
         full_punch_interval = 1.0,
@@ -48,15 +48,13 @@ core.register_tool("ul_basic:pick", {
 	groups = {weapon = 1, tool = 1}
 })
 core.register_tool("ul_basic:knife", {
-    description = S"Knife",
-    inventory_image = "ul_basic_knife.png",
+	description = S"Knife",
+	inventory_image = "ul_basic_knife.png",
 	
 	on_use = ul_basic.on_melee,
 	tool_capabilities = {
 		full_punch_interval = 0.5,
-		damage_groups = {
-			fleshy = 3
-		},
+		damage_groups = {fleshy = 3},
 		punch_attack_uses = 10,
 	},
 	
@@ -65,15 +63,13 @@ core.register_tool("ul_basic:knife", {
 	groups = {weapon = 1, melee = 1, tool = 1}
 })
 core.register_tool("ul_basic:sword", {
-    description = S"Sword",
-    inventory_image = "ul_basic_sword.png",
+	description = S"Sword",
+	inventory_image = "ul_basic_sword.png",
 
-    on_use = ul_basic.on_melee,
+	on_use = ul_basic.on_melee,
 	tool_capabilities = {
 		full_punch_interval = 1.0,
-		damage_groups = {
-			fleshy = 5
-		},
+		damage_groups = {fleshy = 5},
 		punch_attack_uses = 20,
 	},
 	
@@ -83,16 +79,11 @@ core.register_tool("ul_basic:sword", {
 })
 
 core.register_tool("ul_basic:lantern", {
-    description = S"Lantern",
-    inventory_image = "ul_basic_lantern.png",
+	description = S"Lantern",
+	inventory_image = "ul_basic_lantern.png",
 	
 	tool_capabilities = {},
 
-    tool_capabilities = {
-        full_punch_interval = 1.0,
-        max_drop_level = 0,
-        damage_groups = {fleshy = 2},
-    },
 	light_source = 10,
 	
 	groups = {weapon = 1, tool = 1},

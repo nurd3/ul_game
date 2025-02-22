@@ -1,6 +1,15 @@
 local active_block_range = core.get_mapgen_setting('active_block_range') or 3
 local modifier = {}
 
+
+function ul_mobs.on_death(ent)
+	return ent
+end
+function ul_mobs.register_on_death(func)
+	local prev = ul_mobs.on_death
+	ul_mobs.on_death = function(ent) return func(prev(ent)) or ent end
+end
+
 function ul_mobs.incmod(entname)
 	modifier[entname] = (modifier[entname] or 0) + 1
 end
@@ -127,6 +136,8 @@ function ul_mobs.brain(self)
 			return
 		end
 		self._dead = true
+
+		ul_mobs.on_death(self)
 		
 		local pos = self.object:get_pos()
 		mobkit.make_sound(self, "die")
