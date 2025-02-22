@@ -13,7 +13,7 @@ core.register_craftitem("ul_market:hp_vial", {
 	on_use = function(stack, user, pointed_thing)
 		stack:take_item()
 		ul_basic.set_hp(user, 4)
-		ul_basic.objsound(user, "ul_magic_cast")
+		ul_basic.objsound(user, "ul_heal")
 		return stack
 	end,
 	groups = {healing = 1}
@@ -56,6 +56,7 @@ core.register_craftitem("ul_market:card_pack", {
 		for i = 1, #ul_market.party_order do
 			ul_basic.give_or_drop(user:get_inventory(), "main", pointed_thing.above or user:get_pos(), 2, ItemStack(random_card()))
 		end
+		ul_basic.objsound(user, "ul_basic_dug")
 		return stack
 	end
 })

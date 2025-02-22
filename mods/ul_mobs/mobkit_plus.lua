@@ -249,7 +249,7 @@ function mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabili
 			return
 		end
 		
-		mobkit.hurt(self, dmg)
+		self.hp = self.hp - dmg
 	end
 	
 	mobkit_plus.hurt_animation(self)

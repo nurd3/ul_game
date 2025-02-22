@@ -129,7 +129,7 @@ ul_magic.register_rune("ul_magic:vampirism", {
 	on_melee = function (user, victim, level, stats)
 		if victim and user then
 			ul_basic.set_hp(user, level * 2)
-			ul_basic.set_hp(victim, -level * 2)
+			ul_basic.punch(victim, user, 1, {fleshy=-level * 2})
 			return true
 		end
 	end
@@ -161,7 +161,7 @@ ul_magic.register_rune("ul_magic:darkness", {
 	on_melee = function (user, victim, level, stats)
 		if victim and user then
 			if core.get_node_light(vector.round(user:get_pos()), 0) < 5 then
-				ul_basic.set_hp(victim, -level * 3)
+				ul_basic.punch(victim, user, 1, {fleshy=-level * 3})
 				ul_basic.objsound(user, "ul_activate")
 			else
 				ul_basic.set_hp(victim, 1)
@@ -190,7 +190,7 @@ ul_magic.register_rune("ul_magic:iridescence", {
 
 	on_melee = function (user, victim, level)
 		if victim then
-			ul_basic.set_hp(victim, -level)
+			ul_basic.punch(victim, user, 1, {fleshy=-level})
 			return true
 		end
 	end,
@@ -214,7 +214,7 @@ ul_magic.register_rune("ul_magic:light", {
 
 	on_melee = function (user, victim, level)
 		if victim then
-			ul_basic.set_hp(victim, -level * 2)
+			ul_basic.punch(victim, user, 1, {fleshy=-level * 2})
 			ul_basic.set_hp(user, 1)
 			return true
 		end
@@ -240,7 +240,7 @@ ul_magic.register_rune("ul_magic:moon", {
 	on_melee = function (user, victim, level)
 		if victim and user then
 			ul_basic.set_hp(user, -level)
-			ul_basic.set_hp(victim, -level * 5)
+			ul_basic.punch(victim, user, 1, {fleshy=-level * 5})
 			return true
 		end
 	end,
@@ -264,7 +264,7 @@ ul_magic.register_rune("ul_magic:sun", {
 
 	on_melee = function (user, victim, level)
 		if victim then
-			ul_basic.set_hp(victim, -level)
+			ul_basic.punch(victim, user, 1, {fleshy=-level})
 			return true
 		end
 	end,
@@ -288,7 +288,7 @@ ul_magic.register_rune("ul_magic:blood", {
 	
 	on_melee = function (user, victim, level)
 		if victim then
-			ul_basic.set_hp(victim, -(level - 1) * 5)
+			ul_basic.punch(victim, user, 1, {fleshy=-(level - 1) * 5})
 			ul_basic.set_hp(user, -1)
 			return true
 		end

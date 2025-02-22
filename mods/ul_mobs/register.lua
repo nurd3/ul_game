@@ -117,6 +117,9 @@ function ul_mobs.register_mob(name, def)
 
 			if self.hp <= 0 then
 				self._killer = puncher
+				if puncher:is_player() then
+					xplib.add_player_xp(puncher:get_player_name(), 10, {type="ul_mobs_kill"})
+				end
 			end
 		end,
 		

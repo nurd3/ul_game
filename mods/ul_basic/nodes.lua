@@ -48,6 +48,13 @@ core.register_node("ul_basic:ore", {
 	is_ground_content = true,
 	paramtype = "none",
 	paramtype2 = "none",
+	on_construct = function(pos)
+		core.get_meta(pos):set_int("placed", 1)
+	end,
+	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+		if oldmetadata.placed then return end
+		xplib.add_player_xp(digger:get_player_name(), 5, {type="ul_basic_mine"})
+	end,
 })
 
 core.register_node("ul_basic:ore_rare", {
@@ -60,6 +67,13 @@ core.register_node("ul_basic:ore_rare", {
 	is_ground_content = true,
 	paramtype = "none",
 	paramtype2 = "none",
+	on_construct = function(pos)
+		core.get_meta(pos):set_int("placed", 1)
+	end,
+	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+		if oldmetadata.placed then return end
+		xplib.add_player_xp(digger:get_player_name(), 10, {type="ul_basic_mine"})
+	end,
 })
 
 core.register_node("ul_basic:ore_super", {
@@ -72,6 +86,13 @@ core.register_node("ul_basic:ore_super", {
 	is_ground_content = true,
 	paramtype = "none",
 	paramtype2 = "none",
+	on_construct = function(pos)
+		core.get_meta(pos):set_int("placed", 1)
+	end,
+	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+		if oldmetadata.placed then return end
+		xplib.add_player_xp(digger:get_player_name(), 20, {type="ul_basic_mine"})
+	end,
 })
 
 core.register_node("ul_basic:lamp", {
@@ -84,7 +105,14 @@ core.register_node("ul_basic:lamp", {
 	is_ground_content = false,
 	paramtype = "none",
 	paramtype2 = "none",
-    light_source = 14
+    light_source = 14,
+	on_construct = function(pos)
+		core.get_meta(pos):set_int("placed", 1)
+	end,
+	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+		if oldmetadata.placed then return end
+		xplib.add_player_xp(digger:get_player_name(), 25, {type="ul_basic_mine"})
+	end
 })
 
 core.register_node("ul_basic:ladder", {

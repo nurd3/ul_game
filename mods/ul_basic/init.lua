@@ -33,6 +33,15 @@ core.register_on_newplayer(function(plyr)
 	plyr:get_inventory():add_item("main", ItemStack"ul_basic:lantern")
 end)
 
+xplib.register_on_update(function(plyrname, reason, xp, lvl, total)
+	if reason.lvlchange >= 1 then
+		core.chat_send_player(plyrname, core.colorize("#ffff00", S("Level up! You are now level @1!", lvl)))
+		ul_basic.objsound(core.get_player_by_name(plyrname), "ul_activate")
+	elseif reason.xpchange then
+		ul_basic.objsound(core.get_player_by_name(plyrname), "ul_basic_equip")
+	end
+end)
+
 dofile(path.."/functions.lua")
 dofile(path.."/darkness.lua")
 dofile(path.."/nodes.lua")

@@ -57,6 +57,7 @@ sfinv.register_page("ul_inv:enchanting", {
 		inv:remove_item("craft", ItemStack(rune))
 
 		inv:set_stack("craft", 3, ul_magic.enchant(input, rune))
+		xplib.add_player_xp(plyr:get_player_name(), 25, {type="ul_inv_enchant"})
 
 	end
 })

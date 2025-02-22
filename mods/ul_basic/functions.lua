@@ -146,8 +146,11 @@ function ul_basic.on_melee(itemstack, user, pointed_thing, level)
 		local ref = core.get_node(pointed_thing.under)
 		local def = core.registered_nodes[ref.name]
 		
-		if def then
+		if def and def.on_punch then
 			def.on_punch(pointed_thing.under, ref, user)
+		else
+			ul_basic.objsound(user, "ul_miss")
+			ul_basic.objsound(user, "ul_basic_dig")
 		end
 	
 	elseif pointed_thing.type == "object" then
@@ -168,6 +171,8 @@ function ul_basic.on_melee(itemstack, user, pointed_thing, level)
 				ul_magic.wear_level(user, enc)
 			end
 		end
+	else
+		ul_basic.objsound(user, "ul_miss")
 	end
 end
 
@@ -283,7 +288,7 @@ function ul_basic.punch(obj, puncher, time_from_last_punch, tool_capabilities, d
 		return ul_basic.punch(obj.object, puncher, time_from_last_punch, tool_capabilities, dir)
 	elseif type(obj) == "userdata" then
 		if tool_capabilities.damage_groups then
-			tool_capabilities.damage_groups.fleshy = tool_capabilities.damage_groups.fleshy - (16 / (16 + ul_magic.get_purpose_level(obj, defense)))
+			tool_capabilities.damage_groups.fleshy = tool_capabilities.damage_groups.fleshy - (16 / (16 + ul_magic.get_purpose_level(obj, "defense")))
 		end
 		return obj:punch(puncher, time_from_last_punch, tool_capabilities, dir)
 	end

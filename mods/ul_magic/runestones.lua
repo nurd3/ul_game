@@ -33,6 +33,7 @@ core.register_node("ul_magic:runestone", {
 		local timer = core.get_node_timer(pos)
 		timer:set(1, 0)
 		ul_basic.possound(pos, "ul_magic_cast")
+		xplib.add_player_xp(puncher:get_player_name(), 5, {type="ul_magic_runestone"})
 	end
 })
 
@@ -68,6 +69,7 @@ core.register_node("ul_magic:runestone_active", {
 	on_rightclick = function (pos, node, puncher)
 		local timer = core.get_node_timer(pos)
 		if not timer:is_started() then
+			xplib.add_player_xp(puncher:get_player_name(), 5, {type="ul_magic_runestone"})
 			timer:set(1, 0)
 			ul_basic.possound(pos, "ul_magic_cast")
 		end

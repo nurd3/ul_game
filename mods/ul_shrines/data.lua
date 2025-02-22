@@ -207,6 +207,12 @@ core.register_on_dieplayer(function (plyr)
 	)
 end)
 
+xplib.register_on_update(function(plyrname, reason, xp, lvl, total)
+	if reason.lvlchange >= 1 then
+		ul_shrines.add_piety_level(plyrname, 10)
+	end
+end)
+
 --------------------
 -- SHRINE EFFECTS --
 --------------------
