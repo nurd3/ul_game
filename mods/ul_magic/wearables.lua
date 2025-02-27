@@ -14,7 +14,12 @@ ul_inv.register_wearable("ul_magic:enchanted_ring", {
 	description = S"Enchanted Ring",
 	inventory_image = "ul_magic_ring.png",
 	enchantable = "wear",
-	groups = {ring = 1}
+	groups = {ring = 1},
+	on_wear = function(purpose, level)
+		if purpose == "enchantment" then
+			return 2
+		end
+	end
 })
 
 core.register_craftitem("ul_magic:cloak", {
@@ -33,9 +38,7 @@ ul_inv.register_wearable("ul_magic:enchanted_cloak", {
 	groups = {cloak = 1},
 	enchantable = "wear",
 	on_wear = function(purpose, level)
-		if purpose == "enchantment" then
-			return 2
-		elseif purpose == "defense" then
+		if purpose == "defense" then
 			return level
 		end
 	end

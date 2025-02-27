@@ -4,8 +4,9 @@ ul_statfx.register("ul_magic:poison", {
 			return 0
 		end
 		
-		if ul_statfx.timer(timer, dtime, 2) and ul_basic.set_hp(obj, -1) then
-			ul_basic.objsound(obj, "player_damage")
+		if ul_statfx.timer(timer, dtime, 2)
+		then
+			ul_basic.punch(obj, nil, 2, 1, {x=0,y=1,z=0})
 		end
 	end
 })
@@ -16,8 +17,9 @@ ul_statfx.register("ul_magic:burning", {
 			return 0
 		end
 		
-		if ul_statfx.timer(timer, dtime, 0.5) and ul_basic.punch(obj, nil, nil, {damage_groups={fleshy=1}}) then
-			ul_basic.objsound(obj, "player_damage")
+		if ul_statfx.timer(timer, dtime, 0.5)
+		then
+			ul_basic.punch(obj, nil, 0.5, 1, {x=0,y=1,z=0})
 		end
 	end
 })
@@ -30,7 +32,7 @@ ul_statfx.register("ul_magic:levitate", {
 		local vel = obj:get_velocity()
 		obj:add_velocity({
 			x = 0,
-			y = (16 - vel.y) * dtime * 1.5,
+			y = (8 - vel.y) * dtime * 1.5,
 			z = 0
 		})
 	end

@@ -278,7 +278,8 @@ function mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabili
 		puncher:set_wielded_item(weapon)
 	
 	end
-	
+
+	return true	
 end
 
 -- handle nodes that cause damage

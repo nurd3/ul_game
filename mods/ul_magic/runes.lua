@@ -47,7 +47,7 @@ ul_magic.register_rune("ul_magic:fireball", {
 
 	on_hitobj = function (user, victim, level)
 		if victim then
-			ul_basic.set_hp(victim, -level * 2)
+			ul_basic.punch(victim, user, nil, level * 2)
 			ul_statfx.apply(victim, "ul_magic:burning", 5)
 			return true
 		end
@@ -120,16 +120,18 @@ ul_magic.register_rune("ul_magic:vampirism", {
 	color = "#ff0000",
 
 	on_hitobj = function (user, victim, level)
-		if victim and user then
+		if victim and user
+		and ul_basic.punch(victim, user, nil, level * 2)
+		then
 			ul_basic.set_hp(user, level * 2)
-			ul_basic.set_hp(victim, -level * 2)
 			return true
 		end
 	end,
 	on_melee = function (user, victim, level, stats)
-		if victim and user then
+		if victim and user
+		and ul_basic.punch(victim, user, nil, level * 2)
+		then
 			ul_basic.set_hp(user, level * 2)
-			ul_basic.punch(victim, user, 1, {fleshy=-level * 2})
 			return true
 		end
 	end
@@ -160,8 +162,9 @@ ul_magic.register_rune("ul_magic:darkness", {
 
 	on_melee = function (user, victim, level, stats)
 		if victim and user then
-			if core.get_node_light(vector.round(user:get_pos()), 0) < 5 then
-				ul_basic.punch(victim, user, 1, {fleshy=-level * 3})
+			if core.get_node_light(vector.round(user:get_pos()), 0) < 5 
+			and ul_basic.punch(victim, user, 1, level * 3)
+			then
 				ul_basic.objsound(user, "ul_activate")
 			else
 				ul_basic.set_hp(victim, 1)
@@ -190,7 +193,7 @@ ul_magic.register_rune("ul_magic:iridescence", {
 
 	on_melee = function (user, victim, level)
 		if victim then
-			ul_basic.punch(victim, user, 1, {fleshy=-level})
+			ul_basic.punch(victim, user, 1, level)
 			return true
 		end
 	end,
@@ -214,7 +217,7 @@ ul_magic.register_rune("ul_magic:light", {
 
 	on_melee = function (user, victim, level)
 		if victim then
-			ul_basic.punch(victim, user, 1, {fleshy=-level * 2})
+			ul_basic.punch(victim, user, 1, level * 2)
 			ul_basic.set_hp(user, 1)
 			return true
 		end
@@ -240,7 +243,7 @@ ul_magic.register_rune("ul_magic:moon", {
 	on_melee = function (user, victim, level)
 		if victim and user then
 			ul_basic.set_hp(user, -level)
-			ul_basic.punch(victim, user, 1, {fleshy=-level * 5})
+			ul_basic.punch(victim, user, 1, level * 3)
 			return true
 		end
 	end,
@@ -264,7 +267,7 @@ ul_magic.register_rune("ul_magic:sun", {
 
 	on_melee = function (user, victim, level)
 		if victim then
-			ul_basic.punch(victim, user, 1, {fleshy=-level})
+			ul_basic.punch(victim, user, 1, level)
 			return true
 		end
 	end,
@@ -288,7 +291,7 @@ ul_magic.register_rune("ul_magic:blood", {
 	
 	on_melee = function (user, victim, level)
 		if victim then
-			ul_basic.punch(victim, user, 1, {fleshy=-(level - 1) * 5})
+			ul_basic.punch(victim, user, 1, (level - 1) * 5)
 			ul_basic.set_hp(user, -1)
 			return true
 		end

@@ -16,6 +16,10 @@ function ul_totems.get_rune_bonus(name)
 	return rune_levels[name] or 0
 end
 
+function ul_totems.get_active_rune_bonuses()
+	return rune_levels
+end
+
 for _,v in pairs(active_totems) do
 	rune_levels[v] = ul_totems.get_rune_bonus(v) + 1
 end
@@ -81,7 +85,7 @@ core.register_node("ul_totems:totem_active", {
 
 -- https://github.com/BlockMen/dungeon_loot/blob/master/init.lua
 
-local function place_spawner(tab)
+local function place_totem(tab)
 	if tab == nil or #tab < 1 then
 		return
 	end
@@ -98,6 +102,6 @@ core.set_gen_notify("dungeon")
 core.register_on_generated(function(minp, maxp, blockseed)
 	local mgo = core.get_mapgen_object("gennotify")
 	if mgo and mgo.dungeon then
-		core.after(3, place_spawner, table.copy(mgo.dungeon))
+		core.after(3, place_totem, table.copy(mgo.dungeon))
 	end
 end)

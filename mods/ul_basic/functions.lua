@@ -281,15 +281,32 @@ end
 -- punches something
 function ul_basic.punch(obj, puncher, time_from_last_punch, tool_capabilities, dir)
 	tool_capabilities = tool_capabilities or {damage_groups = {fleshy = 0}}
+	if type(tool_capabilities) == "number"
+	then
+		return ul_basic.punch(obj, puncher, time_from_last_punch, {damage_groups = {fleshy = tool_capabilities}, full_punch_interval = 0}, dir)
+	end
 	dir = dir or vector.zero()
 	if obj == nil then
 		return
 	elseif type(obj) == "table" then
 		return ul_basic.punch(obj.object, puncher, time_from_last_punch, tool_capabilities, dir)
 	elseif type(obj) == "userdata" then
-		if tool_capabilities.damage_groups then
-			tool_capabilities.damage_groups.fleshy = tool_capabilities.damage_groups.fleshy - (16 / (16 + ul_magic.get_purpose_level(obj, "defense")))
-		end
 		return obj:punch(puncher, time_from_last_punch, tool_capabilities, dir)
 	end
 end
+
+core.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+	if not tool_capabilities.is_magic then
+		local dmg = mobkit_plus.calculate_dmg(time_from_last_punch, tool_capabilities)
+
+		if dmg == 0 then
+			ul_basic.objsound(player, "ul_basic_miss")
+			return true
+		end
+		
+		player:set_hp(player:get_hp() - 
+			math.max(0, dmg - (16 / (16 + ul_magic.get_purpose_level(player, "defense"))))
+		)
+	end
+	return true
+end)

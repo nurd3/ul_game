@@ -21,8 +21,8 @@ function ul_magic.get_wear_levels(list)
 	return lvls
 end
 
-function ul_magic.get_rune_levels(list)
-	local lvls = {}
+function ul_magic.get_rune_levels(list, lvls)
+	lvls = lvls and table.copy(lvls) or {}
 	
 	if list then
 		for _,stack in ipairs(list) do
@@ -37,15 +37,16 @@ function ul_magic.get_rune_levels(list)
 	return lvls
 end
 
-function ul_magic.get_purpose_level(obj, purpose)
-	local inv = obj.get_inventory and obj:get_inventory()
+function ul_magic.get_purpose_level(obj, purpose, inv)
 	local lvl = 0
+	
+	inv = inv or obj.get_inventory and obj:get_inventory()
 	
 	if not inv or inv:is_empty"outfit" then
 		return 0
 	end
 
-	local lvls = ul_magic.get_rune_levels(inv:get_list"outfit")
+	local lvls = ul_magic.get_rune_levels(inv:get_list"outfit", obj:is_player() and ul_totems.get_active_rune_bonuses())
 
 	for k,v in pairs(lvls) do
 		local rune = ul_magic.registered_runes[k]
@@ -118,26 +119,84 @@ function ul_magic.on_enchant_fallback(itemname, rune)
 	return stack
 end
 
-function ul_magic.shoot(self, target, name, level)
-	local def = ul_magic.registered_runes[name]
-	if not def then error("undefined rune: "..tostring(name), 2) end
+function ul_magic.shoot(object, target, rune, level)
+	-- handle luaentities
+	if type(object) == "table"
+	and object.object
+	then object = object.object end
+	-- handle invalid objectrefs
+	if object
+	and not (object.is_valid and object:is_valid())
+	or target
+	and not (target.is_valid and target:is_valid())
+	then return end
+	-- handle bad input
+	if type(object) ~= "userdata"
+	then error(string.format(
+		"ul_magic.shoot(): bad argument #1 (userdata expected, got %s)",
+		type(object)
+	)) elseif type(target) ~= "userdata"
+	then error(string.format(
+		"ul_magic.shoot(): bad argument #2 (userdata expected, got %s)",
+		type(target)
+	)) end
+
+	local pos = object:get_pos()
+	local tpos = target:get_pos()
+	tpos.y = tpos.y + (
+		target:get_luaentity() and 0
+		or 1.0
+	)
+
+	return ul_magic.shoot_ball(object, vector.direction(pos, tpos), rune, level)
+end
+
+function ul_magic.shoot_ball(object, direction, rune, level, offset)
+
+	-- handle luaentities
+	if type(object) == "table"
+	and object.object
+	then object = object.object end
+	-- handle invalid objectrefs
+	if object
+	and not (object.is_valid and object:is_valid())
+	then return end
+	-- handle bad input
+	if type(object) ~= "userdata"
+	then error(string.format(
+		"ul_magic.shoot_ball(): bad argument #1 (userdata expected, got %s)",
+		type(object)
+	)) elseif type(direction) ~= "table"
+	then error(string.format(
+		"ul_magic.shoot_ball(): bad argument #2 (vector expected, got %s)",
+		type(direction)
+	)) elseif type(offset) ~= "table" and offset
+	then error(string.format(
+		"ul_magic.shoot_ball(): bad argument #5 (vector or nil expected, got %s)",
+		type(offset)
+	)) end
+
+	-- get rune definition
+	local def = ul_magic.registered_runes[rune]
+	-- do not shoot undefined runes
+	if not def
+	then return core.log("warning", string.format(
+		"ul_magic.shoot(): attempt to shoot undefined rune (%s)",
+		rune
+	)) end
 	if not def.disable_primary
 	then
-		local pos = self.object:get_pos()
-		local tpos = target:get_pos()
-		tpos.y = tpos.y + (
-			target:get_luaentity() and 0
-			or 1.0
-		)
-		local hvel = vector.multiply(vector.direction(pos, tpos),8)
-		local o = core.add_entity(pos, name.."_ball", core.serialize {
-			_velocity = hvel,
+		local o = core.add_entity(object:get_pos() + (offset or vector.zero()), "ul_magic:ball", core.serialize {
+			_velocity = direction * 10,
 			_level = level,
+			_rune = rune
 		})
-		o:get_luaentity():set_shooter(self.object)
+		o:get_luaentity():set_shooter(object)
 		
-		ul_basic.objsound(self.object, "ul_magic_attack")
+		ul_basic.objsound(object, "ul_magic_attack")
+		return true
 	else
-		ul_basic.objsound(self.object, "ul_fail")
+		ul_basic.objsound(object, "ul_fail")
+		return false
 	end
 end
