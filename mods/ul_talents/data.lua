@@ -75,7 +75,7 @@ ul_talents.register_talent("ul_talents:cool_sneakers", {
 })
 ul_talents.register_talent("ul_talents:oobleck_suit", {
 	title = S"Oobleck Suit",
-	description = S"Take less damage when staying still, near immunity to fall damage",
+	description = S"Take less damage when staying still, near immunity to fall damage but get a huge damage penalty after punching",
 	slot = "ul_talents:external",
 	class = "ul_talents:gather",
 	icon = "ul_talents_oobleck_suit.png"

@@ -51,9 +51,10 @@ ul_talents.register_talentphysics("ul_talents:cool_sneakers", {
 
 -- oobleck_suit --
 core.register_on_player_hpchange(function(plyr, hp_change, reason)
+	local plyrname = plyr:get_player_name()
 	if not reason
 	or not reason.type
-	or not ul_talents.using_talent(plyr:get_player_name(), "ul_talents:oobleck_suit")
+	or not ul_talents.using_talent(plyrname, "ul_talents:oobleck_suit")
 	then return hp_change end
 	if hp_change < 0
 	and reason.type == "punch"
@@ -62,7 +63,7 @@ core.register_on_player_hpchange(function(plyr, hp_change, reason)
 			plyr:get_physics_override().speed
 			* plyr:get_physics_override().speed_walk
 		return math.floor(hp_change * 
-			(vector.length(plyr:get_velocity()) / (8 * speed_mult))
+			(vector.length(plyr:get_velocity()) / (8 * speed_mult) + math.max(0, 5 - ul_basic.get_attackdtime(plyrname, 5)) / 5)
 		)
 	elseif hp_change < 0
 	and reason.type == "fall"
