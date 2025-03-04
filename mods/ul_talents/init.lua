@@ -27,6 +27,9 @@ then
 			end
 		end
 	})
+	ul_tower.register_on_towerupdate(function()
+		core.chat_send_all(core.colorize("#ffff00", "Right-click tower to access the talents menu"))
+	end)
 end
 
 
