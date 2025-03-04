@@ -2,6 +2,7 @@ natural_entities = {}
 
 local S = core.get_translator"natural_entities"
 local path = core.get_modpath"natural_entities"
+local storage = core.get_mod_storage()
 
 natural_entities.get_translator = S
 natural_entities.get_modpath = path
@@ -91,7 +92,7 @@ local function do_spawns(plyr)
 				local ent_name = generate_ent(entities)
 				
 				if ent_name then
-					
+
 					local spawn, pos2 = adjust(pos, min, max)
 					
 					local repeats = 1
@@ -103,6 +104,11 @@ local function do_spawns(plyr)
 							spawn = false
 						end
 					end
+					local colbox = core.registered_entities[ent_name]
+						and core.registered_entities[ent_name].collisionbox
+					local pos2 = colbox
+						and vector.offset(pos2, 0, -colbox[2], 0)
+						or pos2
 					
 					if spawn and (not def.check or def.check(pos2, ent_name)) then
 						core.add_entity(pos2, ent_name)
@@ -114,10 +120,11 @@ local function do_spawns(plyr)
 	end
 end
 
-local paused = false
+local paused = storage:get_int("paused") ~= 0
+core.log("info", "Note: Natural Entities is paused. use /unpause_natural_entites to resume spawning entities.")
 
 function natural_entities.spawnstep()
-	if paused then return end
+	if paused then core.log("info", "natural_entities is paused, skipping spawn code") return end
 	for index,plyr in ipairs(core.get_connected_players()) do
 		core.after(index * 0.05, do_spawns, plyr)
 	end
@@ -137,15 +144,40 @@ dofile(path.."/register.lua")
 core.register_chatcommand("pause_natural_entities", {
 	params = "",
 	description = S"Pause the spawning of natural entities",
+	privs = {server = true},
 	func = function()
+		storage:set_int("paused", 1)
 		paused = true
+		core.chat_send_all("Natural Entity spawning has been paused.")
 	end
 })
 
 core.register_chatcommand("unpause_natural_entities", {
 	params = "",
 	description = S"Unpause the spawning of natural entities",
+	privs = {server = true},
 	func = function()
+		storage:set_int("paused", 0)
 		paused = false
+		core.chat_send_all("Natural Entity spawning has been unpaused.")
 	end
 })
+
+core.register_chatcommand("is_paused_natural_entities", {
+	params = "",
+	description = S"Check whether or not natural entities is paused",
+	func = function(plyrname)
+		if paused
+		then core.chat_send_player(plyrname, "Natural Entities is paused.")
+		else core.chat_send_player(plyrname, "Natural Entities is not paused.")
+		end
+	end
+})
+
+core.register_on_joinplayer(function(plyr)
+	local plyrname = plyr:get_player_name()
+	if core.get_player_privs(plyrname, {server = true})
+	and paused
+	then core.chat_send_player(plyrname, "Note: Natural Entities is paused. use /unpause_natural_entites to resume spawning entities.")
+	end
+end)

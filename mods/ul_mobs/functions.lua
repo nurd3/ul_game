@@ -49,38 +49,66 @@ end
 
 function ul_mobs.can_see(self, tpos, obj)
 
+	local txt = ""
+
+	txt = txt .. "---can_see\n"
+
 	if not self or not tpos or not mobkit.is_alive(self) then
 		return false
 	end
 	
 	local pos = self.object:get_pos()
 	
+	-- txt = txt .. "---1\n"
+
 	if not core.line_of_sight(pos, tpos) then
+		-- txt = txt .. ">false"
+		-- self.object:set_nametag_attributes{text=txt}
 		return false
 	end
 	
 	local view_range = self.view_range or 16
 	local dist = vector.distance(pos, tpos)
+	local dist_frac = (dist / view_range)
+
+	-- txt = txt .. string.format("view_range: %i\n", view_range)
+	-- txt = txt .. string.format("dist: %i\n", dist)
+	-- txt = txt .. string.format("dist_frac: %i%%\n", dist_frac * 100)
+
+	-- txt = txt .. "---2\n"
 	
 	if dist > view_range then
+		-- txt = txt .. ">false"
+		-- self.object:set_nametag_attributes{text=txt}
 		return false
 	end
 
-	local night_vision = self.vision or 0
-	local light_level = core.get_node_light(tpos)
+	local night_vision = 15 - (self.vision or 0)
+	local light_level = core.get_node_light(tpos, 0)
 	local stealth = 0
 	
 	if obj and obj:is_valid() then
-		stealth = math.random(ul_magic.get_purpose_level(obj, "stealth"))
+		stealth = ul_magic.get_purpose_level(obj, "stealth")
 	end
-	
-	local dist_frac = (dist / view_range)
+
+	-- txt = txt .. string.format("night_vision: %i\n", night_vision)
+	-- txt = txt .. string.format("light_level: %i\n", light_level)
+	-- txt = txt .. string.format("stealth: %i\n", stealth)
+
+	-- txt = txt .. "---3\n"
 
 	if light_level < night_vision then
-		return light_level * dist_frac < night_vision * 0.5 - stealth
+		local ret = light_level * dist_frac + math.random() * stealth < night_vision
+		-- txt = txt .. string.format(">%s\n", tostring(ret))
+		-- self.object:set_nametag_attributes{text=txt}
+		return ret
 	end
-	
-	return light_level * dist_frac > stealth
+
+	-- txt = txt .. "---4\n"
+	local ret = self.vision / light_level > math.random() * stealth * dist_frac
+	-- txt = txt .. string.format(">%s\n", tostring(ret))
+	-- self.object:set_nametag_attributes{text=txt}
+	return ret
 end
 
 function ul_mobs.get_nearest_entity(self, checkfunc)
@@ -113,7 +141,7 @@ function ul_mobs.midfunc(self, prty)
 		local ent = ul_mobs.get_nearest_entity(self, self.on_check_pred)
 		if ent then
 			mobkit.make_sound(self, "flee")
-			mobkit.hq_runfrom(self, 25, ent)
+			mobkit_plus.hq_runfrom(self, 25, ent)
 		end
 	end
 	if self.on_check_prey then

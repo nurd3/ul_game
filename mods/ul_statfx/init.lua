@@ -15,24 +15,27 @@ ul_statfx = {}
 
 ul_statfx.registered = {}
 
-function ul_statfx.register(name, func)
-	ul_statfx.registered[name] = func
+function ul_statfx.register(name, def)
+	ul_statfx.registered[name] = def
 	
 	core.register_entity(name, {
-		is_visible = false,
+		visual = "sprite",
+		textures = {"blank.png"},
 		on_activate = function (self, staticdata, dtime_s)
 			local sdat = staticdata and core.deserialize(staticdata)
 			
 			if sdat and type(sdat._ul_statfx_timer) == "number" then
 				self._ul_statfx_timer = sdat._ul_statfx_timer
 			end
+
+			if def.on_activate
+			then def.on_activate(self, staticdata, dtime_s)
+			end
 		end,
 		on_step = function (self, dtime)
 			if not self or not exists(self.object) then
 				return
 			end
-			
-			local def = ul_statfx.registered[self.name]
 			
 			if not def or type(self._ul_statfx_timer) ~= "number" or self._ul_statfx_timer <= 0 then
 				self.object:remove()
@@ -61,7 +64,7 @@ end
 
 function ul_statfx.apply(obj, name, length)
 	if type(name) ~= "string" then
-		error("string expected, got type "..type(name).." instead.", 1)
+		error("string expected, got "..type(name).." instead.", 1)
 	end
 	
 	local fx = ul_statfx.registered[name]

@@ -107,18 +107,25 @@ function ul_mobs.register_mob(name, def)
 			
 			if mobkit.is_alive(puncher) then						-- is puncher a living and alive thing
 				if self.runaway then
-					mobkit.hq_runfrom(self, 12, puncher)
+					mobkit_plus.hq_runfrom(self, 12, puncher)
 				else
-					mobkit.hq_hunt(self, 12, puncher)		-- get revenge
+					mobkit_plus.hq_hunt(self, 12, puncher)		-- get revenge
 				end
+				self._puncher = puncher
+				self._puncher_last_punched = self.time_total
 			end
 			
 			mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)
 
-			if puncher and self.hp <= 0 then
-				self._killer = puncher
-				if puncher:is_player() then
-					xplib.add_player_xp(puncher:get_player_name(), 10, {type="ul_mobs_kill"})
+			if self._puncher and self.hp <= 0 and self.time_total - 5 < self._puncher_last_punched then
+				self._killer = self._puncher
+				
+				if self._puncher:is_player() then
+					xplib.add_player_xp(self._puncher:get_player_name(), 10, {type="ul_mobs_kill"})
+				elseif self._puncher:get_luaentity()
+				and self._puncher:get_luaentity()._owner
+				then
+					xplib.add_player_xp(self._puncher:get_luaentity()._owner, 10, {type="ul_mobs_pet_kill"})
 				end
 			end
 		end,
@@ -152,6 +159,12 @@ function ul_mobs.register_mob(name, def)
 	
 	for key,val in pairs(def) do
 		entdef[key] = val
+	end
+
+	if entdef.attack
+	and not entdef.attack.full_punch_interval
+	then
+		entdef.attack.full_punch_interval = 0.5
 	end
 	
 	entdef.sounds = sounds

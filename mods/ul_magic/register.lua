@@ -46,7 +46,9 @@ function ul_magic.register_rune(name, def)
 			description = S("@1 Spell", def.description or name),
 			inventory_image = "ul_magic_spell.png"..imgmod,
 			on_use = function(itemstack, user, pointed_thing)
-				ul_magic.shoot_ball(user, user:get_look_dir(), name, ul_magic.get_rune_level(user, name), {x = 0, y = 1.5, z = 0})
+				ul_magic.shoot_ball(user, user:get_look_dir(), name, ul_magic.get_rune_level(user, name),
+				vector.offset(user:get_look_dir(), 0, 1.625, 0))
+				itemstack = ul_magic.wear_spell(itemstack, user)
 				return itemstack
 			end,
 			

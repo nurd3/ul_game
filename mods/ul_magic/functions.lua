@@ -1,5 +1,10 @@
 local S = ul_magic.get_translator
 
+function ul_magic.wear_spell(itemstack, plyr)
+	itemstack:add_wear(65536 / 10)
+	return itemstack
+end
+
 function ul_magic.get_rune_by_index(index)
 	for k,v in pairs(ul_magic.registered_runes) do
 		if v.index == index then
@@ -187,7 +192,7 @@ function ul_magic.shoot_ball(object, direction, rune, level, offset)
 	if not def.disable_primary
 	then
 		local o = core.add_entity(object:get_pos() + (offset or vector.zero()), "ul_magic:ball", core.serialize {
-			_velocity = direction * 10,
+			_velocity = direction * 16,
 			_level = level,
 			_rune = rune
 		})

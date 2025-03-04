@@ -139,8 +139,8 @@ function ul_basic.get_attackdtime(plyrname, fallback, update)
 end
 
 -- util on_melee function
-function ul_basic.on_melee(itemstack, user, pointed_thing, level)
-	local tool_capabilities = itemstack:get_tool_capabilities()
+function ul_basic.on_melee(stack, user, pointed_thing, level, tool_capabilities)
+	tool_capabilities = tool_capabilities or stack:get_tool_capabilities()
 	if pointed_thing.type == "node" then
 	
 		local ref = core.get_node(pointed_thing.under)
@@ -148,15 +148,14 @@ function ul_basic.on_melee(itemstack, user, pointed_thing, level)
 		
 		if def and def.on_punch then
 			def.on_punch(pointed_thing.under, ref, user)
-		else
-			ul_basic.objsound(user, "ul_miss")
-			ul_basic.objsound(user, "ul_basic_dig")
 		end
+		ul_basic.objsound(user, "ul_miss")
+		ul_basic.objsound(user, "ul_basic_dig")
 	
 	elseif pointed_thing.type == "object" then
 	
 		local obj = pointed_thing.ref
-		local meta = itemstack:get_meta()
+		local meta = stack:get_meta()
 		local luaent = obj:get_luaentity()
 		
 		ul_basic.punch(obj, user, delta, tool_capabilities, user:get_look_dir())
@@ -180,22 +179,26 @@ end
 -- SOUNDS --
 ------------
 
-function ul_basic.possound(pos, name)
-	core.sound_play(name, {pos=pos, gain = 1.0})
+function ul_basic.possound(pos, name, extra)
+	extra = extra or {}
+	extra.pos = pos
+	return core.sound_play(name, extra)
 end
 
-function ul_basic.objsound(obj, name)
-	core.sound_play(name, {object=obj, gain = 1.0})
+function ul_basic.objsound(obj, name, extra)
+	extra = extra or {}
+	extra.object = obj
+	return core.sound_play(name, extra)
 end
 
-function ul_basic.nodesound(pos, name)
+function ul_basic.nodesound(pos, name, extra)
 	local def = core.registered_nodes[
 		core.get_node(pos).name
 	]
 	local spec = def
 		and def.sounds
 		and def.sounds[name]
-	ul_basic.possound(pos, spec)
+	return ul_basic.possound(pos, spec, extra)
 end
 
 function ul_basic.entsound(ent, name)
@@ -280,7 +283,7 @@ end
 
 -- punches something
 function ul_basic.punch(obj, puncher, time_from_last_punch, tool_capabilities, dir)
-	tool_capabilities = tool_capabilities or {damage_groups = {fleshy = 0}}
+	tool_capabilities = tool_capabilities or {damage_groups = {fleshy = 0}, full_punch_interval = 0}
 	if type(tool_capabilities) == "number"
 	then
 		return ul_basic.punch(obj, puncher, time_from_last_punch, {damage_groups = {fleshy = tool_capabilities}, full_punch_interval = 0}, dir)
@@ -296,17 +299,20 @@ function ul_basic.punch(obj, puncher, time_from_last_punch, tool_capabilities, d
 end
 
 core.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
-	if not tool_capabilities.is_magic then
+	if player:get_hp() <= 0 then
+		return
+	end
+	if not tool_capabilities.is_magic and hitter then
 		local dmg = mobkit_plus.calculate_dmg(time_from_last_punch, tool_capabilities)
 
 		if dmg == 0 then
-			ul_basic.objsound(player, "ul_basic_miss")
+			ul_basic.objsound(hitter, "ul_miss")
 			return true
 		end
 		
 		player:set_hp(player:get_hp() - 
-			math.max(0, dmg - (16 / (16 + ul_magic.get_purpose_level(player, "defense"))))
-		)
+			math.max(0, dmg - (16 / (16 + ul_magic.get_purpose_level(player, "defense")))),
+		{type = "punch", object = hitter})
 	end
 	return true
 end)

@@ -27,7 +27,7 @@ ul_mobs.register_mob("ul_tower:babylon_eye", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 5,
-	melee = {dmg = 5, range = 5},
+	melee = {dmg = 5, range = 3},
 	disable_fall_damage = true,
 	disable_taming = true,
 	
@@ -55,7 +55,7 @@ ul_mobs.register_mob("ul_tower:big_eye", {
 	vision = 10,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 20,
-	melee = {dmg = 10, range = 7},
+	melee = {dmg = 10},
 	
 					-- behaviour
 	range_power = 0,
@@ -84,7 +84,7 @@ ul_mobs.register_mob("ul_tower:babylonian", {
 	ranged = {
 		func = ul_magic.shoot,
 		args = {"ul_magic:fireball", 5},
-		range = 5
+		range = 10
 	},
 	melee = {dmg = 5, range = 5},
 	disable_taming = true,
@@ -113,7 +113,7 @@ ul_mobs.register_mob("ul_tower:ranger", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 10,
-	melee = {dmg = 3, range = 5},
+	melee = {dmg = 3},
 	disable_taming = true,
 	
 					-- behaviour
@@ -140,7 +140,7 @@ ul_mobs.register_mob("ul_tower:snail", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 20,
-	melee = {dmg = 10, range = 2},
+	melee = {dmg = 10},
 	disable_taming = true,
 	
 					-- behaviour
@@ -166,7 +166,7 @@ ul_mobs.register_mob("ul_tower:big_snail", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 40,
-	melee = {dmg = 10, range = 2},
+	melee = {dmg = 10},
 	disable_taming = true,
 	
 					-- behaviour
@@ -182,8 +182,8 @@ ul_mobs.register_mob("ul_tower:guard", {
 	visual = "upright_sprite",
 	egg_colors = {"#777777", "#ffffff"},
 	textures = {"ul_tower_guard.png", "ul_tower_guard_back.png^[transformFX"},
-	visual_size = {x = 1.0, y = 1.0},
-	collisionbox = {-0.3, -0.5, -0.3, 0.3, 0.3, 0.3},
+	visual_size = {x = 1.0, y = 3.0},
+	collisionbox = {-0.3, -1.5, -0.3, 0.3, 1.3, 0.3},
 	
 					-- stats
 	max_speed = 1,
@@ -195,9 +195,9 @@ ul_mobs.register_mob("ul_tower:guard", {
 	ranged = {
 		func = ul_magic.shoot,
 		args = {"ul_magic:fireball", 5},
-		range = 5
+		range = 20
 	},
-	melee = {dmg = 10, range = 2},
+	melee = {dmg = 10},
 	disable_taming = true,
 	
 					-- behaviour

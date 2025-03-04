@@ -28,6 +28,7 @@ core.register_node("ul_totems:totem", {
 	description = S"Totem",
 	diggable = false,
 	tiles = {"ul_totems_totem.png"},
+	groups = {lithosonic = 1, totem = 1},
 	light_source = 8,
 	on_rightclick = function(pos, node, puncher, stack, pointed_thing)
 		local wielded_item = puncher:get_wielded_item():get_name()
@@ -55,6 +56,7 @@ core.register_node("ul_totems:totem_active", {
 	description = S"Active Totem",
 	diggable = false,
 	tiles = {"ul_totems_totem_active.png"},
+	groups = {totem = 1},
 	palette = ul_magic.rune_palette,
 	light_source = 15,
 	paramtype2 = "color",

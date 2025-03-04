@@ -31,6 +31,48 @@ local function printpath(path)
 	end
 end
 
+function mobkit_plus.lq_jumpattack(self,height,target)
+	local init = true	
+	local tgtbox = target:get_properties().collisionbox
+	local func=function(self)
+		if not mobkit.is_alive(target)
+		or not mobkit.is_alive(self) then return true end
+		if self.isonground then
+			if init then	-- collision bug workaround
+				local vel = self.object:get_velocity()
+				local dir = core.yaw_to_dir(self.object:get_yaw())
+				dir=vector.multiply(dir,6)
+				dir.y = -mobkit.gravity*math.sqrt(height*2/-mobkit.gravity)
+				self.object:set_velocity(dir)
+				mobkit.make_sound(self,'charge')
+				init=false
+			else
+				mobkit.lq_idle(self,0.3)
+				return true
+			end
+		else
+			local tgtpos = target:get_pos()
+			local pos = self.object:get_pos()
+			-- calculate attack spot
+			local yaw = self.object:get_yaw()
+			local dir = core.yaw_to_dir(yaw)
+			local apos = mobkit.pos_translate2d(pos,yaw,self.attack.range)
+
+			if mobkit.is_alive(self) and mobkit.is_pos_in_box(apos,tgtpos,tgtbox) then	--bite
+				target:punch(self.object,self.time_total - (self._time_of_last_punch or 0),self.attack)
+				self._time_of_last_punch = self.time_total
+					-- bounce off
+				local vy = self.object:get_velocity().y
+				self.object:set_velocity({x=dir.x*-3,y=vy,z=dir.z*-3})	
+					-- play attack sound if defined
+				mobkit.make_sound(self,'attack')
+				return true
+			end
+		end
+	end
+	mobkit.queue_low(self,func)
+end
+
 function mobkit_plus.lq_dumbwalk(self,dest,speed_factor)
 	local timer = 3			-- failsafe
 	speed_factor = speed_factor or 1
@@ -46,8 +88,7 @@ function mobkit_plus.lq_dumbwalk(self,dest,speed_factor)
 			local new_pos = self.object:get_pos()
 			new_pos.x, new_pos.z = math.round(dest.x), math.round(dest.z)
 			self.object:set_pos(new_pos)
-			if not self.isonground or math.abs(dest.y-pos.y) > 0.1 then		-- prevent uncontrolled fall when velocity too high
---			if abs(dest.y-pos.y) > 0.1 then	-- isonground too slow for speeds > 4
+			if not self.isonground or math.abs(dest.y-pos.y) > 0.1 then
 				self.object:set_velocity({x=0,y=y,z=0})
 			end
 			return true 
@@ -109,6 +150,30 @@ function mobkit_plus.hq_follow(self,prty,tgtobj)
 	mobkit.queue_high(self,func,prty)
 end
 
+function mobkit_plus.hq_attack(self,prty,tgtobj)
+	local func = function(self)
+		if not mobkit.is_alive(tgtobj) then return true end
+		if mobkit.is_queue_empty_low(self) then
+			local pos = mobkit.get_stand_pos(self)
+			local tpos = mobkit.get_stand_pos(tgtobj)
+			local dist = vector.distance(pos,tpos)
+			if dist > 3 then 
+				return true
+			else
+				mobkit.lq_turn2pos(self,tpos)
+				local height = tgtobj:is_player() and 0.35 or tgtobj:get_luaentity().height*0.6
+				if tpos.y+height>pos.y then 
+					mobkit_plus.lq_jumpattack(self,tpos.y+height-pos.y,tgtobj) 
+				else
+					mobkit_plus.lq_goto(self,mobkit.pos_shift(tpos, 
+						{x = math.random()-0.5,z = math.random()-0.5}))
+				end
+			end
+		end
+	end
+	mobkit.queue_high(self,func,prty)
+end
+
 -- 
 function mobkit_plus.hq_hunt(self,prty,tgtobj)
 	
@@ -123,7 +188,7 @@ function mobkit_plus.hq_hunt(self,prty,tgtobj)
 		if not mobkit.is_alive(tgtobj) then return true end
 		if mobkit.is_queue_empty_low(self) then
 			local pos = mobkit.get_stand_pos(self)
-			local opos = tgtobj:get_pos()
+			local opos = mobkit.get_stand_pos(tgtobj)
 			local dist = vector.distance(pos,opos)
 			local can_see = ul_mobs.can_see(self, opos, tgtobj)
 			if can_see then
@@ -149,10 +214,85 @@ function mobkit_plus.hq_hunt(self,prty,tgtobj)
 						mobkit_plus.lq_goto(self, path[index])
 						index = index + 1
 					else
-						mobkit.hq_attack(self,prty+1,tgtobj)
+						mobkit_plus.hq_attack(self,prty+1,tgtobj)
 					end
 				end
 			else return true end
+		end
+	end
+	mobkit.queue_high(self,func,prty)
+end
+
+function mobkit_plus.hq_runfrom(self,prty,tgtobj)
+	local init = true
+	local timer = 6
+	local wait = 5
+	local pos = mobkit.get_stand_pos(self)
+	local opos = mobkit.get_stand_pos(tgtobj)
+	local tpos = opos +
+		vector.direction(pos, opos) * self.view_range * 0.5
+
+	local path = mobkit_plus.pathfind(self, tpos, self.view_range)
+	local index = 2
+	local last_index = 1
+
+	local func = function(self)
+	
+		if not mobkit.is_alive(tgtobj) then return true end
+		if init then
+			timer = timer-self.dtime
+			if timer <=0 or vector.distance(self.object:get_pos(),tgtobj:get_pos()) < 8 then
+				mobkit.make_sound(self,'scared')
+				init=false
+			end
+			return
+		end
+		
+		if mobkit.is_queue_empty_low(self) and self.isonground then
+			pos = mobkit.get_stand_pos(self)
+			opos = mobkit.get_stand_pos(tgtobj)
+
+			if mobkit.timer(self, 1) then
+				local can_see = ul_mobs.can_see(self, opos, tgtobj)
+				if not (path and index < #path and index ~= last_index)
+				then
+					if can_see 
+					then
+						wait = 5
+						local tries_left = 64
+						repeat
+							local dir = vector.direction(opos, pos)
+							local tdir = vector.rotate(vector.new(math.random() - math.random(), 0, math.random() - math.random()) * 0.1, dir)
+							
+							tdir.y = 0
+							tdir = vector.normalize(tdir)
+
+							for i = (self.view_range or 16), 1, -1 do
+								tpos = vector.round(pos + tdir * i)
+								tpos.y = tpos.y + math.random(-1,1)
+								path = mobkit_plus.pathfind(self, tpos, self.view_range)
+								if path then break end
+							end
+							tries_left = tries_left - 1
+						until(path or tries_left == 0)
+						index = 2
+						last_index = 1
+					else
+						wait = wait - self.dtime
+						if wait < 0
+						then return true
+						end
+					end
+				end
+			end
+			last_index = index
+
+			if path and index < #path then
+				mobkit_plus.lq_goto(self, path[index])
+				index = index + 1
+			else
+				self.object:set_velocity({x=0,y=0,z=0})
+			end
 		end
 	end
 	mobkit.queue_high(self,func,prty)

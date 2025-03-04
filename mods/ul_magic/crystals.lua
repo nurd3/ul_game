@@ -5,7 +5,7 @@ core.register_node("ul_magic:crystal", {
 	sounds = ul_basic.node_sound_defaults(),
     drawtype = "normal",
 	tiles = {"ul_basic_ore.png^[hsl:0:-100:0^ul_magic_rune.png"},
-	groups = {crystal = 1, cracky = 1},
+	groups = {crystal = 1, cracky = 1, lithosonic = 1},
 	light_source = 12
 })
 
