@@ -63,10 +63,10 @@ function xplib.set_player_xp(name, val, reason, disable_multiplier)
 	then error(
 		string.format("xplib.set_player_xp(): bad argument #1 (string expected, got %s)",
 			type(name)
-	)) elseif type(level) ~= "number"
+	)) elseif type(val) ~= "number"
 	then error(
 		string.format("xplib.set_player_xp(): bad argument #2 (number expected, got %s)",
-			type(level)
+			type(val)
 	)) elseif reason
 	and type(reason) ~= "table"
 	then error(
@@ -98,10 +98,10 @@ function xplib.add_player_xp(name, val, reason, disable_multiplier)
 	then error(
 		string.format("xplib.add_player_xp(): bad argument #1 (string expected, got %s)",
 			type(name)
-	)) elseif type(level) ~= "number"
+	)) elseif type(val) ~= "number"
 	then error(
 		string.format("xplib.add_player_xp(): bad argument #2 (number expected, got %s)",
-			type(level)
+			type(val)
 	)) elseif reason
 	and type(reason) ~= "table"
 	then error(
