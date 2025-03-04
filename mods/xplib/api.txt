@@ -1,0 +1,151 @@
+## HOW LEVELS WORK ##############################################################
+
+total xp required to reach levels 1 through 10:
+level	|	total xp
+	1	|	0
+	2	|	100
+	3	|	300
+	4	|	600
+	5	|	1000
+	6	|	1500
+	7	|	2100
+	8	|	2800
+	9	|	3600
+	10	|	4500
+
+the levelling system uses the triangle number multiplied by 100 to calculate total experience
+xp = (level * level + level) / 2
+
+## BASIC FUNCTIONS ##############################################################
+
+xplib.get_player_xp(name)
+-- get the player's total xp
+
+-- args:
+	-- name: the name of the player
+
+xplib.set_player_xp(name, val, reason, disable_multiplier)
+-- !! WARNING !!
+-- THIS CALLS FUNCTIONS REGISTERED USING register_on_update
+-- NEVER TRY TO UPDATE PLAYER XP IN UPDATE FUNCTIONS
+-- MAKE SURE DISABLE MULTIPLIERS IS TRUE IF YOU USE THIS IN A MULTIPLIER FUNCTION
+
+-- args:
+	-- name: the name of the player whose xp is being set
+	-- val: the player's new total xp value
+	-- [optional] reason: a reason table
+		-- type: why the xp was changed, set_xp on default
+		-- [set by xplib] lvlchange: how many levels the player went up by
+		-- [set by xplib] xpchange: how much xp the player recieved
+	-- [optional] disable_multiplier: when true, this will not trigger functions registered by register_multiplier
+
+xplib.add_player_xp(name, val, reason, disable_multiplier)
+-- !! WARNING !!
+-- THIS CALLS FUNCTIONS REGISTERED USING register_on_update
+-- NEVER TRY TO UPDATE PLAYER XP IN UPDATE FUNCTIONS
+-- MAKE SURE DISABLE MULTIPLIERS IS TRUE IF YOU USE THIS IN A MULTIPLIER FUNCTION
+
+-- args:
+	-- name: the name of the player whose xp is being changed
+	-- val: the amount of xp to add
+	-- [optional] reason: a reason table
+		-- type: why the xp was changed, set_xp on default
+		-- [set by xplib] lvlchange: how many levels the player went up by
+		-- [set by xplib] xpchange: how much xp the player recieved
+	-- [optional] disable_multiplier: when true, this will not trigger functions registered by register_multiplier
+
+xplib.get_player_level(name)
+-- get the player's level
+
+-- args:
+	-- name: the name of the player
+
+xplib.set_player_level(name, level, reason)
+-- multipliers are automatically disabled for level functions
+-- 50 xp at level 1 = 100 xp at level 2
+-- !! WARNING !!
+-- THIS CALLS FUNCTIONS REGISTERED USING register_on_update
+-- NEVER TRY TO UPDATE PLAYER XP IN UPDATE FUNCTIONS
+
+-- args:
+	-- name: the name of the player whose xp is being changed
+	-- level: the amount of levels to add
+	-- [optional] reason: a reason table
+		-- type: why the xp was changed, set_xp on default
+		-- [set by xplib] lvlchange: how many levels the player went up by
+		-- [set by xplib] xpchange: how much xp the player recieved
+
+xplib.add_player_level(name, level, reason)
+-- multipliers are automatically disabled for level functions
+-- 50 xp at level 1 = 100 xp at level 2
+-- !! WARNING !!
+-- THIS CALLS FUNCTIONS REGISTERED USING register_on_update
+-- NEVER TRY TO UPDATE PLAYER XP IN UPDATE FUNCTIONS
+
+-- args:
+	-- name: the name of the player whose xp is being changed
+	-- level: the new level the player will be at
+	-- [optional] reason: a reason table
+		-- type: why the xp was changed, set_xp on default
+		-- [set by xplib] lvlchange: how many levels the player went up by
+		-- [set by xplib] xpchange: how much xp the player recieved
+
+## ON_UPDATE ####################################################################
+
+xplib.register_on_update(function(playername, reason, xp, lvl, total, disable_multiplier))
+-- !! WARNING !!
+-- DO NOT USE UPDATE FUNCTIONS TO CHANGE THE PLAYER'S TOTAL XP, USE MULTIPLIERS EXPLAINED BELOW.
+
+-- args:
+	-- playername: the name of the player whose xp is being changed
+	-- reason: a reason table
+		-- type: why the xp was changed, set_xp on default
+		-- [set by xplib] lvlchange: how many levels the player went up by
+		-- [set by xplib] xpchange: how much xp the player recieved
+	-- xp: the new amount of xp the player has relative to the level
+	-- lvl: the level the player is now at
+	-- total: the total xp the player now has
+	-- disable_multiplier: whether or not the xp was changed with multipliers off
+
+## MULTIPLIERS ##################################################################
+
+xplib.register_multiplier(function(playername, reason, xp, lvl, total))
+-- expected to return a number value of the player's new total
+-- if nil is returned then the total is not changed
+-- !! WARNING !!
+-- THOUGH YOU CAN CHANGE PLAYER XP USING FUNCTIONS IN MULTIPLIER FUNCTIONS
+-- IT IS HIGHLY DISCOURAGED AS IT IS LIKELY TO BE OVERRIDDEN BY A FUTURE MULTIPLIER FUNCTION
+-- ALWAYS RETURN THE MULTIPLIER'S RESULT
+
+-- args:
+	-- playername: the name of the player whose xp is being changed
+	-- reason: a reason table:
+		-- type: why the xp was changed, set_xp on default
+		-- [set by xplib] lvlchange: how many levels the player went up by
+		-- [set by xplib] xpchange: how much xp the player recieved
+	-- xp: the new amount of xp the player has relative to the level
+	-- lvl: the level the player is now at
+	-- total: the total xp the player now has
+
+## HELPER FUNCTIONS #############################################################
+
+xplib.lvl2xp(lvl)
+	-- returns an integer of how much xp is required to reach the level
+
+xplib.xp2lvl(xp)
+	-- returns an integer of how many levels the xp is equal to
+
+xplib.xpmod(xp)
+	-- returns the given xp relative to its level
+
+xplib.xpfrac(xp)
+	-- returns a float between 0 and 1 representing how close the xp is to the next level
+	-- xpfrac(a) = xpmod(a) / (100 * xp2lvl(a))
+
+xplib.lvlset(xp, lvl)
+	-- returns an interger of the resulting xp
+	-- 50 xp at level 1 = 100 xp at level 2
+
+xplib.lvladd(xp, lvls)
+	-- returns an interger of the resulting xp
+	-- 50 xp at level 1 = 100 xp at level 2

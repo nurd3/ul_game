@@ -49,56 +49,231 @@ local function lvladd(xp, lvl)
 end
 
 function xplib.get_player_xp(name)
-	if not name then return end
+	if type(name) ~= "string"
+	then error(
+		string.format("xplib.get_player_xp(): bad argument #1 (string expected, got %s)",
+			type(name)
+	)) end
+
 	return storage:get_int(name)
 end
 
-function xplib.set_player_xp(name, val, reason)
-	if not name then return end
+function xplib.set_player_xp(name, val, reason, disable_multiplier)
+	if type(name) ~= "string"
+	then error(
+		string.format("xplib.set_player_xp(): bad argument #1 (string expected, got %s)",
+			type(name)
+	)) elseif type(level) ~= "number"
+	then error(
+		string.format("xplib.set_player_xp(): bad argument #2 (number expected, got %s)",
+			type(level)
+	)) elseif reason
+	and type(reason) ~= "table"
+	then error(
+		string.format("xplib.set_player_xp(): bad argument #3 (table expected, got %s)",
+			type(reason)
+	)) elseif disable_multiplier
+	and type(disable_multiplier) ~= "boolean"
+	then error(
+		string.format("xplib.set_player_xp(): bad argument #3 (boolean expected, got %s)",
+			type(disable_multiplier)
+	)) end
+
 	local lvlchange = xp2lvl(val) - xp2lvl(storage:get_int(name))
 	local xpchange = val - storage:get_int(name)
+
+	if not disable_multiplier
+	then val = xplib.multiplier(name, val, reason, lvlchange, xpchange) or val
+		lvlchange = xp2lvl(val) - xp2lvl(storage:get_int(name))
+		xpchange = val - storage:get_int(name)
+	end
+	
 	storage:set_int(name, math.max(0, val))
-	xplib.on_update(name, val, reason, lvlchange, xpchange)
+	core.log("info", "attempting on_update")
+	xplib.on_update(name, val, reason, lvlchange, xpchange, disable_multiplier ~= nil)
 end
 
-function xplib.add_player_xp(name, val, reason)
-	if not name then return end
-	xplib.set_player_xp(name, xplib.get_player_xp(name) + (val or 1), reason)
+function xplib.add_player_xp(name, val, reason, disable_multiplier)
+	if type(name) ~= "string"
+	then error(
+		string.format("xplib.add_player_xp(): bad argument #1 (string expected, got %s)",
+			type(name)
+	)) elseif type(level) ~= "number"
+	then error(
+		string.format("xplib.add_player_xp(): bad argument #2 (number expected, got %s)",
+			type(level)
+	)) elseif reason
+	and type(reason) ~= "table"
+	then error(
+		string.format("xplib.add_player_xp(): bad argument #3 (table expected, got %s)",
+			type(reason)
+	)) elseif disable_multiplier
+	and type(disable_multiplier) ~= "boolean"
+	then error(
+		string.format("xplib.set_player_xp(): bad argument #3 (boolean expected, got %s)",
+			type(disable_multiplier)
+	)) end
+
+	xplib.set_player_xp(name, xplib.get_player_xp(name) + (val or 1), reason, disable_multiplier)
 end
 
 function xplib.get_player_level(name)
-	if not name then return end
+	if type(name) ~= "string"
+	then error(
+		string.format("xplib.get_player_level(): bad argument #1 (string expected, got %s)",
+			type(name)
+	)) end
+
 	return xp2lvl(storage:get_int(name))
 end
 
 function xplib.set_player_level(name, level, reason)
-	if not name then return end
+	if type(name) ~= "string"
+	then error(
+		string.format("xplib.set_player_level(): bad argument #1 (string expected, got %s)",
+			type(name)
+	)) elseif type(level) ~= "number"
+	then error(
+		string.format("xplib.set_player_level(): bad argument #2 (number expected, got %s)",
+			type(level)
+	)) elseif reason
+	and type(reason) ~= "table"
+	then error(
+		string.format("xplib.set_player_level(): bad argument #3 (table expected, got %s)",
+			type(reason)
+	)) end
+
 	xplib.set_player_xp(name, 
 		lvlset(storage:get_int(name), level),
-	reason)
+	reason, true)
 end
 
 function xplib.add_player_level(name, level, reason)
-	if not name then return end
+	if type(name) ~= "string"
+	then error(
+		string.format("xplib.add_player_level(): bad argument #1 (string expected, got %s)",
+			type(name)
+	)) elseif type(level) ~= "number"
+	then error(
+		string.format("xplib.add_player_level(): bad argument #2 (number expected, got %s)",
+			type(level)
+	)) elseif reason
+	and type(reason) ~= "table"
+	then error(
+		string.format("xplib.add_player_level(): bad argument #3 (table expected, got %s)",
+			type(reason)
+	)) end
+
 	xplib.set_player_xp(name,
 		lvladd(storage:get_int(name), level),
-	reason)
+	reason, true)
+end
+
+function xplib.lvl2xp(lvl)
+	if type(lvl) ~= "number"
+	then error(
+		string.format("xplib.lvl2xp(): bad argument #1 (number expected, got %s)",
+			type(lvl)
+	)) end
+
+	return lvl2xp(lvl)
+end
+
+function xplib.xp2lvl(xp)
+	if type(xp) ~= "number"
+	then error(
+		string.format("xplib.xp2lvl(): bad argument #1 (number expected, got %s)",
+			type(xp)
+	)) end
+
+	return xp2lvl(xp)
+end
+
+function xplib.xpmod(xp)
+	if type(xp) ~= "number"
+	then error(
+		string.format("xplib.xpmod(): bad argument #1 (number expected, got %s)",
+			type(xp)
+	)) end
+
+	return xpmod(xp)
+end
+
+function xplib.xpfrac(xp)
+	if type(xp) ~= "number"
+	then error(
+		string.format("xplib.xpmod(): bad argument #1 (number expected, got %s)",
+			type(xp)
+	)) end
+
+	return xpfrac(xp)
+end
+
+function xplib.lvlset(xp, lvl)
+	if type(xp) ~= "number"
+	then error(
+		string.format("xplib.lvlset(): bad argument #1 (number expected, got %s)",
+			type(xp)
+	)) elseif type(lvl) ~= "number"
+	then error(
+		string.format("xplib.lvlset(): bad argument #2 (number expected, got %s)",
+			type(lvl)
+	)) end
+
+	return lvlset(xp, lvl)
+end
+
+function xplib.lvladd(xp, lvls)
+	if type(xp) ~= "number"
+	then error(
+		string.format("xplib.lvladd(): bad argument #1 (number expected, got %s)",
+			type(xp)
+	)) elseif type(lvls) ~= "number"
+	then error(
+		string.format("xplib.lvladd(): bad argument #2 (number expected, got %s)",
+			type(lvls)
+	)) end
+
+	return lvladd(xp, lvls)
 end
 
 local function update() end
+local function multiply() end
 
-function xplib.on_update(playername, xp, reason, lvlchange, xpchange)
-	reason = reason and {table.unpack(reason)} or {type = "set_xp"}
+function xplib.on_update(playername, xp, reason, lvlchange, xpchange, disable_multiplier)
+	core.log("info", "doing on_update")
+	reason = reason and table.copy(reason) or {type = "set_xp"}
 	reason.lvlchange = lvlchange
 	reason.xpchange = xpchange
-	update(playername, reason, xpmod(xp), xp2lvl(xp), xp)
+	update(playername, reason, xpmod(xp), xp2lvl(xp), xp, disable_multiplier)
+end
+
+function xplib.multiplier(playername, xp, reason, lvlchange, xpchange)
+	reason = reason and table.copy(reason) or {type = "set_xp"}
+	reason.lvlchange = lvlchange
+	reason.xpchange = xpchange
+	return multiply(playername, reason, xpmod(xp), xp2lvl(xp), xp) or xp
 end
 
 function xplib.register_on_update(func)
+	local modname = core.get_current_modname() or "??"
+	core.log("info", string.format("register_on_update from mod %s", modname))
 	local prev = update
-	update = function(playername, reason, xp, lvl, total)
-		prev(playername, reason, xp, lvl, total)
-		func(playername, reason, xp, lvl, total)
+	update = function(playername, reason, xp, lvl, total, disable_multiplier)
+		prev(playername, reason, xp, lvl, total, disable_multiplier)
+		core.log("info", string.format("performing registered on_update from %s", modname))
+		func(playername, reason, xp, lvl, total, disable_multiplier)
+	end
+end
+
+function xplib.register_multiplier(func)
+	local modname = core.get_current_modname() or "??"
+	core.log("info", string.format("register_multiplier from mod %s", modname))
+	local prev = multiply
+	multiply = function(playername, reason, xp, lvl, total)
+		total = prev(playername, reason, xp, lvl, total) or total
+		core.log("info", string.format("performing registered multiplier from %s", modname))
+		return func(playername, reason, xp, lvl, total) or total
 	end
 end
 
@@ -120,7 +295,7 @@ core.register_on_joinplayer(function(player)
 	})
 end)
 
-xplib.register_on_update(function(playername, reason, xp, lvl, total)
+xplib.register_on_update(function(playername, reason, xp, lvl)
 	local player = core.get_player_by_name(playername)
 
 	player:hud_change(hud_ids[playername], "text", string.format("L%02i\n%04i/%04i", lvl, xp, lvl * 100))
