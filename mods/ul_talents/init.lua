@@ -27,8 +27,12 @@ then
 			end
 		end
 	})
-	ul_tower.register_on_towerupdate(function()
-		core.chat_send_all(core.colorize("#ffff00", "Right-click tower to access the talents menu"))
+	ul_tower.register_on_towerupdate(function(reason)
+		if reason == "set_pos"
+		or reason == "set_height"
+		or reason == "add_height"
+		then core.chat_send_all(core.colorize("#ffff00", "Right-click tower to access the talents menu"))
+		end
 	end)
 end
 

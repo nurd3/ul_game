@@ -11,7 +11,7 @@ function ul_tower.reset()
 	tower_pos = nil
 	storage:set_string("pos", "")
 	storage:set_int("height", 0)
-	ul_tower.update()
+	ul_tower.update("reset")
 end
 
 function ul_tower.get_height()
@@ -20,12 +20,12 @@ end
 
 function ul_tower.set_height(val)
 	storage:set_int("height", val)
-	ul_tower.update()
+	ul_tower.update("set_height")
 end
 
 function ul_tower.add_height(val)
 	storage:set_int("height", ul_tower.get_height() + (val or 1))
-	ul_tower.update()
+	ul_tower.update("add_height")
 end
 
 function ul_tower.get_pos()
@@ -35,14 +35,14 @@ end
 function ul_tower.set_pos(val)
 	tower_pos = val
 	storage:set_string("pos", core.serialize(tower_pos))
-	ul_tower.update()
+	ul_tower.update("set_pos")
 end
 
 function ul_tower.register_on_towerupdate(func)
 	local prev = ul_tower.update
-	ul_tower.update = function()
-		prev()
-		func()
+	ul_tower.update = function(reason)
+		prev(reason)
+		func(reason)
 	end
 end
 

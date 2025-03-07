@@ -153,7 +153,7 @@ sfinv.register_page("ul_tower:inv_tower", {
 			end
 
 			generate_random_recipe()
-			ul_tower.update()
+			ul_tower.update("new_recipe")
 			
 			return
 		end
