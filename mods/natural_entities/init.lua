@@ -13,7 +13,7 @@ local function generate_ent(entities)
 	local temp = {}
 
 	for name,chance in pairs(entities) do
-		table.insert(temp, {name, chance})
+		table.insert(temp, {name, chance * math.random()})
 	end
 
 	table.sort(temp, function(a,b)
