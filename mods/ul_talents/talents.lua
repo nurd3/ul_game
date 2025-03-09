@@ -199,7 +199,7 @@ ul_talents.register_talentstep(1.0, "ul_talents:durability_lantern", durability_
 
 -- durability_pick --
 core.register_on_dignode(function(pos, oldnode, digger)
-	if digger:is_player() then
+	if digger and digger:is_player() then
 		local plyrname = digger:get_player_name()
 		local stack = digger:get_wielded_item()
 		local wear = stack:get_wear()
