@@ -14,6 +14,7 @@ end
 dofile(path.."/mobkit_plus.lua")
 
 dofile(path.."/functions.lua")
+dofile(path.."/commands.lua")
 dofile(path.."/register.lua")
 
 dofile(path.."/soul.lua")

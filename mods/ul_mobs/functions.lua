@@ -1,6 +1,6 @@
+local storage = core.get_mod_storage()
 local active_block_range = core.get_mapgen_setting('active_block_range') or 3
 local modifier = {}
-
 
 function ul_mobs.on_death(ent)
 	return ent
@@ -47,19 +47,93 @@ function ul_mobs.death_drops(...)
 	return func
 end
 
+function ul_mobs.set_player_hidden(plyrname, val)
+	if type(plyrname) ~= "string"
+	then error(string.format(
+			"ul_mobs.set_player_hidden(): bad argument #1 (string expected, got %s)",
+			type(plyrname)
+		))
+	elseif val
+	and type(val) ~= "boolean"
+	then error(string.format(
+			"ul_mobs.set_player_hidden(): bad argument #2 (boolean expected, got %s)",
+			type(val)
+		))
+	end
+
+	storage:set_int("hidden:" .. plyrname, val and 1 or 0)
+end
+
+function ul_mobs.is_player_hidden(obj)
+	if not obj
+	then return true
+	end
+
+	if type(obj) == "string"
+	then
+		return not core.check_player_privs(obj, "interact")
+			or storage:get_int("hidden:" .. obj) ~= 0
+	elseif type(obj) == "userdata"
+	then
+		return obj:is_valid()
+			and obj:is_player()
+			and (not core.check_player_privs(obj, "interact")
+			or storage:get_int("hidden:" .. obj:get_player_name()) ~= 0)
+	else
+		error(string.format(
+			"ul_mobs.is_player_hidden(): bad argument #1 (string|userdata|nil expected, got %s)",
+			type(obj)
+		))
+	end
+end
+
 function ul_mobs.can_see(self, tpos, obj)
 
-	local txt = ""
+	-- local txt = ""
 
-	txt = txt .. "---can_see\n"
+	-- txt = txt .. "---existence\n"
 
-	if not self or not tpos or not mobkit.is_alive(self) then
+	if not self
+	or not self.object
+	or not self.object:is_valid()
+	or not tpos
+	then
+		-- txt = txt .. ">nil"
+		return
+	end
+
+	-- txt = txt .. "---life\n"
+	
+	-- txt = txt .. string.format("self_alive: %s\n", mobkit.is_alive(self) and "true" or "false")
+	-- txt = txt .. string.format("trgt_alive: %s\n", mobkit.is_alive(obj) and "true" or "false")
+	-- txt = txt .. string.format("target_object_provided: %s\n", obj and "true" or "false")
+
+	if not mobkit.is_alive(self)
+	or obj and not mobkit.is_alive(obj)
+	then
+		-- txt = txt .. ">false"
+		-- self.object:set_nametag_attributes{text=txt}
+		return false
+	end
+
+	-- txt = txt .. "---player hidden\n"
+	
+	-- txt = txt .. string.format("is_player: %s\n", obj and obj:is_player() and "true" or "false")
+	-- txt = txt .. string.format("player_hidden: %s\n", obj and ul_mobs.is_player_hidden(obj) and "true" or "false")
+
+	if ul_mobs.is_player_hidden(obj)
+	then
+		-- txt = txt .. ">false"
+		-- self.object:set_nametag_attributes{text=txt}
 		return false
 	end
 	
 	local pos = self.object:get_pos()
 	
-	-- txt = txt .. "---1\n"
+	-- txt = txt .. "---line of sight\n"
+
+	-- txt = txt .. string.format("self_pos: %s\n", vector.to_string(pos))
+	-- txt = txt .. string.format("trgt_pos: %s\n", vector.to_string(tpos))
 
 	if not core.line_of_sight(pos, tpos) then
 		-- txt = txt .. ">false"
@@ -71,11 +145,11 @@ function ul_mobs.can_see(self, tpos, obj)
 	local dist = vector.distance(pos, tpos)
 	local dist_frac = (dist / view_range)
 
+	-- txt = txt .. "---within view_range\n"
+
 	-- txt = txt .. string.format("view_range: %i\n", view_range)
 	-- txt = txt .. string.format("dist: %i\n", dist)
 	-- txt = txt .. string.format("dist_frac: %i%%\n", dist_frac * 100)
-
-	-- txt = txt .. "---2\n"
 	
 	if dist > view_range then
 		-- txt = txt .. ">false"
@@ -91,20 +165,21 @@ function ul_mobs.can_see(self, tpos, obj)
 		stealth = ul_magic.get_purpose_level(obj, "stealth")
 	end
 
+	-- txt = txt .. "---visibility\n"
+
 	-- txt = txt .. string.format("night_vision: %i\n", night_vision)
 	-- txt = txt .. string.format("light_level: %i\n", light_level)
 	-- txt = txt .. string.format("stealth: %i\n", stealth)
 
-	-- txt = txt .. "---3\n"
-
 	if light_level < night_vision then
+		-- txt = txt .. "---low visibility\n"
 		local ret = light_level * dist_frac + math.random() * stealth < night_vision
 		-- txt = txt .. string.format(">%s\n", tostring(ret))
 		-- self.object:set_nametag_attributes{text=txt}
 		return ret
 	end
 
-	-- txt = txt .. "---4\n"
+	-- txt = txt .. "---high visibility\n"
 	local ret = self.vision / light_level > math.random() * stealth * dist_frac
 	-- txt = txt .. string.format(">%s\n", tostring(ret))
 	-- self.object:set_nametag_attributes{text=txt}
@@ -118,16 +193,23 @@ function ul_mobs.get_nearest_entity(self, checkfunc)
 	local check = checkfunc or function () return true end
 
 	-- search in nearby objects
-	for _,obj in ipairs(self.nearby_objects) do
-		local ent = obj:get_luaentity()
-		if obj:get_pos() then
-			local can_see = ul_mobs.can_see(self, obj:get_pos(), obj)
-			if can_see and check(self, obj) and not (ent and ent.disable_hunting) then
-				local opos = obj:get_pos()
-				local odist = math.abs(opos.x-pos.x) + math.abs(opos.z-pos.z)
-				if odist < dist then
-					dist = odist
-					retv = obj
+	for _,obj in ipairs(self.nearby_objects)
+	do
+		if obj
+		then
+			local ent = obj:get_luaentity()
+			
+			if obj:get_pos()
+			and not ul_mobs.is_player_hidden(obj:get_player_name())
+			then
+				local can_see = ul_mobs.can_see(self, obj:get_pos(), obj)
+				if can_see and check(self, obj) and not (ent and ent.disable_hunting) then
+					local opos = obj:get_pos()
+					local odist = math.abs(opos.x-pos.x) + math.abs(opos.z-pos.z)
+					if odist < dist then
+						dist = odist
+						retv = obj
+					end
 				end
 			end
 		end
