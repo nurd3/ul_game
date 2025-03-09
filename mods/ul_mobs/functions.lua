@@ -1,33 +1,17 @@
 local storage = core.get_mod_storage()
 local active_block_range = core.get_mapgen_setting('active_block_range') or 3
-local modifier = {}
 
-function ul_mobs.on_death(ent)
-	return ent
-end
-function ul_mobs.register_on_death(func)
-	local prev = ul_mobs.on_death
-	ul_mobs.on_death = function(ent) return func(prev(ent)) or ent end
-end
-
-function ul_mobs.incmod(entname)
-	modifier[entname] = (modifier[entname] or 0) + 1
-end
-
-function ul_mobs.decmod(entname, val)
-	modifier[entname] = (modifier[entname] or 0) - 1
-end
-
-function ul_mobs.set_mod(entname, val)
-	population[entname] = val
-end
+-- adaptive spawning removed
+-- technically counted as eugenics which is unnecessary
+-- natural selection only works because it's natural
+-- and if something is more likely to die, it'll die naturally
 
 function ul_mobs.check(pos, entname)
-	local light = core.get_node_light(pos, 0)
-	modifier[entname] = modifier[entname] or 0
-	if light and light <= 5 then
-		return modifier[entname] - math.random(1, 20) < 0
-	end
+	if not pos
+	or not entname
+	or not core.get_node_light(pos, 0)
+	then return false end
+	return core.get_node_light(pos, 0) <= 5
 end
 
 function ul_mobs.quick_battle(dist, hp1, sp1, ml1, rg1, hp2, sp2, ml2, rg2)
