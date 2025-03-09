@@ -13,6 +13,7 @@ dofile(path.."/mobs.lua")
 dofile(path.."/natural_entities.lua")
 dofile(path.."/sfinv.lua")
 dofile(path.."/levels.lua")
+dofile(path.."/events.lua")
 
 ul_tower.register_pickable_items {
 	["ul_basic:stone"] = 128,
