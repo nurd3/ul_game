@@ -87,8 +87,9 @@ function ul_magic.register_rune(name, def)
 	if not def.disable_ring then
 		local ring_def = {
 			short_description = S"Outdated Ring",
-			description = S"Outdated Ring, punch the ground with this ring to fix it",
-			on_use = function()
+			description = S"Outdated Ring, Rightclick the ground to fix",
+			inventory_image = "ul_magic_ring.png"..imgmod,
+			on_place = function()
 				return ul_magic.enchant("ul_magic:ring", name)
 			end,
 			groups = def.groups or {}

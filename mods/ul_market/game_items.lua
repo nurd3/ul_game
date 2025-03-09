@@ -90,6 +90,7 @@ core.register_node("ul_market:tradeinator", {
 		end
 	end,
 	on_rightclick = function (pos, node, puncher)
+		if not puncher then return end
 		local plyrname = puncher:get_player_name()
 		if plyrname then
 			core.show_formspec(
@@ -126,6 +127,7 @@ core.register_node("ul_market:tradeinator_rare", {
 		end
 	end,
 	on_rightclick = function (pos, node, puncher)
+		if not puncher then return end
 		local plyrname = puncher:get_player_name()
 		if plyrname then
 			core.show_formspec(
@@ -162,7 +164,8 @@ core.register_node("ul_market:tradeinator_super", {
 		end
 	end,
 	on_rightclick = function (pos, node, puncher)
-		local plyrname = puncher and puncher:get_player_name()
+		if not puncher then return end
+		local plyrname = puncher:get_player_name()
 		if plyrname then
 			core.show_formspec(
 				plyrname,

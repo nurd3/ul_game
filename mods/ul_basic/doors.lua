@@ -58,6 +58,8 @@ function ul_basic.doors.register(name, def)
 		end,
 		
 		on_punch = function(self, puncher)
+			if not puncher
+			then return end
 			local pos = self.object:get_pos()
 			local stack = ItemStack(name)
 			
