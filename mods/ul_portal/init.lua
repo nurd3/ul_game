@@ -121,7 +121,7 @@ core.register_node("ul_portal:portal", {
 		storage:set_string("portal_positions", core.serialize(portals))
 	end,
 	on_rightclick = function (pos, node, puncher)
-		local plyrname = puncher:get_player_name()
+		local plyrname = puncher and puncher:get_player_name()
 		if plyrname then
 			opened_portals[plyrname] = pos
 			core.show_formspec(

@@ -58,13 +58,6 @@ core.register_node("ul_tower:tower", {
 			return
 		end
 
-		if not tpos then
-			ul_tower.set_pos(pos)
-			ul_tower.add_height()
-			core.chat_send_all(core.colorize("#ffff00", S("Tower has been started at @1. Tower must go up. Tower must be pure.", vector.to_string(pos))))
-			return stack
-		end
-
 		if pos.x ~= tpos.x or pos.z ~= tpos.z then
 			core.chat_send_player(plyr:get_player_name(), core.colorize("#ff0000", S"Tower must only go up."))
 			core.set_node(pos, {name="air"})

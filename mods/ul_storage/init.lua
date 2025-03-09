@@ -66,7 +66,7 @@ core.register_node("ul_storage:crate", {
 			node_meta:set_string("infotext", node_meta:get("_name") or "Unnamed Crate")
 		end
 		
-		local plyrname = puncher:get_player_name()
+		local plyrname = puncher and puncher:get_player_name()
 		if plyrname then
 			opened_storage[plyrname] = pos
 			core.show_formspec(

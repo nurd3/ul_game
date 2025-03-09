@@ -162,7 +162,7 @@ core.register_node("ul_market:tradeinator_super", {
 		end
 	end,
 	on_rightclick = function (pos, node, puncher)
-		local plyrname = puncher:get_player_name()
+		local plyrname = puncher and puncher:get_player_name()
 		if plyrname then
 			core.show_formspec(
 				plyrname,

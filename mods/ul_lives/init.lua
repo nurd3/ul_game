@@ -78,7 +78,7 @@ core.register_node("ul_lives:grave", {
 		end
 	end,
 	on_rightclick = function (pos, node, puncher)
-		if puncher:is_player() then
+		if puncher and puncher:is_player() then
 			core.show_formspec(
 				puncher:get_player_name(),
 				"ul_lives:grave_formspec", 

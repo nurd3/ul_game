@@ -62,8 +62,7 @@ core.register_node("lootblocks:lootblock", {
     tiles = {"lootblocks_lootblock.png"},
     on_punch = function(pos, node, puncher)
         core.set_node(pos, {name="air"})
-        local inv = puncher:get_inventory()
-		if math.random() > 0.75 and lootblocks.gen_spawn(pos) then
+		if math.random() < 0.01 and lootblocks.gen_spawn(pos) then
 			return
 		end
         lootblocks.gen_drop(pos)
@@ -80,7 +79,6 @@ core.register_node("lootblocks:lootblock_rare", {
     tiles = {"lootblocks_lootblock.png^[hsl:120"},
     on_punch = function(pos, node, puncher)
         core.set_node(pos, {name="air"})
-        local inv = puncher:get_inventory()
         lootblocks.gen_drop(pos)
 		if math.random() > 0.75 and lootblocks.gen_spawn(pos) then
 			return
@@ -100,8 +98,7 @@ core.register_node("lootblocks:lootblock_super", {
     tiles = {"lootblocks_lootblock.png^[hsl:180"},
     on_punch = function(pos, node, puncher)
         core.set_node(pos, {name="air"})
-        local inv = puncher:get_inventory()
-		if math.random() > 0.75 and lootblocks.gen_spawn(pos) then
+		if math.random() < 0.01 and lootblocks.gen_spawn(pos) then
 			return
 		end
         lootblocks.gen_drop(pos)

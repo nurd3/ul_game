@@ -98,7 +98,7 @@ ul_talents.register_talentphysics("ul_talents:heavy_mitts", {
 -- deflect --
 local deflect_old_on_punch = core.registered_entities["ul_magic:ball"].on_punch
 core.registered_entities["ul_magic:ball"].on_punch = function (self, puncher, time_from_last_punch, tool_capabilities, direction)
-	if puncher and  puncher:is_player() then
+	if puncher and puncher:is_player() then
 		local plyrname = puncher:get_player_name()
 
 		if ul_talents.using_talent(plyrname, "ul_talents:deflect") then
