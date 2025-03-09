@@ -233,7 +233,17 @@ function ul_mobs.brain(self)
 		local prty = mobkit.get_queue_priority(self)
 		local owner = self._owner and core.get_player_by_name(self._owner)
 		local sitting = mobkit.recall(self, "sitting")
-		if not self._owner then
+		
+		if owner then
+			local text = ""
+			if sitting then
+				text = text .. "(sitting)\n"
+			end
+			text = text .. tostring(self.hp).." / "..tostring(self.max_hp)
+			self.object:set_nametag_attributes{
+				text = text
+			}
+		else
 			local closest = math.huge
 			for _,plyr in ipairs(core.get_connected_players()) do
 				local dist = vector.distance(plyr:get_pos(), self.object:get_pos()) 
@@ -243,17 +253,6 @@ function ul_mobs.brain(self)
 				self.hp = 0
 				return
 			end
-		end
-		
-		if true then
-			local text = ""
-			if sitting then
-				text = text .. "(sitting)\n"
-			end
-			text = text .. tostring(self.hp).." / "..tostring(self.max_hp)
-			self.object:set_nametag_attributes{
-				text = text
-			}
 		end
 		
 		if self.comfortable_hp and prty < 20
