@@ -1,6 +1,7 @@
 local S = ul_mobs.get_translator
 
 local function arcanoid_check_prey(self, obj)
+	if not obj then return false end
 	local luaent = obj:get_luaentity()
 	return not luaent or luaent.category ~= "arcanoid" and luaent.category ~= "neutral"
 end

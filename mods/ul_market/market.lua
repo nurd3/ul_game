@@ -105,10 +105,19 @@ function ul_market.reset_market()
 	)
 end
 
-function ul_market.calculate_price(t)
+function ul_market.calculate_price(t, disable_snap)
+	if disable_snap
+	and (not t.demand
+	or not t.supply)
+	then return end
+
 	if not t.demand then return 0.87 end
 	if not t.supply then return 1000000000000 end
-	return math.max(t.base_price * (t.demand / t.supply), 0.87)
+
+	if disable_snap
+	then return t.base_price * (t.demand / t.supply)
+	else return math.max(t.base_price * (t.demand / t.supply), 0.87)
+	end
 end
 
 function ul_market.get_industry_price(name)
@@ -118,43 +127,87 @@ function ul_market.get_industry_price(name)
 	return 0.87
 end
 
-function ul_market.calculate_company_price(name)
+function ul_market.calculate_company_price(name, disable_snap)
 	local cmp = ul_market.registered_companies[name]
 	local bonus = companies[name]
 	local sum = 0
 	local count = 0
-	if not cmp or not cmp.shares then
+
+	if not cmp
+	then 
+		if disable_snap
+		then return nil end
 		return 0.87
 	end
-	for k,v in pairs(cmp.shares) do
-		count = count + v
-		sum = sum + v * ul_market.get_industry_price(k)
-	end
-	
-	local price = (sum / count)
-	if bonus then
-		price = ul_market.calculate_price({base_price = price, supply = bonus.supply, demand = bonus.demand})
+
+	local price = 0
+
+	if cmp.shares
+	then
+		for k,v in pairs(cmp.shares)
+		do
+			count = count + v
+			sum = sum + v * ul_market.get_industry_price(k)
+		end
+		
+		price = (sum / count)
+
+		if bonus 
+		then price = ul_market.calculate_price({base_price = price, supply = bonus.supply, demand = bonus.demand}, disable_snap)
+		end
+	else
+		if bonus
+		then
+			price = ul_market.calculate_price({base_price = bonus.price or 1, supply = bonus.supply, demand = bonus.demand}, disable_snap)
+		else
+			if disable_snap
+			then return nil end
+			return 0.87
+		end
 	end
 
-	return math.max(price, 0.87)
+	if disable_snap
+	then return price
+	else return math.max(price, 0.87)
+	end
 end
 
-function ul_market.calculate_company_value(name)
+function ul_market.calculate_company_value(name, disable_snap)
 	local cmp = ul_market.registered_companies[name]
 	local bonus = companies[name]
 	local sum = 0
-	if not cmp.shares then
+
+	if not cmp
+	then 
+		if disable_snap
+		then return nil end
 		return 0.87
 	end
-	for k,v in pairs(cmp.shares) do
-		sum = sum + v * ul_market.get_industry_price(k)
+
+	if cmp.shares
+	then
+		for k,v in pairs(cmp.shares)
+		do
+			sum = sum + v * ul_market.get_industry_price(k)
+		end
+		if bonus 
+		then sum = ul_market.calculate_price({base_price = sum, supply = bonus.supply, demand = bonus.demand}, disable_snap)
+		end
+	else
+		if bonus
+		then
+			sum = ul_market.calculate_price({base_price = bonus.price or 1, supply = bonus.supply, demand = bonus.demand}, disable_snap)
+		else
+			if disable_snap
+			then return nil end
+			return 0.87
+		end
 	end
 
-	if bonus then
-		sum = ul_market.calculate_price({base_price = sum, supply = bonus.supply, demand = bonus.demand})
+	if disable_snap
+	then return sum
+	else return math.max(sum, 0.87)
 	end
-
-	return math.max(sum, 0.87)
 end
 
 local market_acceleration = 1

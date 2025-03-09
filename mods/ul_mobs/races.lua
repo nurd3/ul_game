@@ -61,7 +61,8 @@ end
 local function punched(self, puncher, time_from_last_punch, tool_capabilities, dir)
 	local sciv = self.civ
 	if mobkit.is_alive(puncher) then				-- is puncher a living and alive thing
-		mobkit.hq_hunt(self, 12, puncher)			-- get revenge
+		ul_mobs.fight_or_flight(self, puncher, 
+			self.comfortable_hp and self.hp < self.comfortable_hp, 12, 20)
 	end
 
 	mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)
@@ -97,6 +98,7 @@ ul_mobs.register_mob("ul_mobs:cult", {
 	disable_taming = true,
 	
 						-- behaviour
+	comfortable_hp = 10,
 	on_check_prey = monster_check,
 	on_punch = punched,
 	type = "race",
@@ -124,6 +126,7 @@ ul_mobs.register_mob("ul_mobs:anocula", {
 	disable_taming = true,
 	
 						-- behaviour
+	comfortable_hp = 5,
 	on_check_prey = monster_check,
 	on_punch = punched,
 	type = "race",

@@ -8,6 +8,12 @@ natural_entities.get_translator = S
 natural_entities.get_modpath = path
 
 local MAX_ENTS = minetest.settings:get("natural_entities_maximum") or 64
+local SPAWN_RATE = minetest.settings:get("natural_entities_spawn_rate") or 1.0
+
+if SPAWN_RATE == 0
+then pause = true
+else SPAWN_RATE = 1 / SPAWN_RATE
+end
 
 local function generate_ent(entities)
 	local temp = {}
@@ -133,7 +139,7 @@ end
 local timer = 0
 core.register_globalstep(function(dtime)
 	timer = timer + dtime
-	if timer > 1.0 then
+	if timer > SPAWN_RATE then
 		natural_entities.spawnstep()
 		timer = 0
 	end
@@ -156,7 +162,10 @@ core.register_chatcommand("unpause_natural_entities", {
 	params = "",
 	description = S"Unpause the spawning of natural entities",
 	privs = {server = true},
-	func = function()
+	func = function(plyrname)
+		if SPAWN_RATE == 0
+		then return "Natural Entities cannot spawn when Spawn rate is 0. Please change the setting in minetest.conf and restart."
+		end
 		storage:set_int("paused", 0)
 		paused = false
 		core.chat_send_all("Natural Entity spawning has been unpaused.")
@@ -178,6 +187,11 @@ core.register_on_joinplayer(function(plyr)
 	local plyrname = plyr:get_player_name()
 	if core.get_player_privs(plyrname, {server = true})
 	and paused
-	then core.chat_send_player(plyrname, "Note: Natural Entities is paused. use /unpause_natural_entites to resume spawning entities.")
+	then 
+		if SPAWN_RATE == 0
+		then
+			core.chat_send_player(plyrname, "WARNING: spawnrate of 0 automatically disables natural entity spawning.")
+		end
+		core.chat_send_player(plyrname, "Note: Natural Entities is paused. use /unpause_natural_entites to resume spawning entities.")
 	end
 end)

@@ -88,7 +88,11 @@ function ul_market.generate_random_event(event_bonuses)
 	local temp = {}
 
 	for k,v in pairs(event_bonuses) do
-		if k ~= "overall" and math.random() * v.chance * event_bonuses.overall.chance > math.random() * 5 then
+		local def = ul_market.registered_events[k]
+		if k ~= "overall"
+		and (not def or not def.disable_random)
+		and math.random() * v.chance * event_bonuses.overall.chance > math.random() * 5
+		then
 			table.insert(temp, k)
 		end
 	end

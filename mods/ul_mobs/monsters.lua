@@ -66,6 +66,7 @@ ul_mobs.register_mob("ul_mobs:eye", {
 						-- behaviour
 	range_power = 0,
 	melee_power = 3,
+	comfortable_hp = 5,
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.1, "ul_magic:heal"}),
 	type = "monster",
@@ -92,6 +93,7 @@ ul_mobs.register_mob("ul_mobs:big_eye", {
 					-- behaviour
 	range_power = 0,
 	melee_power = 10,
+	comfortable_hp = 5,
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.5, "ul_magic:heal"}),
 	type = "monster",
@@ -120,6 +122,7 @@ ul_mobs.register_mob("ul_mobs:ghost", {
 					-- behaviour
 	range_power = 0,
 	melee_power = 5,
+	comfortable_hp = 5,
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.1, "ul_magic:levitate"}),
 	type = "monster",
@@ -177,6 +180,7 @@ ul_mobs.register_mob("ul_mobs:vampire", {
 					-- behaviour
 	range_power = 3,
 	melee_power = 5,
+	comfortable_hp = 7,
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.1, "ul_magic:vampirism"}, {0.2, "ul_basic:bone"}),
 	type = "monster",
@@ -204,6 +208,7 @@ ul_mobs.register_mob("ul_mobs:lich", {
 					-- behaviour
 	range_power = 0,
 	melee_power = 10,
+	comfortable_hp = 10,
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({1.0, "ul_magic:regen"}, {0.3, "ul_basic:bone"}),
 	type = "monster",
@@ -231,6 +236,7 @@ ul_mobs.register_mob("ul_mobs:skeleton", {
 					-- behaviour
 	range_power = 0,
 	melee_power = 10,
+	comfortable_hp = 5,
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.2, "ul_magic:sword"}, {1.0, "ul_basic:bone"}),
 	type = "monster",
@@ -263,6 +269,7 @@ ul_mobs.register_mob("ul_mobs:stalker", {
 					-- behaviour
 	range_power = 3,
 	melee_power = 0,
+	comfortable_hp = 1,
 	on_check_prey = check_prey,
 	on_check_pred = function(self, obj)
 		if obj:get_luaentity() and obj:get_luaentity().name == "ul_mobs:rgull" then
@@ -296,6 +303,7 @@ ul_mobs.register_mob("ul_mobs:kobold", {
 					-- behaviour
 	range_power = 0,
 	melee_power = 5,
+	comfortable_hp = 5,
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({1.0, "ul_basic:pick"}, {0.5, "ul_magic:fireball"}),
 	type = "monster",
@@ -328,6 +336,7 @@ ul_mobs.register_mob("ul_mobs:horbold", {
 					-- behaviour
 	range_power = 5,
 	melee_power = 5,
+	comfortable_hp = 5,
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({1.0, "ul_basic:pick"}, {1.0, "ul_magic:fireball"}),
 	type = "monster",

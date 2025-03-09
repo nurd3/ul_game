@@ -226,7 +226,7 @@ end
 function mobkit_plus.hq_runfrom(self,prty,tgtobj)
 	local init = true
 	local timer = 6
-	local wait = 5
+	local wait = self.time_total
 	local pos = mobkit.get_stand_pos(self)
 	local opos = mobkit.get_stand_pos(tgtobj)
 	local tpos = opos +
@@ -258,7 +258,7 @@ function mobkit_plus.hq_runfrom(self,prty,tgtobj)
 				then
 					if can_see 
 					then
-						wait = 5
+						wait = self.time_total
 						local tries_left = 64
 						repeat
 							local dir = vector.direction(opos, pos)
@@ -278,8 +278,7 @@ function mobkit_plus.hq_runfrom(self,prty,tgtobj)
 						index = 2
 						last_index = 1
 					else
-						wait = wait - self.dtime
-						if wait < 0
+						if wait + 5 < self.time_total
 						then return true
 						end
 					end

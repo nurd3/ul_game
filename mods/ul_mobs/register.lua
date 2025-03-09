@@ -65,11 +65,19 @@ function ul_mobs.register_mob(name, def)
 			mobkit.actfunc(self, staticdata, dtime_s)
 			
 			local sdat = core.deserialize(staticdata)
+
+			self.total_time = math.random()
 			
-			if sdat and sdat._owner then
-				self.object:set_properties{
-					infotext = "owner: "..self._owner
-				}
+			if sdat
+			then
+				if sdat._owner 
+				then
+					self.object:set_properties{
+						infotext = "owner: "..self._owner
+					}
+				end
+				self.total_time = self.total_time + (sdat.total_time or 0)
+				self._hp = sdat._hp
 			end
 		end,
 		get_staticdata = function (self)	-- mobkit does not save hp or owner
@@ -80,13 +88,13 @@ function ul_mobs.register_mob(name, def)
 					closest = closest > dist and dist or closest
 				end
 				if closest > 512 then
-					self.hp = 0
+					self._hp = 0
 					return ""
 				end
 			end
 			local ret = core.deserialize(mobkit.statfunc(self))
 			ret._owner = self._owner or self.owner
-			ret.hp = self.hp
+			ret._hp = self.hp
 			ret.time_total = self.time_total
 			return core.serialize(ret)
 		end,
@@ -108,8 +116,8 @@ function ul_mobs.register_mob(name, def)
 			if mobkit.is_alive(puncher) then						-- is puncher a living and alive thing
 				if self.runaway then
 					mobkit_plus.hq_runfrom(self, 12, puncher)
-				else
-					mobkit_plus.hq_hunt(self, 12, puncher)		-- get revenge
+				else ul_mobs.fight_or_flight(self, puncher, 
+						self.comfortable_hp and self.hp < self.comfortable_hp, 12, 20)
 				end
 				self._puncher = puncher
 				self._puncher_last_punched = self.time_total

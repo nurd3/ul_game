@@ -204,7 +204,7 @@ ul_market.register_company("ul_market:company_llan", {
 	title = S"Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch Trading Company",
 	description = S"A mysterious trading company which goes through a cycle of growth before making shares private.",
 	attitude = {privating = 0.1, godlike = 1.0},
-	stats = {supply = 1.0, demand = 1.0, cline = 1.0, strive = 1.0}
+	stats = {base_price = 1.0, supply = 1.0, demand = 1.0, cline = 1.0, strive = 1.0}
 })
 ul_market.register_company("ul_market:company_rot", {
 	tag = "RTHS",

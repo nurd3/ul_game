@@ -1,0 +1,14 @@
+# This file contains settings of natural_entities that can be changed in
+# minetest.conf
+
+#    The limit of average entity density when spawning.
+#    smaller numbers = sparser entities
+#    must be positive integer
+#    64 means entities will only spawn when their area has less
+#    than 64 entities.
+natural_entities_maximum (Maximum Entities) int 64
+
+#    The rate at which natural entities spawn.
+#    must be a float over or equal to 0
+#    1 is once every second, 2 is twice per second etc.
+natural_entities_spawn_rate (Spawnrate) float 1.0

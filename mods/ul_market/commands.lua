@@ -15,8 +15,9 @@ core.register_chatcommand("price_company", {
 	description = S"Returns the price of a company",
 	privs = {},
 	func = function(plyrname, params)
-		if params ~= "" and ul_market.registered_companies[params] then
-			core.chat_send_player(plyrname, ul_market.calculate_company_price(params))
+		if params ~= "" and ul_market.registered_companies[params]
+		then core.chat_send_player(plyrname, 
+			tostring(ul_market.calculate_company_price(params, true)))
 		end
 	end
 })
@@ -25,8 +26,9 @@ core.register_chatcommand("value_company", {
 	description = S"Returns the value of a company",
 	privs = {},
 	func = function(plyrname, params)
-		if params ~= "" and ul_market.registered_companies[params] then
-			core.chat_send_player(plyrname, ul_market.calculate_company_value(params))
+		if params ~= "" and ul_market.registered_companies[params]
+		then core.chat_send_player(plyrname, 
+			tostring(ul_market.calculate_company_value(params, true)))
 		end
 	end
 })

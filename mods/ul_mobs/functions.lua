@@ -141,20 +141,44 @@ function ul_mobs.midfunc(self, prty)
 		local ent = ul_mobs.get_nearest_entity(self, self.on_check_pred)
 		if ent then
 			mobkit.make_sound(self, "flee")
-			mobkit_plus.hq_runfrom(self, 25, ent)
+			mobkit_plus.hq_runfrom(self, prty, ent)
 		end
 	end
 	if self.on_check_prey then
 		local ent = ul_mobs.get_nearest_entity(self, self.on_check_prey)
 		if ent then
-			mobkit.make_sound(self, "hunt")
-			mobkit_plus.hq_hunt(self, 25, ent)
+			ul_mobs.fight_or_flight(self, ent,
+				self.comfortable_hp and self.hp < self.comfortable_hp, prty, prty)
 		end
+	end
+end
+
+function ul_mobs.fight_or_flight(self, ent, uncomfortable, hunt_prty, flee_prty)
+	if not ent
+	then return end
+	if self.on_check_pred then
+		local is_pred = self.on_check_pred(self, ent)
+		if is_pred then
+			mobkit.make_sound(self, "flee")
+			mobkit_plus.hq_runfrom(self, flee_prty or 10, ent)
+		end
+	end
+	local is_prey = self.on_check_prey(self, ent)
+	if ent and uncomfortable then
+		mobkit.make_sound(self, "flee")
+		mobkit_plus.hq_runfrom(self, flee_prty or 10, ent)
+	else
+		mobkit.make_sound(self, "hunt")
+		mobkit_plus.hq_hunt(self, hunt_prty or 10, ent)
 	end
 end
 
 -- brain
 function ul_mobs.brain(self)
+	if self._hp
+	then self.hp = self._hp
+		self._hp = nil
+	end
 
 	if mobkit.timer(self,1) then mobkit_plus.node_dps_dmg(self) end
 	mobkit_plus.vitals(self)
@@ -196,6 +220,14 @@ function ul_mobs.brain(self)
 		return
 	end
 
+	if mobkit.timer(self, 5)
+	and self.hp < self.max_hp
+	and mobkit.get_queue_priority(self) < 10
+	then
+		self.hp = math.min(self.max_hp, self.hp + 1)
+		ul_basic.objsound(self.object, "ul_heal")
+	end
+
 	-- decision making doesn't need to happen too often
 	if mobkit.timer(self, ul_mobs.reaction_time) then
 		local prty = mobkit.get_queue_priority(self)
@@ -213,7 +245,7 @@ function ul_mobs.brain(self)
 			end
 		end
 		
-		if owner then
+		if true then
 			local text = ""
 			if sitting then
 				text = text .. "(sitting)\n"
@@ -224,17 +256,25 @@ function ul_mobs.brain(self)
 			}
 		end
 		
-		if not sitting and prty < 20 and owner and vector.distance(owner:get_pos(), self.object:get_pos()) > self.view_range then
-			local pos = owner:get_pos()
-			pos.x = pos.x + math.random(-1,1)
-			pos.y = pos.y + 1
-			pos.z = pos.z + math.random(-1,1)
-			self.object:set_pos(pos)
-			mobkit.clear_queue_high(self)
+		if self.comfortable_hp and prty < 20
+		and self.hp < self.comfortable_hp
+		then
+			ul_mobs.midfunc(self, 20)
 		end
 
 		if prty < 10 then
-			ul_mobs.midfunc(self, prty)
+			if not sitting
+			and owner
+			and vector.distance(owner:get_pos(), self.object:get_pos()) > self.view_range
+			then
+				local pos = owner:get_pos()
+				pos.x = pos.x + math.random(-1,1)
+				pos.y = pos.y + 1
+				pos.z = pos.z + math.random(-1,1)
+				self.object:set_pos(pos)
+				mobkit.clear_queue_high(self)
+			else ul_mobs.midfunc(self, 10)
+			end
 		end
 
 		if prty < 1 and not sitting and owner then
@@ -246,7 +286,6 @@ function ul_mobs.brain(self)
 			mobkit.hq_roam(self, 0)
 		end
 	end
-	
 end
 
 local timer = 0
