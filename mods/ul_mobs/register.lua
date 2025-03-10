@@ -87,8 +87,8 @@ function ul_mobs.register_mob(name, def)
 					local dist = vector.distance(plyr:get_pos(), self.object:get_pos()) 
 					closest = closest > dist and dist or closest
 				end
-				if closest > 512 then
-					self._hp = 0
+				if closest > 96 then
+					self.object:remove()
 					return ""
 				end
 			end

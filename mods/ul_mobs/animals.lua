@@ -123,9 +123,6 @@ ul_mobs.register_mob("ul_mobs:mgull", {
 		end
 	end,
 
-	sounds = {
-		hunt = "ul_mobs_rgull_hunt"
-	},
 						-- behaviour
 	type = "animal",
 	category = "avioid",
@@ -160,6 +157,9 @@ ul_mobs.register_mob("ul_mobs:rgull", {
 		self.object:remove()
 	end,
 	
+	sounds = {
+		hunt = "ul_mobs_rgull_hunt"
+	},
 						-- behaviour
 	on_check_prey = raging_gull_check,
 	type = "animal",

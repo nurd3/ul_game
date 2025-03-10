@@ -5,7 +5,7 @@ local path = core.get_modpath"ul_mobs"
 
 ul_mobs.get_translator = S
 ul_mobs.get_modpath = path
-ul_mobs.reaction_time = core.settings:get("ul_mobs_reaction_time") or 0.25
+ul_mobs.reaction_time = core.settings:get("ul_mobs_reaction_time") or 0.5
 
 if not table.unpack then
     table.unpack = unpack

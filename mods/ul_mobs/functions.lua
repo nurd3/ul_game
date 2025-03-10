@@ -193,7 +193,6 @@ function ul_mobs.get_nearest_entity(self, checkfunc)
 			local ent = obj:get_luaentity()
 			
 			if obj:get_pos()
-			and not ul_mobs.is_player_hidden(obj:get_player_name())
 			then
 				local can_see = ul_mobs.can_see(self, obj:get_pos(), obj)
 				if can_see and check(self, obj) and not (ent and ent.disable_hunting) then
@@ -257,6 +256,17 @@ function ul_mobs.brain(self)
 	end
 
 	if mobkit.timer(self,1) then mobkit_plus.node_dps_dmg(self) end
+	if mobkit.timer(self,10) and not self._owner then
+		local closest = math.huge
+		for _,plyr in ipairs(core.get_connected_players()) do
+			local dist = vector.distance(plyr:get_pos(), self.object:get_pos()) 
+			closest = closest > dist and dist or closest
+		end
+		if closest > 96 then
+			self.object:remove()
+			return
+		end
+	end
 	mobkit_plus.vitals(self)
 
 	if self.hp <= 0 then	-- if is dead
