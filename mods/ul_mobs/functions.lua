@@ -287,8 +287,6 @@ function ul_mobs.brain(self)
 		if self.on_die then
 			self.on_die(self, pos)
 		end
-		
-		ul_mobs.incmod(self.name)
 
 		mobkit.clear_queue_high(self)	-- cease all activity
 		core.after(1.0, self.object.remove, self.object)
