@@ -1,6 +1,15 @@
 local storage = core.get_mod_storage()
 local active_block_range = core.get_mapgen_setting('active_block_range') or 3
 
+function ul_mobs.on_death(ent)
+	return ent
+end
+
+function ul_mobs.register_on_death(func)
+	local prev = ul_mobs.on_death
+	ul_mobs.on_death = function(ent) return func(prev(ent)) or ent end
+end
+
 -- adaptive spawning removed
 -- technically counted as eugenics which is unnecessary
 -- natural selection only works because it's natural
@@ -352,18 +361,3 @@ function ul_mobs.brain(self)
 		end
 	end
 end
-
-local timer = 0
-
-function ul_mobs.mod_step(dtime)
-	timer = timer + dtime
-	
-	if timer > 2 then
-		timer = 0
-		for nom,mod in pairs(modifier) do
-			modifier[nom] = mod - mod / 20 * 5
-		end
-	end
-end
-
-core.register_globalstep(ul_mobs.mod_step)
