@@ -29,7 +29,7 @@ local function do_events(reason)
 	core.log(last_update)
 
 	if reason == "set_pos"
-	then broadcast(S"Tower! The first piece of the tower has been placed! [NEWS]")
+	then broadcast(S"Tower! The first piece of the tower has been placed! [NEWS]") end
 	if last_update < 4
 	and level >= 4
 	then
