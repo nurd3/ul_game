@@ -112,28 +112,40 @@ function ul_mobs.register_mob(name, def)
 			if puncher and puncher:is_player() and self._owner and puncher:get_player_name() == self._owner then
 				return
 			end
+
+			local dmg = self.hp
+			
+			mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)
+
+			dmg = dmg - self.hp
 			
 			if mobkit.is_alive(puncher) then						-- is puncher a living and alive thing
 				if self.runaway then
 					mobkit_plus.hq_runfrom(self, 12, puncher)
-				else ul_mobs.fight_or_flight(self, puncher, 
-						self.comfortable_hp and self.hp < self.comfortable_hp, 12, 20)
+				else
+					local uncomfortable = self.comfortable_hp
+						and self.hp < self.comfortable_hp
+					uncomfortable = uncomfortable
+						or self.scare_dmg
+						and dmg >= self.scare_dmg
+
+					ul_mobs.fight_or_flight(self, puncher, 
+						uncomfortable, 12, 20)
 				end
 				self._puncher = puncher
 				self._puncher_last_punched = self.time_total
 			end
-			
-			mobkit_plus.on_punch(self, puncher, time_from_last_punch, tool_capabilities, dir)
 
 			if self._puncher and self.hp <= 0 and self.time_total - 5 < self._puncher_last_punched then
 				self._killer = self._puncher
-				
-				if self._puncher:is_player() then
-					xplib.add_player_xp(self._puncher:get_player_name(), 10, {type="ul_mobs_kill"})
-				elseif self._puncher:get_luaentity()
-				and self._puncher:get_luaentity()._owner
+				if self.xp_worth
 				then
-					xplib.add_player_xp(self._puncher:get_luaentity()._owner, 10, {type="ul_mobs_pet_kill"})
+					if self._puncher:is_player()
+					then xplib.add_player_xp(self._puncher:get_player_name(), self.xp_worth, {type="ul_mobs_kill"})
+					elseif self._puncher:get_luaentity()
+					and self._puncher:get_luaentity()._owner
+					then xplib.add_player_xp(self._puncher:get_luaentity()._owner, self.xp_worth, {type="ul_mobs_pet_kill"})
+					end
 				end
 			end
 		end,

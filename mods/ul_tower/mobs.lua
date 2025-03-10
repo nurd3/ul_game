@@ -27,13 +27,15 @@ ul_mobs.register_mob("ul_tower:babylon_eye", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 5,
-	melee = {dmg = 5, range = 3},
+	xp_worth = 10,
+	melee = {dmg = 5, range = 5},
 	disable_fall_damage = true,
 	disable_taming = true,
 	
 						-- behaviour
 	range_power = 0,
 	melee_power = 5,
+	scare_dmg = 1,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.1, "ul_magic:heal"}, {0.2, "ul_basic:rod"}),
 	type = "monster",
@@ -55,6 +57,7 @@ ul_mobs.register_mob("ul_tower:big_eye", {
 	vision = 10,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 20,
+	xp_worth = 25,
 	melee = {dmg = 10},
 	
 					-- behaviour
@@ -81,6 +84,7 @@ ul_mobs.register_mob("ul_tower:babylonian", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 15,
+	xp_worth = 25,
 	ranged = {
 		func = ul_magic.shoot,
 		args = {"ul_magic:fireball", 5},
@@ -113,12 +117,15 @@ ul_mobs.register_mob("ul_tower:ranger", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 10,
+	xp_worth = 10,
 	melee = {dmg = 3},
 	disable_taming = true,
 	
 					-- behaviour
 	range_power = 5,
 	melee_power = 5,
+	comfortable_hp = 5,
+	scare_dmg = 3,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.1, "ul_magic:light"}, {0.2, "ul_basic:rod"}),
 	type = "monster",
@@ -131,7 +138,7 @@ ul_mobs.register_mob("ul_tower:snail", {
 	egg_colors = {"#777777", "#ffffff"},
 	textures = {"ul_tower_snail.png"},
 	visual_size = {x = 0.5, y = 0.5},
-	collisionbox = {-0.1, -0.3, -0.1, 0.0, 0.1, 0.1},
+	collisionbox = {-0.2, -0.3, -0.2, 0.2, 0.3, 0.2},
 	
 					-- stats
 	max_speed = 1,
@@ -140,6 +147,7 @@ ul_mobs.register_mob("ul_tower:snail", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 20,
+	xp_worth = 50,
 	melee = {dmg = 10},
 	disable_taming = true,
 	
@@ -166,6 +174,7 @@ ul_mobs.register_mob("ul_tower:big_snail", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 40,
+	xp_worth = 100,
 	melee = {dmg = 10},
 	disable_taming = true,
 	
@@ -192,6 +201,7 @@ ul_mobs.register_mob("ul_tower:guard", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 40,
+	xp_worth = 100,
 	ranged = {
 		func = ul_magic.shoot,
 		args = {"ul_magic:fireball", 5},
@@ -200,8 +210,12 @@ ul_mobs.register_mob("ul_tower:guard", {
 	melee = {dmg = 10},
 	disable_taming = true,
 	
+	sounds = {
+		hunt = "ul_tower_guard_hunt"
+	},
 					-- behaviour
 	melee_power = 5,
+	scare_dmg = 5,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.5, "ul_magic:light"}, {0.5, "ul_basic:rod"}),
 	type = "monster",

@@ -243,7 +243,8 @@ function ul_mobs.fight_or_flight(self, ent, uncomfortable, hunt_prty, flee_prty)
 		mobkit.make_sound(self, "flee")
 		mobkit_plus.hq_runfrom(self, flee_prty or 10, ent)
 	else
-		mobkit.make_sound(self, "hunt")
+		if mobkit.get_queue_priority(self) < hunt_prty
+		then mobkit.make_sound(self, "hunt") end
 		mobkit_plus.hq_hunt(self, hunt_prty or 10, ent)
 	end
 end

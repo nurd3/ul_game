@@ -151,23 +151,32 @@ function mobkit_plus.hq_follow(self,prty,tgtobj)
 end
 
 function mobkit_plus.hq_attack(self,prty,tgtobj)
+	local melee_range = self.melee and self.melee.range or 3
+
 	local func = function(self)
 		if not mobkit.is_alive(tgtobj) then return true end
 		if mobkit.is_queue_empty_low(self) then
 			local pos = mobkit.get_stand_pos(self)
 			local tpos = mobkit.get_stand_pos(tgtobj)
 			local dist = vector.distance(pos,tpos)
-			if dist > 3 then 
+			if dist > melee_range
+			or self.recharge
+			and self._recharge_end
+			and self._recharge_end > self.time_total
+			then
 				return true
 			else
 				mobkit.lq_turn2pos(self,tpos)
 				local height = tgtobj:is_player() and 0.35 or tgtobj:get_luaentity().height*0.6
 				if tpos.y+height>pos.y then 
-					mobkit_plus.lq_jumpattack(self,tpos.y+height-pos.y,tgtobj) 
+					mobkit_plus.lq_jumpattack(self,tpos.y+height-pos.y,tgtobj)
+					self._recharge_end = self.recharge
+						and (self.time_total + self.recharge)
 				else
 					mobkit_plus.lq_goto(self,mobkit.pos_shift(tpos, 
 						{x = math.random()-0.5,z = math.random()-0.5}))
 				end
+
 			end
 		end
 	end
@@ -183,10 +192,24 @@ function mobkit_plus.hq_hunt(self,prty,tgtobj)
 	
 	local path = mobkit_plus.pathfind(self, tgtobj:get_pos(), self.view_range)
 	local index = 2
+	local last_hp = self.hp
 
 	local func = function(self)
 		if not mobkit.is_alive(tgtobj) then return true end
-		if mobkit.is_queue_empty_low(self) then
+		if self.scare_dmg
+		and mobkit.timer(self, ul_mobs.reaction_time)
+		then
+			if last_hp - self.hp >= self.scare_dmg
+			then mobkit_plus.hq_runfrom(self, prty, tgtobj)
+				return true
+			end
+			last_hp = self.hp
+		end
+		if self.comfortable_hp
+		and self.hp < self.comfortable_hp
+		then return true
+		elseif mobkit.is_queue_empty_low(self)
+		then
 			local pos = mobkit.get_stand_pos(self)
 			local opos = mobkit.get_stand_pos(tgtobj)
 			local dist = vector.distance(pos,opos)

@@ -16,6 +16,7 @@ ul_mobs.register_mob("ul_mobs:alien", {
 	
 					-- stats
 	max_speed = 5,
+	xp_worth = 50,
 	jump_height = 20,
 	view_range = 128,
 	vision = 15,	-- how well they see in the dark
@@ -49,6 +50,7 @@ ul_mobs.register_mob("ul_mobs:lootglob", {
 	
 					-- stats
 	max_speed = 20,
+	xp_worth = 50,
 	jump_height = 2,
 	view_range = 128,
 	vision = 1,		-- how well they see in the dark
@@ -79,6 +81,7 @@ ul_mobs.register_mob("ul_mobs:shadow", {
 	
 					-- stats
 	max_speed = 20,
+	xp_worth = 5,
 	jump_height = 20,
 	view_range = 256,
 	vision = 15,	-- how well they see in the dark
@@ -115,6 +118,7 @@ ul_mobs.register_mob("ul_mobs:eeltig", {
 	
 					-- stats
 	max_speed = 20,
+	xp_worth = 25,
 	jump_height = 20,
 	view_range = 256,
 	vision = 15,	-- how well they see in the dark

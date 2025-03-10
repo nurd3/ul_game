@@ -122,7 +122,10 @@ ul_mobs.register_mob("ul_mobs:mgull", {
 			end, self)
 		end
 	end,
-	
+
+	sounds = {
+		hunt = "ul_mobs_rgull_hunt"
+	},
 						-- behaviour
 	type = "animal",
 	category = "avioid",
@@ -145,6 +148,7 @@ ul_mobs.register_mob("ul_mobs:rgull", {
 	lung_capacity = nil,
 	max_hp = 20,
 	melee = {dmg = 10},
+	recharge = 0.5,
 	disable_fall_damage = true,
 	on_punch = function (self, puncher)
 		if not puncher then return end

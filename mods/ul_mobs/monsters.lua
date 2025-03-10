@@ -60,6 +60,7 @@ ul_mobs.register_mob("ul_mobs:eye", {
 	vision = 10,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 8,
+	xp_worth = 10,
 	melee = {dmg = 3},
 	disable_fall_damage = true,
 	
@@ -67,6 +68,7 @@ ul_mobs.register_mob("ul_mobs:eye", {
 	range_power = 0,
 	melee_power = 3,
 	comfortable_hp = 5,
+	scare_dmg = 3,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.1, "ul_magic:heal"}),
 	type = "monster",
@@ -88,11 +90,14 @@ ul_mobs.register_mob("ul_mobs:big_eye", {
 	vision = 10,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 20,
+	xp_worth = 25,
 	melee = {dmg = 10},
+	recharge = 0.5,
 	
 					-- behaviour
 	range_power = 0,
 	melee_power = 10,
+	scare_dmg = 5,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	comfortable_hp = 5,
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.5, "ul_magic:heal"}),
@@ -116,6 +121,7 @@ ul_mobs.register_mob("ul_mobs:ghost", {
 	vision = 10,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 10,
+	xp_worth = 10,
 	melee = {dmg = 5},
 	disable_fall_damage = true,
 	
@@ -123,6 +129,7 @@ ul_mobs.register_mob("ul_mobs:ghost", {
 	range_power = 0,
 	melee_power = 5,
 	comfortable_hp = 5,
+	scare_dmg = 3,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.1, "ul_magic:levitate"}),
 	type = "monster",
@@ -144,7 +151,9 @@ ul_mobs.register_mob("ul_mobs:zombie", {
 	vision = 5,		-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 15,
+	xp_worth = 10,
 	melee = {dmg = 5},
+	recharge = 0.5,
 	
 					-- behaviour
 	range_power = 0,
@@ -170,17 +179,20 @@ ul_mobs.register_mob("ul_mobs:vampire", {
 	vision = 10,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 15,
+	xp_worth = 25,
 	ranged = {
 		func = ul_magic.shoot,
 		args = {"ul_magic:vampirism", 3},
 		range = 5
 	},
 	melee = {dmg = 5, range = 5},
+	recharge = 1.0,
 	
 					-- behaviour
 	range_power = 3,
 	melee_power = 5,
 	comfortable_hp = 7,
+	scare_dmg = 5,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.1, "ul_magic:vampirism"}, {0.2, "ul_basic:bone"}),
 	type = "monster",
@@ -202,13 +214,16 @@ ul_mobs.register_mob("ul_mobs:lich", {
 	vision = 7,		-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 25,
+	xp_worth = 50,
 	melee = {dmg = 10},
+	recharge = 1.5,
 	disable_fall_damage = true,
 	
 					-- behaviour
 	range_power = 0,
 	melee_power = 10,
 	comfortable_hp = 10,
+	scare_dmg = 5,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({1.0, "ul_magic:regen"}, {0.3, "ul_basic:bone"}),
 	type = "monster",
@@ -231,12 +246,15 @@ ul_mobs.register_mob("ul_mobs:skeleton", {
 	lung_capacity = nil,
 	max_hp = 15,
 	melee = {dmg = 10},
+	xp_worth = 25,
+	recharge = 1.5,
 	disable_fall_damage = true,
 	
 					-- behaviour
 	range_power = 0,
 	melee_power = 10,
 	comfortable_hp = 5,
+	scare_dmg = 5,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({0.2, "ul_magic:sword"}, {1.0, "ul_basic:bone"}),
 	type = "monster",
@@ -259,6 +277,7 @@ ul_mobs.register_mob("ul_mobs:stalker", {
 	vision = 15,	-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 5,
+	xp_worth = 10,
 	ranged = {
 		func = ul_magic.shoot, 
 		args = {"ul_magic:launch", 3},
@@ -270,6 +289,7 @@ ul_mobs.register_mob("ul_mobs:stalker", {
 	range_power = 3,
 	melee_power = 0,
 	comfortable_hp = 1,
+	scare_dmg = 1,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_check_pred = function(self, obj)
 		if obj:get_luaentity() and obj:get_luaentity().name == "ul_mobs:rgull" then
@@ -297,13 +317,16 @@ ul_mobs.register_mob("ul_mobs:kobold", {
 	vision = 7,		-- how well they see in the dark
 	lung_capacity = nil,
 	max_hp = 10,
+	xp_worth = 10,
 	melee = {dmg = 5},
+	recharge = 1.0,
 	disable_fall_damage = true,
 	
 					-- behaviour
 	range_power = 0,
 	melee_power = 5,
 	comfortable_hp = 5,
+	scare_dmg = 3,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({1.0, "ul_basic:pick"}, {0.5, "ul_magic:fireball"}),
 	type = "monster",
@@ -331,12 +354,15 @@ ul_mobs.register_mob("ul_mobs:horbold", {
 		range = 20
 	},
 	melee = {dmg = 5},
+	xp_worth = 25,
+	recharge = 1.5,
 	disable_fall_damage = true,
 	
 					-- behaviour
 	range_power = 5,
 	melee_power = 5,
 	comfortable_hp = 5,
+	scare_dmg = 5,	-- if this much damage is dealt in a singleblow, the entity becomes scared
 	on_check_prey = check_prey,
 	on_die = ul_mobs.death_drops({1.0, "ul_basic:pick"}, {1.0, "ul_magic:fireball"}),
 	type = "monster",
