@@ -1,5 +1,8 @@
 local storage = core.get_mod_storage()
+
 local active_block_range = core.get_mapgen_setting('active_block_range') or 3
+local soft_timer = core.settings:get("ul_mobs_soft_despawn_timer") or 10.0
+local soft_dist = core.settings:get("ul_mobs_soft_despawn_distance") or 96
 
 function ul_mobs.on_death(ent)
 	return ent
@@ -180,10 +183,30 @@ function ul_mobs.can_see(self, tpos, obj)
 end
 
 function ul_mobs.get_nearest_entity(self, checkfunc)
-	local retv = nil					    -- return value
-	local dist = active_block_range * 64	-- maximum distance
 	local pos = mobkit.get_stand_pos(self)	-- position
 	local check = checkfunc or function () return true end
+	
+	table.sort(self.nearby_objects, function(a,b)
+		if a and not b
+		then return true
+		elseif not a and b
+		then return false
+		elseif not a and not b
+		then return
+		end
+
+		local pos1, pos2 = a:get_pos(), b:get_pos()
+
+		if pos1 and not pos2
+		then return true
+		elseif not pos1 and pos2
+		then return false
+		elseif not pos1 and not pos2
+		then return
+		end
+
+		return vector.distance(pos, pos1) < vector.distance(pos, pos2)
+	end)
 
 	-- search in nearby objects
 	for _,obj in ipairs(self.nearby_objects)
@@ -194,14 +217,11 @@ function ul_mobs.get_nearest_entity(self, checkfunc)
 			
 			if obj:get_pos()
 			then
-				local can_see = ul_mobs.can_see(self, obj:get_pos(), obj)
-				if can_see and check(self, obj) and not (ent and ent.disable_hunting) then
-					local opos = obj:get_pos()
-					local odist = math.abs(opos.x-pos.x) + math.abs(opos.z-pos.z)
-					if odist < dist then
-						dist = odist
-						retv = obj
-					end
+				if ul_mobs.can_see(self, obj:get_pos(), obj)
+				and check(self, obj)
+				and not (ent and ent.disable_hunting)
+				then
+					return obj
 				end
 			end
 		end
@@ -255,18 +275,28 @@ function ul_mobs.brain(self)
 		self._hp = nil
 	end
 
-	if mobkit.timer(self,1) then mobkit_plus.node_dps_dmg(self) end
-	if mobkit.timer(self,10) and not self._owner then
-		local closest = math.huge
+	if mobkit.timer(self,1)
+	then mobkit_plus.node_dps_dmg(self) end
+
+	if mobkit.timer(self, soft_timer)
+	and not self._owner then
+		local remove = true
 		for _,plyr in ipairs(core.get_connected_players()) do
-			local dist = vector.distance(plyr:get_pos(), self.object:get_pos()) 
-			closest = closest > dist and dist or closest
+			if soft_dist > vector.distance(plyr:get_pos(), self.object:get_pos())
+			then
+				remove = false
+				break
+			end
 		end
-		if closest > 96 then
+		if remove
+		then
+			mobkit.clear_queue_high(self)
+			mobkit.clear_queue_low(self)
 			self.object:remove()
 			return
 		end
 	end
+
 	mobkit_plus.vitals(self)
 
 	if self.hp <= 0 then	-- if is dead

@@ -4,3 +4,15 @@
 #    must be a float over 0
 #    1 = 1 second reaction time, 0.5 = 0.5 second reaction time
 ul_mobs_reaction_time (Mob Reaction Time) float 0.5
+
+#    How long an untamed mob will wait before despawning
+#    only despawns when outside of a certain distance (see Despawn Distance)
+#    must be a float over 0
+#    10 = despawns after 10 seconds of being outside of range
+ul_mobs_despawn_timer (Mob Despawn Timer) float 10.0
+
+#    How long an untamed mob will wait before despawning
+#    only despawns when outside of a certain distance (see Soft Despawn Distance)
+#    must be a float over 0
+#    96.0 = despawns
+ul_mobs_despawn_distance (Mob Despawn Distance) float 96.0

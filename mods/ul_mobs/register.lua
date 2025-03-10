@@ -1,5 +1,8 @@
 local S = ul_mobs.get_translator
 
+local soft_timer = core.settings:get("ul_mobs_soft_despawn_timer") or 10.0
+local soft_dist = core.settings:get("ul_mobs_soft_despawn_distance") or 96
+
 function ul_mobs.register_mob(name, def)
 	
 	local colors = {"#ffffff", "#777777"}
@@ -70,6 +73,10 @@ function ul_mobs.register_mob(name, def)
 			
 			if sdat
 			then
+				if sdat._remove
+				then return self.object:remove()
+				end
+
 				if sdat._owner 
 				then
 					self.object:set_properties{
@@ -81,15 +88,26 @@ function ul_mobs.register_mob(name, def)
 			end
 		end,
 		get_staticdata = function (self)	-- mobkit does not save hp or owner
-			if not self._owner then
-				local closest = math.huge
+			if not self
+			or not self.object
+			or not mobkit.is_alive(self)
+			or self._dead
+			then
+				return "return {remove = true}"
+			end
+			if not self._owner
+			then
+				local remove = true
 				for _,plyr in ipairs(core.get_connected_players()) do
-					local dist = vector.distance(plyr:get_pos(), self.object:get_pos()) 
-					closest = closest > dist and dist or closest
+					if soft_dist > vector.distance(plyr:get_pos(), self.object:get_pos())
+					then
+						remove = false
+						break
+					end
 				end
-				if closest > 96 then
-					self.object:remove()
-					return ""
+				if remove
+				then
+					return "return {remove = true}"
 				end
 			end
 			local ret = core.deserialize(mobkit.statfunc(self))

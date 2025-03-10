@@ -7,12 +7,13 @@ ul_basic.get_translator = S
 ul_basic.get_modpath = path
 
 -- perma-dark
-core.set_timeofday(0)
+core.set_timeofday(0.5)
 core.settings:set("time_speed", 0)
+
 core.settings:set("movement_speed_walk", 8.0)
 
 core.register_on_joinplayer(function(plyr, last_login)
-	plyr:set_moon {visible = false}
+	plyr:set_moon {texture="ul_basic_lamp.png", scale = 1.57}
 	plyr:set_stars {visible = false}
 	plyr:set_sun {texture="ul_basic_lamp.png"}
 	plyr:override_day_night_ratio(0)
@@ -21,9 +22,15 @@ core.register_on_joinplayer(function(plyr, last_login)
 		clouds = false,
 		base_color = "#000000",
 		sky_color = {
+			dawn_sky = "#000000",
+			dawn_horizon = "#000000",
 			day_sky = "#000000",
+			day_horizon = "#000000",
 			night_sky = "#000000",
-			dawn_sky = "#000000"
+			night_horizon = "#000000",
+			indoors = "#000000",
+			fog_sun_tint = "#000000",
+			fog_moon_tint = "#000000",
 		}
 	}
 end)

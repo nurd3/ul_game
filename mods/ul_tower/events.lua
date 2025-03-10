@@ -30,7 +30,7 @@ local function do_events(reason)
 
 	if reason == "set_pos"
 	then broadcast(S"Tower! The first piece of the tower has been placed! [NEWS]")
-	elseif last_update < 4
+	if last_update < 4
 	and level >= 4
 	then
 		ul_market.add_intensity("ul_tower:event_explosion", 800, "ul_market:company_llan")
