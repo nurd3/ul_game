@@ -242,6 +242,14 @@ local function multiply() end
 
 function xplib.on_update(playername, xp, reason, lvlchange, xpchange, disable_multiplier)
 	core.log("info", "doing on_update")
+	if not core.get_player_by_name(playername)
+	then
+		core.log("info", "player is not here, pending on_update")
+		local pending = core.deserialize(storage:get_string("pending_updates "..playername)) or {}
+		table.insert(pending, {xp, reason, lvlchange, xpchange, disable_multiplier})
+		storage:set_string("pending_updates "..playername, core.serialize(pending))
+		return
+	end
 	reason = reason and table.copy(reason) or {type = "set_xp"}
 	reason.lvlchange = lvlchange
 	reason.xpchange = xpchange
@@ -249,6 +257,15 @@ function xplib.on_update(playername, xp, reason, lvlchange, xpchange, disable_mu
 end
 
 function xplib.multiplier(playername, xp, reason, lvlchange, xpchange)
+	core.log("info", "doing multiplier")
+	if not core.get_player_by_name(playername)
+	then
+		core.log("info", "player is not here, pending multiplier")
+		local pending = core.deserialize(storage:get_string("pending_multipliers "..playername)) or {}
+		table.insert(pending, {xp, reason, lvlchange, xpchange})
+		storage:set_string("pending_multipliers "..playername, core.serialize(pending))
+		return
+	end
 	reason = reason and table.copy(reason) or {type = "set_xp"}
 	reason.lvlchange = lvlchange
 	reason.xpchange = xpchange
@@ -293,6 +310,28 @@ core.register_on_joinplayer(function(player)
 		direction = 0,
 		offset = {x = 0, y= 24},
 	})
+
+	local updates = core.deserialize(storage:get_string("pending_updates "..playername))
+
+	if updates
+	then
+		for _,args in ipairs(updates)
+		do
+			xplib.on_update(playername, table.unpack(args))
+		end
+		storage:set_string("pending_updates "..playername, "")
+	end
+
+	local multipliers = core.deserialize(storage:get_string("pending_multipliers "..playername))
+
+	if multipliers
+	then
+		for _,args in ipairs(multipliers)
+		do
+			xplib.multiplier(playername, table.unpack(args))
+		end
+		storage:set_string("pending_multipliers "..playername, "")
+	end
 end)
 
 xplib.register_on_update(function(playername, reason, xp, lvl)

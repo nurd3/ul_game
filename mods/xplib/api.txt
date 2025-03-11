@@ -95,6 +95,7 @@ xplib.add_player_level(name, level, reason)
 xplib.register_on_update(function(playername, reason, xp, lvl, total, disable_multiplier))
 -- !! WARNING !!
 -- DO NOT USE UPDATE FUNCTIONS TO CHANGE THE PLAYER'S TOTAL XP, USE MULTIPLIERS EXPLAINED BELOW.
+-- note: if the player is offline, on_update functions will only execute once the player has rejoined
 
 -- args:
 	-- playername: the name of the player whose xp is being changed
@@ -116,6 +117,7 @@ xplib.register_multiplier(function(playername, reason, xp, lvl, total))
 -- THOUGH YOU CAN CHANGE PLAYER XP USING FUNCTIONS IN MULTIPLIER FUNCTIONS
 -- IT IS HIGHLY DISCOURAGED AS IT IS LIKELY TO BE OVERRIDDEN BY A FUTURE MULTIPLIER FUNCTION
 -- ALWAYS RETURN THE MULTIPLIER'S RESULT
+-- note: if the player is offline, multiplier functions will only execute once the player has rejoined
 
 -- args:
 	-- playername: the name of the player whose xp is being changed
