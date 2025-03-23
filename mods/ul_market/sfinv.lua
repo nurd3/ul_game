@@ -31,6 +31,7 @@ sfinv.register_page("ul_market:inv_companies", {
 			company = company.."button[1,2;1,1;ul_sell1;x1]"
 			company = company.."button[1,3;1,1;ul_sell2;x2]"
 			company = company.."button[1,4;1,1;ul_sell5;x5]"
+			company = company.."button[2,1.5;1,1;ul_sell_all;Sell All]"
 		end
 		
 		local scroll = scrolls_companies[plyrname] or 0
@@ -70,6 +71,9 @@ sfinv.register_page("ul_market:inv_companies", {
 				buy = tonumber(k:sub(7))
 			elseif string.sub(k, 4, 7) == "sell" then
 				sell = tonumber(k:sub(8))
+				if k:sub(8) == "_all"
+				then sell = ul_market.get_portfolio_shares(plyrname, selected_company[plyrname])
+				end
 			end
 		end
 		scrolls_companies[plyrname] = fields.ul_companies and fields.ul_companies:sub(5)
@@ -115,10 +119,14 @@ sfinv.register_page("ul_market:inv_govt", {
 			party = party..string.format("label[0,0;%s]", core.formspec_escape(prty.title))
 			party = party..string.format("tooltip[0,0;4,0.5;%s]", core.formspec_escape(prty.description))
 			party = party..string.format("label[0,0.5;\"%s\"]", core.formspec_escape(prty.motto))
-			party = party..string.format("label[0,1;%i seats]", seats)
+			party = party..string.format("label[0,1;%s %i]", T{"Seats:"}, seats)
 
-			party = party..string.format("button[0,2;2,0.5;ul_fund_party;%s]", T{"Fund Party $500"})
-			party = party..string.format("label[0,3;$%.2f]", ul_market.get_party_bonus(selected_party[plyrname]) * 5000)
+			party = party..string.format("label[0,1.5;%s $%.2f]", T{"Party Donations:"}, ul_market.get_party_bonus(selected_party[plyrname]) * 5000)
+			party = party..string.format("label[0,2;%s]", T{"Donate"})
+
+			party = party..string.format("button[0,2.5;1,0.5;ul_fund500;%s]", T{"$500"})
+			party = party..string.format("button[1,2.5;1,0.5;ul_fund1000;%s]", T{"$1000"})
+			party = party..string.format("button[0,3;2,0.5;ul_fund5000;%s]", T{"$5000"})
 		end
 
 		local chart = ""
@@ -174,21 +182,27 @@ sfinv.register_page("ul_market:inv_govt", {
 	on_player_receive_fields = function(self, plyr, ctx, fields)
 		local plyrname = plyr:get_player_name()
 		local prty = nil
+		local fund = nil
+
 		for k,v in pairs(fields) do
-			if ul_market.registered_parties[k] then
-				prty = k
+			if ul_market.registered_parties[k]
+			then prty = k
+			elseif string.sub(k, 4, 7) == "fund" 
+			then fund = tonumber(k:sub(8))
 			end
 		end
+
 		if prty then
 			selected_party[plyrname] = prty
 			sfinv.set_page(plyr, "ul_market:inv_govt")
 			return
 		end
-		if fields.ul_fund_party and selected_party[plyrname] then
-			if ul_market.get_wallet(plyrname) >= 500 then
-				ul_market.get_portfolio(plyrname).wallet = ul_market.get_wallet(plyrname) - 500
+
+		if fund and selected_party[plyrname] then
+			if ul_market.get_wallet(plyrname) >= fund then
+				ul_market.get_portfolio(plyrname).wallet = ul_market.get_wallet(plyrname) - fund
 				ul_market.save_portfolios()
-				ul_market.add_party_bonus(selected_party[plyrname], 0.1)
+				ul_market.add_party_bonus(selected_party[plyrname], fund * 0.0002)
 			else
 				core.chat_send_player(plyrname, core.colorize("#ff0000", S"Not enough Money!"))
 			end

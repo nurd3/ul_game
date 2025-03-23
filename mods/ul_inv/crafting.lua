@@ -69,10 +69,12 @@ sfinv.override_page("sfinv:crafting", {
 			local offset = 0.5
 			local ist = ItemStack(rec.output)
 			local prepend = ist:get_count() > 1 and (ist:get_count().."X ") or ""
-			recipe = recipe.."label[0,0;"..prepend..get_item_display_name(ist:get_name()).."]"
+			recipe = recipe.."label[0,0;"..core.formspec_escape(
+				prepend..get_item_display_name(ist:get_name())
+			).."]"
 			for nom,amt in pairs(rec.input) do
 				local name = get_item_display_name(nom)
-				recipe = recipe.."label[0.1,"..offset..";"..amt.."X "..name.."]"
+				recipe = recipe.."label[0.2,"..offset..";"..amt.."X "..name.."]"
 				offset = offset + 0.3
 			end
 			recipe = recipe.."button[0,4;2,1;ul_craft;Craft]"
