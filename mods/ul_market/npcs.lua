@@ -138,7 +138,11 @@ local function random_dialogue_group()
 end
 
 local function died()
+	if math.random() < 0.1
+	then ul_market.add_intensity("ul_market:event_famine", 800)
+	end
 	ul_market.generate_event("ul_market:event_assassination")
+	
 end
 
 local S = ul_market.get_translator

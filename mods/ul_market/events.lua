@@ -78,10 +78,14 @@ function ul_market.add_event_bonus(event_bonuses, event, t)
 end
 
 
-function ul_market.get_event_bonus(event)
+function ul_market.get_event_bonus(event, vntbns)
+	vntbns = vntbns or event_bonuses
 	event_bonuses[event] = event_bonuses[event] or {chance = 1, intensity = 1}
-	event_bonuses.overall = event_bonuses.overall or {chance = 1, intensity = 0}
-	return {chance = event_bonuses[event].chance * event_bonuses.overall.chance, intensity = event_bonuses[event].intensity * event_bonuses.overall.intensity}
+	event_bonuses.overall = event_bonuses.overall or {chance = 1, intensity = 1}
+	return {
+		chance = event_bonuses[event].chance * event_bonuses.overall.chance, 
+		intensity = event_bonuses[event].intensity * event_bonuses.overall.intensity
+	}
 end
 
 function ul_market.generate_random_event(event_bonuses)
@@ -101,7 +105,7 @@ function ul_market.generate_random_event(event_bonuses)
 end
 
 function ul_market.generate_event(event)
-	local event_bonuses = event_bonus_calc({})
+	event_bonuses = event_bonus_calc({})
 	event = event or ul_market.generate_random_event(event_bonuses)
 	if not event then
 		return
@@ -177,7 +181,7 @@ ul_market.register_marketstep(function()
 		local sum = 0
 		for n,v in pairs(t) do
 			if math.random() < 0.5 and v then
-				t[n] = v - 0.01 * math.max(v, 5)
+				t[n] = v - 0.1 * math.max(v, 5)
 			end
 			sum = sum + math.max(t[n], 0)
 			if t[n] and t[n] <= 0 then
