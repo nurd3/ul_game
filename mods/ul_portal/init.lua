@@ -12,13 +12,24 @@ local portal_order = {}
 
 
 local function sort_portals()
-	portal_order = {}
+	local temp = {}
 
-	for k,v in pairs(portals) do
-		table.insert(portal_order, v..k)
+	for k,v in pairs(portals)
+	do table.insert(temp, {k, v})
 	end
 
-	table.sort(portal_order)
+	table.sort(temp, function (a, b)
+		if a[2] == b[2]
+		then return a[1] > b[1]
+		else return a[2] > b[2]
+		end
+	end)
+
+	portal_order = {}
+
+	for i,v in ipairs(temp)
+	do portal_order[i] = v[1]
+	end
 end
 
 sort_portals()
@@ -40,16 +51,25 @@ function ul_portal.get_formspec(pos, plyr)
 
 	opened_portals[plyr:get_player_name()] = spos
 
-	for k,v in pairs(portals) do 
-		local pos2 = vector.from_string(k)
+	for i,v in ipairs(portal_order)
+	do 
+		local pos2 = vector.from_string(v)
 		local node = core.get_node_or_nil(pos)
-		if not node or node.name ~= "ul_portal:portal" then
-			portals[k] = nil
-		elseif k ~= spos and math.abs(pos.x - pos2.x) <= max_dist and math.abs(pos.z - pos2.z) <= max_dist then
+		if not node
+		or node.name ~= "ul_portal:portal"
+		then
+			portals[v] = nil
+			table.remove(portal_order, v)
+		elseif v ~= spos 
+		and math.abs(pos.x - pos2.x) <= max_dist 
+		and math.abs(pos.z - pos2.z) <= max_dist
+		then
+			local name = portals[v]
 			locations_spec = locations_spec .. 
-				"button[0.5," .. offset .. ";3,1;" .. k .. ";" .. k .. " \"" .. core.formspec_escape(v) .. "\"]"
+				"button[0.5," .. offset .. ";3,1;" .. i .. ";" .. core.formspec_escape(v) .. " \"" .. core.formspec_escape(name) .. "\"]"
 			offset = offset + 1
-		end end
+		end
+	end
 
 	if locations_spec == "" then
 		locations_spec = "label[1,0;No Portals]"
@@ -64,6 +84,7 @@ function ul_portal.get_formspec(pos, plyr)
 		"container[5,0]\n" ..
 		"field[0.3,0.5;3,1;name_field;Portal Name;" .. core.formspec_escape(portals[vector.to_string(pos)] or S"Portal") .. "]" ..
 		"button[0.3,1;2,1;save_button;Save]" ..
+		"button[0.3,2;2,1;destroy;Destroy]" ..
 		"container_end[]"
 end
 
@@ -75,8 +96,8 @@ core.register_on_player_receive_fields(function(plyr, formname, fields)
 	local plyrname = plyr:get_player_name()
 	
 	for k,v in pairs(fields) do
-		if portals[k] then
-			local pos = vector.from_string(k)
+		if tonumber(k) then
+			local pos = vector.from_string(portal_order[k])
 			pos.y = pos.y + 1
 			plyr:set_pos(pos)
 			core.close_formspec(plyrname, "ul_portal:formspec")
@@ -91,6 +112,18 @@ core.register_on_player_receive_fields(function(plyr, formname, fields)
 		
 		portals[opened_portals[plyrname]] = fields.name_field
 		storage:set_string("portal_positions", core.serialize(portals))
+		sort_portals()
+	end
+
+	if fields.destroy
+	then 
+		local pos = vector.from_string(opened_portals[plyrname])
+		core.set_node(pos, {name="air"})
+		core.add_item(pos, ItemStack"ul_portal:portal")
+		portals[vector.to_string(pos)] = nil
+		sort_portals()
+		storage:set_string("portal_positions", core.serialize(portals))
+		core.close_formspec(plyrname, "ul_portal:formspec")
 	end
 	
 end)
@@ -113,12 +146,11 @@ core.register_node("ul_portal:portal", {
 		stack:take_item()
 		return stack
 	end,
-	on_punch = function (pos, puncher)
-		core.set_node(pos, {name="air"})
-		core.add_item(pos, ItemStack"ul_portal:portal")
-		portals[vector.to_string(pos)] = nil
-		sort_portals()
-		storage:set_string("portal_positions", core.serialize(portals))
+	on_punch = function (pos, node, puncher)
+		if puncher
+		and puncher:get_player_name()
+		then core.chat_send_player(puncher:get_player_name(), core.colorize("#ff0000", "Use the Destroy button in the portal menu!"))
+		end
 	end,
 	on_rightclick = function (pos, node, puncher)
 		local plyrname = puncher and puncher:get_player_name()

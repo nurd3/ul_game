@@ -210,7 +210,7 @@ function ul_market.calculate_company_value(name, disable_snap)
 	end
 end
 
-local market_acceleration = 1
+local market_acceleration = 2
 
 -- calculates the changes of the stats
 -- explanation:

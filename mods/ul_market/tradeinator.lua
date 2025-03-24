@@ -107,9 +107,11 @@ local function wear_fuel(pos, amount)
 	amount = amount or 1
 	local inv = core.get_meta(pos):get_inventory()
 	for i,v in ipairs(inv:get_list"fuel") do
-		if amount > 0 and v:get_name() == "ul_basic:lantern" then
-			local wear = math.ceil(v:get_wear() / 65536 * 8)
-			v:add_wear(math.floor(amount / 8 * 65536))
+		if amount <= 0
+		then break
+		elseif v:get_name() == "ul_basic:lantern" then
+			local wear = math.floor(v:get_wear() / 65536 * 8)
+			v:set_wear((wear + amount) / 8 * 65536)
 			inv:set_stack("fuel", i, v)
 			amount = amount - (8 - wear)
 		end

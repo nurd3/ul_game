@@ -6,6 +6,7 @@ local parties = core.deserialize(storage:get_string("parties")) or {}
 local party_bonus = core.deserialize(storage:get_string("party_bonus")) or {}
 local till_election = storage:get("election") or 60
 local unrest_bonus = storage:get("unrest_bonus") or 0
+local biggest_party = ""
 
 local function sign(number)
 	return (number == 0 and 0) or (number > 0 and 1) or -1
@@ -15,6 +16,9 @@ local function generate_random_party()
 	local temp = {}
 
 	for _,v in ipairs(ul_market.party_order) do
+		if ul_market.get_party_seats(v) > 500
+		then return v
+		end
 		table.insert(temp, {v, ul_market.get_party_seats(v) * math.random()})
 	end
 	table.sort(temp, function(a,b)
@@ -102,7 +106,7 @@ function ul_market.election()
 	local total = 0
 	local min_dist = math.huge
 	local dists = {}
-	local biggest_party = ""
+	biggest_party = nil
 
 	for party,_ in pairs(parties) do
 		dists[party] = math.abs(unrest - get_party_extremeness(party)) - ul_market.get_party_bonus(party)
@@ -120,6 +124,11 @@ function ul_market.election()
 	for party,dist in pairs(dists) do
 		parties[party] = parties[party] + math.floor((math.floor((max_dist - dist) / total * 1000 + 0.5) - parties[party]) * 0.5 + 0.5)
 		count = count + parties[party]
+		if not biggest_party
+		or parties[party] > parties[biggest_party]
+		then
+			biggest_party = party
+		end
 	end
 	local new_count = 0
 	for party,dist in pairs(parties) do
@@ -227,11 +236,18 @@ core.register_on_mods_loaded(function()
 			parties[k] = v.starting_seats
 		end
 	end
+	biggest_party = nil
 	for k,v in pairs(parties) do
 		if not ul_market.registered_parties[k] then
 			parties[k] = nil
 		end
+		if not biggest_party
+		or parties[party] > parties[biggest_party]
+		then
+			biggest_party = party
+		end
 	end
+
 	storage:set_string("parties", core.serialize(parties))
 	if type(unrest_bonus) ~= "number" then
 		ul_market.set_unrest_bonus(tonumber(unrest_bonus) or 0)
@@ -239,7 +255,10 @@ core.register_on_mods_loaded(function()
 end)
 
 ul_market.register_marketstep(function()
-	if math.random() < 0.1 then
+	if biggest_party
+	and parties[biggest_party] >= 500
+	or math.random() < 0.2
+	then
 		local tries = 5
 		local policy, intensity = generate_random_party_policy(generate_random_party())
 		policy, intensity = generate_random_party_policy(generate_random_party())
