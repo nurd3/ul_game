@@ -37,7 +37,7 @@ local function generate_random_party_policy(party)
 		end
 	end
 
-	if #temp < 0 then return end
+	if #temp <= 0 then return end
 	local ret = temp[math.random(#temp)]
 	return ret, ul_market.registered_parties[party].policies[ret]
 end

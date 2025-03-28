@@ -97,7 +97,7 @@ core.register_on_player_receive_fields(function(plyr, formname, fields)
 	
 	for k,v in pairs(fields) do
 		if tonumber(k) then
-			local pos = vector.from_string(portal_order[k])
+			local pos = vector.from_string(portal_order[tonumber(k)])
 			pos.y = pos.y + 1
 			plyr:set_pos(pos)
 			core.close_formspec(plyrname, "ul_portal:formspec")
