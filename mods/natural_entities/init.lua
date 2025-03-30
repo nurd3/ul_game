@@ -63,6 +63,9 @@ local function adjust(pos, min, max)
 end
 
 local function do_spawns(plyr)
+	if not plyr
+	or not plyr:is_valid()
+	then return end
 	local spawns = natural_entities.registered_spawns
 	for name,def in pairs(spawns) do
 		
