@@ -7,8 +7,8 @@ ul_basic.get_translator = S
 ul_basic.get_modpath = path
 
 -- perma-dark
-core.set_timeofday(0.5)
-core.settings:set("time_speed", 0)
+core.settings:set("world_start_time", 12000)
+core.settings:set("time_speed", 72)
 
 core.settings:set("movement_speed_walk", 8.0)
 
@@ -57,3 +57,16 @@ dofile(path.."/items.lua")
 dofile(path.."/doors.lua")
 dofile(path.."/crafts.lua")
 dofile(path.."/attackbar.lua")
+
+-- replace light functions so that they return accurate values
+
+local old_get_node_light = core.get_node_light
+local old_get_natural_light = core.get_natural_light
+
+core.get_node_light = function (pos)
+	return old_get_node_light(pos, 0)
+end
+
+core.get_natural_light = function (pos)
+	return old_get_natural_light(pos, 0)
+end

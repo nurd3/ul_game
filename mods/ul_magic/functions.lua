@@ -1,5 +1,43 @@
 local S = ul_magic.get_translator
 
+function ul_magic.get_runes_by_group(groups)
+	if type(groups) ~= "table"
+	then error(
+		string.format("ul_magic.get_runes_by_group(): bad argument #1 (table expected, got %s)",
+			type(name)
+	)) else
+		local runes = {}
+
+		for name,def in pairs(ul_magic.registered_runes)
+		do
+			local include = true
+			local rune_groups = def.groups or {}
+
+			for k,v in pairs(groups)
+			do include = include
+				and groups[k] == (rune_groups[k] and true or false)
+			end
+
+			if include then table.insert(runes, name) end
+		end
+
+		return runes
+	end
+end
+
+function ul_magic.rand_rune(runes)
+
+	if not runes
+	then
+		for name,def in pairs(ul_magic.registered_runes)
+		do table.insert(runes, name)
+		end
+	end
+
+	return #runes > 0
+		and runes[math.random(#runes)]
+end
+
 function ul_magic.wear_spell(itemstack, plyr)
 	itemstack:add_wear(65536 / 10)
 	return itemstack

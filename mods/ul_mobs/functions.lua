@@ -21,9 +21,9 @@ end
 function ul_mobs.check(pos, entname)
 	if not pos
 	or not entname
-	or not core.get_node_light(pos, 0)
+	or not core.get_node_light(pos)
 	then return false end
-	return core.get_node_light(pos, 0) <= 5
+	return core.get_node_light(pos) <= 5
 end
 
 function ul_mobs.quick_battle(dist, hp1, sp1, ml1, rg1, hp2, sp2, ml2, rg2)
@@ -154,7 +154,7 @@ function ul_mobs.can_see(self, tpos, obj)
 	end
 
 	local night_vision = 15 - (self.vision or 0)
-	local light_level = core.get_node_light(tpos, 0)
+	local light_level = core.get_node_light(tpos)
 	local stealth = 0
 	
 	if obj and obj:is_valid() then
@@ -250,18 +250,21 @@ end
 function ul_mobs.fight_or_flight(self, ent, uncomfortable, hunt_prty, flee_prty)
 	if not ent
 	then return end
-	if self.on_check_pred then
+	if self.on_check_pred
+	then
 		local is_pred = self.on_check_pred(self, ent)
 		if is_pred then
 			mobkit.make_sound(self, "flee")
 			mobkit_plus.hq_runfrom(self, flee_prty or 10, ent)
 		end
 	end
-	local is_prey = self.on_check_prey(self, ent)
-	if ent and uncomfortable then
+
+	if ent and uncomfortable
+	then
 		mobkit.make_sound(self, "flee")
 		mobkit_plus.hq_runfrom(self, flee_prty or 10, ent)
-	else
+	elseif ent
+	then
 		if mobkit.get_queue_priority(self) < hunt_prty
 		then mobkit.make_sound(self, "hunt") end
 		mobkit_plus.hq_hunt(self, hunt_prty or 10, ent)
@@ -270,13 +273,16 @@ end
 
 -- brain
 function ul_mobs.brain(self)
-	if self._hp
-	then self.hp = self._hp
-		self._hp = nil
-	end
 
 	if mobkit.timer(self,1)
-	then mobkit_plus.node_dps_dmg(self) end
+	then
+		if self._hp == self.hp
+		then self._hp = nil
+		elseif self._hp
+		then self.hp = self._hp
+		end 
+		mobkit_plus.node_dps_dmg(self)
+	end
 
 	if mobkit.timer(self, soft_timer)
 	and not self._owner then
@@ -299,7 +305,8 @@ function ul_mobs.brain(self)
 
 	mobkit_plus.vitals(self)
 
-	if self.hp <= 0 then	-- if is dead
+	if self.hp <= 0
+	or self._remove then	-- if is dead or must be removed
 		if self._dead then
 			return
 		end
@@ -398,5 +405,85 @@ function ul_mobs.brain(self)
 		if mobkit.is_queue_empty_high(self) then
 			mobkit.hq_roam(self, 0)
 		end
+		if not self.last_idle_noise
+		then self.last_idle_noise = self.time_total
+		end
+
+		if prty < 1
+		and math.random(self.time_total - self.last_idle_noise) > 15 then
+			self.last_idle_noise = self.time_total
+			mobkit.make_sound(self, "idle")
+		end
+	end
+end
+
+function ul_mobs.actfunc(self, staticdata, dtime_s)
+
+	mobkit.actfunc(self, staticdata, dtime_s)
+	
+	local sdat = core.deserialize(staticdata)
+
+	self.total_time = math.random()
+	
+	if sdat
+	then
+		if sdat._remove
+		then return self.object:remove()
+		end
+
+		if sdat._owner 
+		then
+			self.object:set_properties{
+				infotext = "owner: "..self._owner
+			}
+		end
+		self.total_time = self.total_time + (sdat.total_time or 0)
+		self._hp = sdat._hp
+	end
+	if dtime_s > soft_timer
+	and not self._owner
+	then self._remove = true
+		self.object:remove()
+	end
+end
+
+function ul_mobs.statfunc(self)	-- mobkit does not save hp or owner
+	if not self
+	or not self.object
+	or not mobkit.is_alive(self)
+	or self._dead
+	or self._remove
+	then
+		return "return {_remove = true}"
+	end
+	if not self._owner
+	then
+		local remove = true
+		for i,plyr in ipairs(core.get_connected_players()) do
+			if soft_dist > vector.distance(plyr:get_pos(), self.object:get_pos())
+			then
+				remove = false
+				break
+			end
+		end
+		if remove
+		and #core.get_connected_players() > 0
+		then
+			return "return {_remove = true}"
+		end
+	end
+	local ret = core.deserialize(mobkit.statfunc(self))
+	ret._owner = self._owner or self.owner
+	ret._hp = self.hp
+	ret.time_total = self.time_total
+	return core.serialize(ret)
+end
+
+function ul_mobs.stepfunc(self, dtime, moveresult)
+	if self._remove
+	then
+		self.object:remove()
+	else
+		mobkit.stepfunc(self, dtime, moveresult)
 	end
 end

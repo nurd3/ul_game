@@ -423,7 +423,10 @@ end
 function mobkit.is_alive(thing)		-- thing can be luaentity or objectref.
 --	if not thing then return false end
 	if not mobkit.exists(thing) then return false end
-	if type(thing) == 'table' then return thing.hp > 0 or (thing.health and thing.health > 0) end	-- support for mobs redo
+	if type(thing) == 'table'
+	then return thing.hp and thing.hp > 0		-- hp can be nil
+		or (thing.health and thing.health > 0)	-- mobs redo support
+	end	-- support for mobs redo
 	if thing:is_player() then return thing:get_hp() > 0
 	else 
 		local lua = thing:get_luaentity()

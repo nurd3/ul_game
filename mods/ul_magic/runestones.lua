@@ -1,15 +1,5 @@
 local S = ul_magic.get_translator
 
-function ul_magic.gen_rune()
-	local t = {}
-	for name,_ in pairs(ul_magic.registered_runes) do
-		table.insert(t, name)
-	end
-	if #t > 0 then
-		return t[math.random(#t)]
-	end
-end
-
 core.register_node("ul_magic:runestone", {
     description = S"Runestone",
 	sounds = ul_basic.node_sound_defaults(),
@@ -51,7 +41,7 @@ core.register_node("ul_magic:runestone_active", {
 	light_source = 14,
 	on_timer = function (pos, elapsed)
 		if math.random() * elapsed > 10 then
-			core.set_node(pos, {name = ul_magic.gen_rune().."_runestone"})
+			core.set_node(pos, {name = ul_magic.rand_rune().."_runestone"})
 			ul_basic.possound(pos, "ul_activate")
 		else
 			local timer = core.get_node_timer(pos)

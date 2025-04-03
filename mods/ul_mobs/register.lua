@@ -13,9 +13,9 @@ function ul_mobs.register_mob(name, def)
 		colors[3] = def.egg_colors[3] or nil
 	end
 	
-	if not colors[3] then
-		colors[3] = colors[2] or colors[1]
-	end
+	
+	colors[2] = colors[2] or colors[1]
+	colors[3] = colors[3] or colors[2]
 	
 	local egg_def = {
 		description = S("@1 Spawn Egg", def.description),
@@ -46,7 +46,6 @@ function ul_mobs.register_mob(name, def)
 		sounds = def.sounds
 	end
 	
-	
 	sounds.hunt = sounds.hunt or "ul_mobs_hunt"
 	sounds.hurt = sounds.hurt or "player_damage"
 	sounds.die = sounds.die or "ul_mobs_die"
@@ -63,59 +62,9 @@ function ul_mobs.register_mob(name, def)
 		visual_size = def.visual_size,
 		static_save = true,
 		makes_footstep_sound = true,
-		on_step = mobkit.stepfunc,			-- required
-		on_activate = function(self, staticdata, dtime_s)
-			mobkit.actfunc(self, staticdata, dtime_s)
-			
-			local sdat = core.deserialize(staticdata)
-
-			self.total_time = math.random()
-			
-			if sdat
-			then
-				if sdat._remove
-				then return self.object:remove()
-				end
-
-				if sdat._owner 
-				then
-					self.object:set_properties{
-						infotext = "owner: "..self._owner
-					}
-				end
-				self.total_time = self.total_time + (sdat.total_time or 0)
-				self._hp = sdat._hp
-			end
-		end,
-		get_staticdata = function (self)	-- mobkit does not save hp or owner
-			if not self
-			or not self.object
-			or not mobkit.is_alive(self)
-			or self._dead
-			then
-				return "return {remove = true}"
-			end
-			if not self._owner
-			then
-				local remove = true
-				for _,plyr in ipairs(core.get_connected_players()) do
-					if soft_dist > vector.distance(plyr:get_pos(), self.object:get_pos())
-					then
-						remove = false
-						break
-					end
-				end
-				if remove
-				then
-					return "return {remove = true}"
-				end
-			end
-			local ret = core.deserialize(mobkit.statfunc(self))
-			ret._owner = self._owner or self.owner
-			ret._hp = self.hp
-			ret.time_total = self.time_total
-			return core.serialize(ret)
-		end,
+		on_step = ul_mobs.stepfunc,			-- required
+		on_activate = ul_mobs.actfunc,
+		get_staticdata = ul_mobs.statfunc,
 											-- api props
 		springiness = 0,
 		buoyancy = 0.5,						-- portion of hitbox submerged

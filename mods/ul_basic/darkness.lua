@@ -18,7 +18,7 @@ core.register_globalstep(function (dtime)
 				vector.offset(pos, 1, 1, 1)
 			)
 			
-			local light = core.get_node_light(pos, 0) or -1
+			local light = core.get_node_light(pos) or -1
 			local plyrtimer = plyrtimers[plyrnom] or 0
 			
 			-- if light level below 5

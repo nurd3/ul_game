@@ -18,7 +18,7 @@ ul_magic.register_rune("ul_magic:heal", {
 		end
 	end,
 
-	groups = {healing = 1}
+	groups = {support = 1, cast = 1, shoot = 1, healing = 1}
 })
 ul_magic.register_rune("ul_magic:regen", {
 	type = "support",
@@ -38,7 +38,7 @@ ul_magic.register_rune("ul_magic:regen", {
 		end
 	end,
 
-	groups = {healing = 1}
+	groups = {support = 1, cast = 1, shoot = 1, healing = 1, statfx = 1}
 })
 ul_magic.register_rune("ul_magic:fireball", {
 	type = "attack",
@@ -51,7 +51,9 @@ ul_magic.register_rune("ul_magic:fireball", {
 			ul_statfx.apply(victim, "ul_magic:burning", 5)
 			return true
 		end
-	end
+	end,
+
+	groups = {attack = 1, cast = 1, shoot = 1, statfx = 1}
 })
 ul_magic.register_rune("ul_magic:launch", {
 	type = "attack",
@@ -76,7 +78,9 @@ ul_magic.register_rune("ul_magic:launch", {
 			victim:add_velocity({x=0,y=20,z=0})
 			return true
 		end
-	end
+	end,
+
+	groups = {attack = 1, movement = 1, cast = 1, shoot = 1, melee = 1}
 })
 ul_magic.register_rune("ul_magic:levitate", {
 	type = "prank",
@@ -100,7 +104,9 @@ ul_magic.register_rune("ul_magic:levitate", {
 			ul_statfx.apply(victim, "ul_magic:levitate", 2 * level)
 			return true
 		end
-	end
+	end,
+
+	groups = {prank = 1, movement = 1, cast = 1, shoot = 1, melee = 1, statfx = 1}
 })
 ul_magic.register_rune("ul_magic:teleport", {
 	type = "movement",
@@ -112,7 +118,9 @@ ul_magic.register_rune("ul_magic:teleport", {
 		if user then
 			user:set_pos(pos)
 		end
-	end
+	end,
+
+	groups = {movement = 1, shoot = 1}
 })
 ul_magic.register_rune("ul_magic:vampirism", {
 	type = "attack",
@@ -134,7 +142,9 @@ ul_magic.register_rune("ul_magic:vampirism", {
 			ul_basic.set_hp(user, level * 2)
 			return true
 		end
-	end
+	end,
+
+	groups = {attack = 1, shoot = 1, melee = 1, healing = 1}
 })
 ul_magic.register_rune("ul_magic:poison", {
 	type = "attack",
@@ -152,7 +162,9 @@ ul_magic.register_rune("ul_magic:poison", {
 			ul_statfx.apply(victim, "ul_magic:poison", 3 * level)
 			return true
 		end
-	end
+	end,
+
+	groups = {attack = 1, shoot = 1, melee = 1, statfx = 1}
 })
 ul_magic.register_rune("ul_magic:darkness", {
 	type = "attack",
@@ -162,7 +174,7 @@ ul_magic.register_rune("ul_magic:darkness", {
 
 	on_melee = function (user, victim, level, stats)
 		if victim and user then
-			if core.get_node_light(vector.round(user:get_pos()), 0) < 5 
+			if core.get_node_light(vector.round(user:get_pos())) < 5 
 			and ul_basic.punch(victim, user, 1, level * 3)
 			then
 				ul_basic.objsound(user, "ul_activate")
@@ -171,7 +183,9 @@ ul_magic.register_rune("ul_magic:darkness", {
 			end
 			return true
 		end
-	end
+	end,
+
+	groups = {attack = 1, melee = 1, darkness = 1}
 })
 ul_magic.register_rune("ul_magic:defense", {
 	type = "wear",
@@ -183,7 +197,9 @@ ul_magic.register_rune("ul_magic:defense", {
 		if purpose == "defense" then
 			return 2 * level
 		end
-	end
+	end,
+
+	groups = {wear = 1, defense = 1}
 })
 ul_magic.register_rune("ul_magic:iridescence", {
 	type = "complex",
@@ -207,7 +223,9 @@ ul_magic.register_rune("ul_magic:iridescence", {
 		if purpose == "darkness" then
 			return -2
 		end
-	end
+	end,
+
+	groups = {complex = 1, wear = 1, melee = 1, stealth = 1, light = 1}
 })
 ul_magic.register_rune("ul_magic:light", {
 	type = "complex",
@@ -232,7 +250,9 @@ ul_magic.register_rune("ul_magic:light", {
 		if purpose == "darkness" then
 			return -2
 		end
-	end
+	end,
+
+	groups = {complex = 1, wear = 1, melee = 1, defense = 1, light = 1}
 })
 ul_magic.register_rune("ul_magic:moon", {
 	type = "complex",
@@ -257,7 +277,9 @@ ul_magic.register_rune("ul_magic:moon", {
 		if purpose == "darkness" then
 			return level
 		end
-	end
+	end,
+
+	groups = {complex = 1, wear = 1, melee = 1, stealth = 1, darkness = 1, moon = 1}
 })
 ul_magic.register_rune("ul_magic:sun", {
 	type = "complex",
@@ -281,7 +303,9 @@ ul_magic.register_rune("ul_magic:sun", {
 		if purpose == "darkness" then
 			return level
 		end
-	end
+	end,
+
+	groups = {complex = 1, wear = 1, melee = 1, defense = 1, light = 1, sun = 1}
 })
 ul_magic.register_rune("ul_magic:blood", {
 	type = "complex",
@@ -306,7 +330,9 @@ ul_magic.register_rune("ul_magic:blood", {
 		if purpose == "darkness" then
 			return -level
 		end
-	end
+	end,
+
+	groups = {complex = 1, wear = 1, melee = 1, stealth = 1, blood = 1}
 })
 
 lootblocks.register_drop("ul_magic:spell", 0.5)

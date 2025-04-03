@@ -202,7 +202,7 @@ natural_entities.register_spawn("ul_market:npcs", {
 	},
 	
 	check = function (pos)
-		return (core.get_node_light(pos, 0) or 0) > 5
+		return (core.get_node_light(pos) or 0) > 5
 	end
 	
 })
