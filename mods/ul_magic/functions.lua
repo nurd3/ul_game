@@ -29,6 +29,7 @@ function ul_magic.rand_rune(runes)
 
 	if not runes
 	then
+		runes = {}
 		for name,def in pairs(ul_magic.registered_runes)
 		do table.insert(runes, name)
 		end
